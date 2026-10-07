@@ -423,6 +423,26 @@
       border-radius: 999px;
       margin-bottom: 0.9rem;
     }
+    .panel-guest {
+      background:
+        linear-gradient(165deg, var(--accent-soft) 0%, var(--surface) 42%);
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+      box-shadow: 0 10px 28px rgba(184, 121, 31, 0.08);
+    }
+    .panel-guest .guest-note {
+      margin: 0 0 1.1rem;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+    .panel-guest .guest-meta {
+      margin: 0 0 1.1rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .panel-guest .guest-meta strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
 
     /* Footer */
     footer {
@@ -666,8 +686,8 @@
         <div class="section-head">
           <h2 id="contact-title" class="block-sv">Kontakt &amp; BNI</h2>
           <h2 class="block-en">Contact &amp; BNI</h2>
-          <p class="block-sv">Vill du bolla en idé, boka en kort genomgång, eller höra mer om Referenskortet? Hör av dig.</p>
-          <p class="block-en">Want to bounce an idea, book a short walkthrough, or learn more about The Referral Card? Reach out.</p>
+          <p class="block-sv">Vill du bolla en idé, boka en kort genomgång, höra mer om Referenskortet — eller komma som gäst till BNI? Hör av dig.</p>
+          <p class="block-en">Want to bounce an idea, book a short walkthrough, learn more about The Referral Card — or visit BNI as a guest? Reach out.</p>
         </div>
         <div class="split">
           <div class="panel">
@@ -703,22 +723,40 @@
               </a>
             </div>
           </div>
-          <div class="panel">
+          <div class="panel panel-guest">
             <div class="bni-badge">BNI Elit Västerås</div>
-            <h3 class="block-sv">Kategori: AI-utvecklare</h3>
-            <h3 class="block-en">Category: AI developer</h3>
-            <p class="block-sv">
-              Jag är medlem i BNI Elit Västerås. Gillar du ömsesidiga affärer och tydliga
-              rekommendationer? Låt oss byta referenser — och prova Referenskortet tillsammans.
+            <h3 class="block-sv">Gästbesök på BNI</h3>
+            <h3 class="block-en">Guest visit at BNI</h3>
+            <p class="guest-note block-sv">
+              Nyfiken på hur BNI fungerar? Du är välkommen som gäst till mitt team,
+              BNI Elit Västerås. Hör av dig så bokar vi ett besök.
             </p>
-            <p class="block-en">
-              I’m a member of BNI Elite Västerås. Like reciprocal business and clear
-              referrals? Let’s exchange introductions — and try The Referral Card together.
+            <p class="guest-note block-en">
+              Curious how BNI works? You’re welcome as a guest at my chapter,
+              BNI Elit Västerås. Get in touch and I’ll arrange a visit.
             </p>
-            <a class="btn btn-secondary" href="https://referralcard.ai/" rel="noopener noreferrer" target="_blank">
-              <span class="i18n-sv">Till Referenskortet</span>
-              <span class="i18n-en">To The Referral Card</span>
-            </a>
+            <p class="guest-meta block-sv">
+              <strong>Kaj Nybom</strong> · kategori AI-utvecklare
+            </p>
+            <p class="guest-meta block-en">
+              <strong>Kaj Nybom</strong> · category AI developer
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="mailto:kaj.nybom@gmail.com?subject=G%C3%A4stbes%C3%B6k%20BNI%20Elit%20V%C3%A4ster%C3%A5s">
+                <span class="i18n-sv">Kontakta mig</span>
+                <span class="i18n-en">Contact me</span>
+              </a>
+              <a class="btn btn-secondary" href="tel:+46729820484">
+                <span class="i18n-sv">Ring Kaj</span>
+                <span class="i18n-en">Call Kaj</span>
+              </a>
+            </div>
+            <p style="margin:1rem 0 0; font-size:0.92rem; color:var(--muted)">
+              <a href="https://referralcard.ai/" rel="noopener noreferrer" target="_blank">
+                <span class="i18n-sv">Till Referenskortet →</span>
+                <span class="i18n-en">To The Referral Card →</span>
+              </a>
+            </p>
           </div>
         </div>
       </div>
