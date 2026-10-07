@@ -1,0 +1,12 @@
+{
+  "name": "mediahiveab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mediahive AB company website — practical AI for businesses.",
+  "scripts": {
+    "deploy": "wrangler pages deploy . --project-name=mediahiveab"
+  },
+  "dependencies": {
+    "wrangler": "^3.114.0"
+  }
+}
