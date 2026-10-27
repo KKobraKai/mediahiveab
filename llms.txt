@@ -1,0 +1,31 @@
+# Mediahive AB
+
+> Mediahive AB is an honest, practical AI partner for small and mid-sized businesses in Sweden. We build AI assistants, automation of everyday work, custom AI tools and bot-to-bot integrations, explained in plain Swedish or English. Based in Västerås; we work across Sweden, on site in Mälardalen or remotely, and internationally.
+
+- Company: Mediahive AB, org.nr 559493-6790, Västerås, Sweden
+- Founder: Kaj Nybom (AI developer, member of BNI Elit Västerås)
+- Languages: Swedish, English
+- Contact: kaj.nybom@gmail.com, +46 72 982 04 84
+- Website: https://mediahiveab.com/
+
+## Services
+
+- AI automation of everyday work: repetitive admin, email, documents and data handled by AI with a human in control.
+- AI assistants for businesses and their customers: assistants that answer, book and follow up on your channels.
+- Custom AI tools and web apps built for one business's workflow.
+- Bot-to-bot communication and system integration: connecting your systems and assistants so they can receive, understand and answer requests from other bots, safely and with the owner's approval.
+- AI advisory and workshops: what is worth building and what to skip.
+
+## How we work
+
+- Starts with a short, free call; then a fixed price for a clearly scoped first step, so the cost is known before anything is built.
+- No lock-in: the customer owns what is built and gets documentation to run it themselves or switch supplier.
+- Plain language, no jargon.
+
+## Products
+
+- Referenskortet (The Referral Card): referral postcards for BNI members and other referral networks. https://referralcard.ai/
+
+## FAQ
+
+- Do you only work in Västerås? No. We are based in Västerås and meet customers across Mälardalen, but most work is done remotely, across Sweden and internationally, in Swedish or English.
