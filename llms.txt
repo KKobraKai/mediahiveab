@@ -6,7 +6,7 @@
 - Founder: Kaj Nybom (AI developer, member of BNI Elit Västerås)
 - Member of Företagarna Västerås (Swedish small-business association)
 - Languages: Swedish, English
-- Contact: kAI@mediahiveab.com, +46 72 982 04 84
+- Contact: kai@mediahiveab.com, +46 72 982 04 84
 - Website: https://mediahiveab.com/
 
 ## Services
@@ -19,7 +19,7 @@
 
 ## How we work
 
-- Starts with a short, free call; then a fixed price for a clearly scoped first step, so the cost is known before anything is built.
+- Starts with a short, free call; then a proposal for a clearly scoped first step, so you know what it involves before anything is built.
 - No lock-in: the customer owns what is built and gets documentation to run it themselves or switch supplier.
 - Plain language, no jargon.
 
