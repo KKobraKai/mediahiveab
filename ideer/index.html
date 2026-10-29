@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Idéer — AI som pratar med AI, Badger, skärmar och AI-team | Mediahive AB</title>
+  <meta name="description" content="Idéer vi utforskar och bygger på Mediahive AB: AI som pratar med AI, Badger-brickan, smarta skärmar för displaybranschen och företag som drivs med AI-team. För företagare och innovatörer.">
+  <link rel="canonical" href="https://mediahiveab.com/ideer/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0E1A2B">
+  <meta property="og:title" content="Mediahive AB — Idéer">
+  <meta property="og:description" content="Skräddarsydda AI-agenter, utbildning, produktutveckling och AI-omställning för medarbetare.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mediahiveab.com/ideer/">
+  <meta property="og:locale" content="sv_SE">
+  <meta property="og:locale:alternate" content="en_US">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root{
+      --ink:#0E1A2B;--ink-2:#1C2B40;--text:#1F2937;--muted:#5B6575;--line:#E3E7ED;
+      --bg:#FFFFFF;--bg-2:#F5F7FA;--accent:#D98E2B;--accent-2:#B8731A;--accent-soft:#FBF1E2;
+      --radius:14px;--max:1120px;
+      --shadow:0 1px 2px rgba(14,26,43,.06),0 8px 24px rgba(14,26,43,.06);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    .wrap{width:min(100% - 2.5rem,var(--max));margin-inline:auto}
+    /* language */
+    html[lang="sv"] .en, html[lang="en"] .sv{display:none!important}
+    /* header */
+    header.top{position:sticky;top:0;z-index:50;background:rgba(14,26,43,.92);backdrop-filter:blur(10px);color:#fff}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:1rem}
+    .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font-weight:700;letter-spacing:-.01em;font-size:1.08rem}
+    .brand img{width:30px;height:30px}
+    .links{display:flex;gap:1.6rem;font-size:.94rem}
+    .links a{text-decoration:none;color:#C9D2DE}
+    .links a:hover{color:#fff}
+    .right{display:flex;align-items:center;gap:.75rem}
+    .lang{display:inline-flex;border:1px solid rgba(255,255,255,.25);border-radius:999px;overflow:hidden}
+    .lang button{background:none;border:0;color:#C9D2DE;font:inherit;font-size:.8rem;font-weight:600;padding:.35rem .7rem;cursor:pointer}
+    .lang button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.25rem;border-radius:10px;font-weight:600;font-size:.97rem;text-decoration:none;border:1px solid transparent;transition:.15s}
+    .btn-accent{background:var(--accent);color:#fff}
+    .btn-accent:hover{background:var(--accent-2)}
+    .btn-ghost{border-color:rgba(255,255,255,.35);color:#fff}
+    .btn-ghost:hover{background:rgba(255,255,255,.08)}
+    .btn-dark{background:var(--ink);color:#fff}
+    .btn-dark:hover{background:var(--ink-2)}
+    .btn-sm{padding:.5rem .9rem;font-size:.88rem}
+    /* hero */
+    .hero{background:radial-gradient(900px 500px at 85% 0%,rgba(217,142,43,.22),transparent 60%),linear-gradient(180deg,var(--ink) 0%,var(--ink-2) 100%);color:#fff;padding:5.5rem 0 5rem}
+    .eyebrow{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+    .hero h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;letter-spacing:-.03em;margin:.9rem 0 1.2rem;font-weight:800;max-width:17ch}
+    .hero p.lead{font-size:1.2rem;color:#C9D2DE;max-width:58ch;margin:0 0 2rem}
+    .hero .ctas{display:flex;flex-wrap:wrap;gap:.8rem}
+    .trust{display:flex;flex-wrap:wrap;gap:.6rem 1.8rem;margin-top:3rem;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.12);font-size:.92rem;color:#AAB6C5}
+    .trust b{color:#fff;font-weight:600}
+    /* sections */
+    section{padding:5rem 0}
+    section.alt{background:var(--bg-2)}
+    .head{max-width:680px;margin-bottom:2.8rem}
+    .head h2{font-size:clamp(1.7rem,3.2vw,2.4rem);line-height:1.15;letter-spacing:-.02em;color:var(--ink);margin:.5rem 0 .8rem;font-weight:800}
+    .head p{color:var(--muted);margin:0;font-size:1.08rem}
+    .grid{display:grid;gap:1.25rem}
+    .g3{grid-template-columns:repeat(3,1fr)}
+    .g2{grid-template-columns:repeat(2,1fr)}
+    .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;box-shadow:var(--shadow)}
+    .card h3{margin:.9rem 0 .4rem;font-size:1.12rem;color:var(--ink);letter-spacing:-.01em}
+    .card p{margin:0;color:var(--muted);font-size:.98rem}
+    .ico{width:42px;height:42px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center}
+    .ico svg{width:22px;height:22px;stroke:var(--accent-2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    /* steps */
+    .steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .step{position:relative;padding:1.6rem;border-top:3px solid var(--accent);background:#fff;border-radius:0 0 var(--radius) var(--radius);box-shadow:var(--shadow)}
+    .step::before{counter-increment:s;content:"0" counter(s);font-weight:800;color:var(--accent);font-size:.9rem;letter-spacing:.05em}
+    .step h3{margin:.5rem 0 .4rem;color:var(--ink);font-size:1.1rem}
+    .step p{margin:0;color:var(--muted);font-size:.98rem}
+    .promises{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}
+    .promise{display:flex;gap:.6rem;align-items:flex-start;font-size:.95rem;color:var(--text)}
+    .promise svg{flex:0 0 20px;width:20px;height:20px;stroke:var(--accent-2);fill:none;stroke-width:2.2;margin-top:.2rem}
+    /* why */
+    .why{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center}
+    .why blockquote{margin:0;padding:1.8rem;border-left:4px solid var(--accent);background:#fff;border-radius:0 var(--radius) var(--radius) 0;box-shadow:var(--shadow);font-size:1.15rem;color:var(--ink);font-weight:500}
+    /* product */
+    .product{display:grid;grid-template-columns:1.2fr .8fr;gap:2.5rem;align-items:center;background:var(--ink);color:#fff;border-radius:20px;padding:3rem}
+    .product h2{color:#fff;font-size:clamp(1.6rem,3vw,2.2rem);margin:.5rem 0 .8rem;letter-spacing:-.02em}
+    .product p{color:#C9D2DE;margin:0 0 1.5rem}
+    .product dl{margin:0;display:grid;gap:1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:1.4rem}
+    .product dt{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600}
+    .product dd{margin:.15rem 0 0;color:#fff}
+    /* about */
+    .about{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start}
+    .avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(140deg,var(--accent),var(--ink));display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.8rem}
+    .about h3{margin:0 0 .2rem;color:var(--ink);font-size:1.3rem}
+    .about .role{color:var(--accent-2);font-weight:600;margin:0 0 .8rem;font-size:.95rem}
+    .about p{margin:0 0 .8rem;color:var(--muted)}
+    /* faq */
+    details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:.75rem}
+    summary{cursor:pointer;font-weight:600;color:var(--ink);list-style:none;display:flex;justify-content:space-between;gap:1rem}
+    summary::after{content:"+";color:var(--accent-2);font-weight:700}
+    details[open] summary::after{content:"–"}
+    details p{margin:.7rem 0 0;color:var(--muted)}
+    /* contact */
+    .contact{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem}
+    .contact .card{padding:2rem}
+    .clist{list-style:none;padding:0;margin:1.2rem 0 1.6rem;display:grid;gap:.8rem}
+    .clist li{display:flex;gap:.75rem;align-items:center}
+    .clist .k{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;min-width:84px}
+    .clist a{font-weight:600;color:var(--ink);text-decoration:none}
+    .clist a:hover{color:var(--accent-2)}
+    .ctas-row{display:flex;gap:.7rem;flex-wrap:wrap}
+    .bni{background:var(--accent-soft);border-color:#F1DDBD}
+    /* footer */
+    footer{background:var(--ink);color:#AAB6C5;padding:2.5rem 0;font-size:.9rem}
+    .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
+    footer a{color:#fff;text-decoration:none}
+    @media (max-width:900px){
+      .links{display:none}
+      .g3,.steps{grid-template-columns:1fr 1fr}
+      .promises{grid-template-columns:1fr 1fr}
+      .why,.product,.contact{grid-template-columns:1fr}
+      .product{padding:2rem}
+    }
+    @media (max-width:600px){
+      .g3,.g2,.steps,.promises{grid-template-columns:1fr}
+      .hero{padding:4rem 0 3.5rem}
+      section{padding:3.8rem 0}
+      .about{grid-template-columns:1fr}
+      .right .btn{display:none}
+    }
+      .ex{margin:.9rem 0 0;padding:0;list-style:none;display:grid;gap:.45rem}
+    .ex li{font-size:.94rem;color:var(--text);padding-left:1.1rem;position:relative}
+    .ex li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+    .tag{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--accent-2);background:var(--accent-soft);border-radius:999px;padding:.2rem .65rem;margin-top:.9rem}
+    .levels{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+    .lvl{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.2rem}
+    .lvl b{display:block;color:var(--ink);margin-bottom:.3rem}
+    .lvl span{color:var(--muted);font-size:.93rem}
+    .pill-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}
+    .pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:.35rem .85rem;font-size:.9rem;color:var(--ink)}
+    .cta-band{background:var(--ink);color:#fff;border-radius:20px;padding:3rem;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.5rem}
+    .cta-band h2{color:#fff;margin:0 0 .4rem;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.02em}
+    .cta-band p{margin:0;color:#C9D2DE}
+    @media (max-width:900px){.levels{grid-template-columns:1fr 1fr}}
+    @media (max-width:600px){.levels{grid-template-columns:1fr}.cta-band{padding:2rem}}
+      .schem{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.5rem;box-shadow:var(--shadow);overflow-x:auto}
+    .schem svg{width:100%;min-width:640px;height:auto;display:block}
+    .schem .bx{fill:var(--bg-2);stroke:var(--line);stroke-width:1.5}
+    .schem .bx.acc{fill:var(--accent-soft);stroke:var(--accent)}
+    .schem .bx.dk{fill:var(--ink);stroke:var(--ink)}
+    .schem text{font-family:Inter,system-ui,sans-serif;font-size:14px;fill:var(--ink);text-anchor:middle}
+    .schem text.sm{font-size:11.5px;fill:var(--muted)}
+    .schem text.w{fill:#fff}
+    .schem .ar{stroke:var(--accent-2);stroke-width:2;fill:none;marker-end:url(#ah)}
+    html[lang="sv"] svg .en, html[lang="en"] svg .sv{display:none}
+    .idea{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+    .idea .ex li{font-size:.98rem}
+    .note{margin-top:1.4rem;font-size:.9rem;color:var(--muted);border-left:3px solid var(--accent);padding-left:.9rem}
+    @media (max-width:900px){.idea{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" width="30" height="30">Mediahive AB</a>
+      <nav class="links" aria-label="Meny">
+        <a href="#ai-till-ai"><span class="sv">AI till AI</span><span class="en">AI to AI</span></a>
+        <a href="#badger">Badger</a>
+        <a href="#skarmar"><span class="sv">Skärmar</span><span class="en">Screens</span></a>
+        <a href="#ai-team"><span class="sv">AI-team</span><span class="en">AI team</span></a>
+        <a href="/tjanster/"><span class="sv">Tjänster</span><span class="en">Services</span></a>
+      </nav>
+      <div class="right">
+        <div class="lang" role="group" aria-label="Språk / Language">
+          <button type="button" id="lang-sv" aria-pressed="true">SV</button>
+          <button type="button" id="lang-en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-accent btn-sm" href="/#kontakt"><span class="sv">Boka samtal</span><span class="en">Book a call</span></a>
+      </div>
+    </div>
+  </header>
+  <main id="top">
+    <div class="hero"><div class="wrap">
+      <span class="eyebrow"><span class="sv">Idéer · för företagare och innovatörer</span><span class="en">Ideas · for business owners and innovators</span></span>
+      <h1><span class="sv">Idéer vi bygger, testar och använder själva.</span><span class="en">Ideas we build, test and use ourselves.</span></h1>
+      <p class="lead"><span class="sv">Här visar vi vad vi utforskar: AI som pratar med AI, en namnbricka som öppnar dörren, skärmar som svarar och ett företag som drivs med AI-medarbetare. Vi visar idéerna och exemplen, inte ritningarna.</span><span class="en">This is what we're exploring: AI that talks to AI, a name badge that opens the door, screens that answer, and a company run with AI workers. We show the ideas and examples, not the blueprints.</span></p>
+      <div class="ctas"><a class="btn btn-accent" href="https://idea.botknock.com/?lang=sv" target="_blank" rel="noopener" data-sv-href="https://idea.botknock.com/?lang=sv" data-en-href="https://idea.botknock.com/?lang=en"><span class="sv">Prata med min idé-assistent</span><span class="en">Talk to my idea assistant</span></a><a class="btn btn-ghost" href="#ai-till-ai"><span class="sv">Se exemplen</span><span class="en">See the examples</span></a></div>
+    </div></div>
+    <section id="ai-till-ai"><div class="wrap"><div class="head"><span class="eyebrow"><span class="sv">AI som pratar med AI</span><span class="en">AI talking to AI</span></span><h2><span class="sv">Snart är det kundens AI som ringer. Är ert företag redo att svara?</span><span class="en">Soon it's the customer's AI that calls. Is your business ready to answer?</span></h2><p><span class="sv">Allt fler har en egen AI-assistent som bokar, frågar och jämför åt dem. Vi bygger dörren som låter deras AI knacka på hos er, och er AI svara, med ägaren i kontroll över vem som släpps in och vad som får göras.</span><span class="en">More and more people have their own AI assistant that books, asks and compares for them. We build the door that lets their AI knock on yours, and your AI answer, with the owner in control of who gets in and what may be done.</span></p></div><div class="schem"><svg viewBox="0 0 900 230" role="img" aria-label="AI till AI / AI to AI"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#B8731A"/></marker></defs><rect class="bx " x="10" y="70" width="150" height="80" rx="12"/><text x="85.0" y="106.0"><tspan class="sv">Kundens AI</tspan><tspan class="en">Customer's AI</tspan></text><text x="85.0" y="125.0" class="sm"><tspan class="sv">eller en person</tspan><tspan class="en">or a person</tspan></text><rect class="bx acc" x="200" y="70" width="150" height="80" rx="12"/><text x="275.0" y="106.0"><tspan class="sv">Knacka på</tspan><tspan class="en">Knock</tspan></text><text x="275.0" y="125.0" class="sm"><tspan class="sv">QR, länk, skärm, badge</tspan><tspan class="en">QR, link, screen, badge</tspan></text><rect class="bx dk" x="390" y="70" width="150" height="80" rx="12"/><text x="465.0" y="106.0" class="w"><tspan class="sv">Ägarens ja</tspan><tspan class="en">Owner's yes</tspan></text><text x="465.0" y="125.0" class="sm w"><tspan class="sv">mål: ett tryck</tspan><tspan class="en">goal: one tap</tspan></text><rect class="bx acc" x="580" y="70" width="150" height="80" rx="12"/><text x="655.0" y="106.0"><tspan class="sv">Företagets AI</tspan><tspan class="en">Company's AI</tspan></text><text x="655.0" y="125.0" class="sm"><tspan class="sv">svarar, bokar, offererar</tspan><tspan class="en">answers, books, quotes</tspan></text><rect class="bx " x="770" y="20" width="120" height="55" rx="12"/><text x="830.0" y="43.5"><tspan class="sv">Kalender</tspan><tspan class="en">Calendar</tspan></text><text x="830.0" y="62.5" class="sm"><tspan class="sv"></tspan><tspan class="en"></tspan></text><rect class="bx " x="770" y="90" width="120" height="55" rx="12"/><text x="830.0" y="113.5"><tspan class="sv">Affärssystem</tspan><tspan class="en">Business system</tspan></text><text x="830.0" y="132.5" class="sm"><tspan class="sv"></tspan><tspan class="en"></tspan></text><rect class="bx " x="770" y="160" width="120" height="55" rx="12"/><text x="830.0" y="183.5"><tspan class="sv">Människa</tspan><tspan class="en">A person</tspan></text><text x="830.0" y="202.5" class="sm"><tspan class="sv">vid behov</tspan><tspan class="en">when needed</tspan></text><path class="ar" d="M160 110H196"/><path class="ar" d="M350 110H386"/><path class="ar" d="M540 110H576"/><path class="ar" d="M730 110C750 110 750 47 766 47"/><path class="ar" d="M730 110C750 110 750 117 766 117"/><path class="ar" d="M730 110C750 110 750 187 766 187"/></svg></div>
+<div class="grid g3" style="margin-top:1.6rem">
+<article class="card"><h3 style="margin-top:0"><span class="sv">Bokning</span><span class="en">Booking</span></h3><p><span class="sv">Kundens assistent hittar en ledig tid för fönsterputs och bokar direkt med hantverkarens AI.</span><span class="en">The customer's assistant finds a free slot for window cleaning and books it directly with the contractor's AI.</span></p></article>
+<article class="card"><h3 style="margin-top:0"><span class="sv">Offertförfrågan</span><span class="en">Quote request</span></h3><p><span class="sv">En byggares AI skickar mått och önskemål. Leverantörens AI svarar med ett prisförslag som ägaren godkänner.</span><span class="en">A builder's AI sends measurements and requirements. The supplier's AI replies with a price proposal the owner approves.</span></p></article>
+<article class="card"><h3 style="margin-top:0"><span class="sv">Leverans och status</span><span class="en">Delivery and status</span></h3><p><span class="sv">Leverantörens bot meddelar en försening, och er AI flyttar jobbet och informerar kunden.</span><span class="en">The supplier's bot reports a delay, and your AI moves the job and lets the customer know.</span></p></article>
+</div><p class="note"><span class="sv">Schemat visar principen, inte tekniken bakom.</span><span class="en">The diagram shows the principle, not the technology behind it.</span></p></div></section>
+    <section id="badger" class="alt"><div class="wrap idea"><div class="head" style="margin:0"><span class="eyebrow"><span class="sv">Badger: en namnbricka som öppnar dörren</span><span class="en">Badger: a name badge that opens the door</span></span><h2><span class="sv">Skanna brickan, så kan din AI prata med min</span><span class="en">Scan the badge, and your AI can talk to mine</span></h2><p><span class="sv">En liten e-pappersbricka med en QR-kod. Den som skannar den knackar på, brickan visar vem som vill in, och bäraren släpper in med ett knapptryck. Den är en prototyp som vi testar.</span><span class="en">A small e-paper badge with a QR code. Whoever scans it knocks, the badge shows who wants in, and the wearer lets them in with one button press. It is a prototype we are testing.</span></p></div><div class="card"><h3 style="margin-top:0"><span class="sv">Exempel</span><span class="en">Examples</span></h3><ul class="ex"><li><span class="sv">Mässor och nätverksmöten: kontakten går direkt in i rätt AI-flöde</span><span class="en">Trade fairs and networking: the contact goes straight into the right AI flow</span></li><li><span class="sv">Reception och butiksdisk: besökaren checkar in med sin egen telefon</span><span class="en">Reception and shop counters: visitors check in with their own phone</span></li><li><span class="sv">Servicebil eller arbetsplats: kunden når företagets AI utan app</span><span class="en">Service van or job site: the customer reaches the company's AI without an app</span></li></ul></div></div></section>
+    <section id="skarmar"><div class="wrap idea"><div class="head" style="margin:0"><span class="eyebrow"><span class="sv">Skärmar och displaybranschen</span><span class="en">Screens and the display industry</span></span><h2><span class="sv">Från skärm som visar till skärm som svarar</span><span class="en">From screens that show to screens that answer</span></h2><p><span class="sv">En LED-skärm når många människor varje dag, men samtalet slutar när de går förbi. Med AI blir skärmen en ingång: innehållet anpassar sig efter läget, och den som är intresserad kan knacka på direkt från sin telefon.</span><span class="en">An LED screen reaches many people every day, but the conversation ends when they walk past. With AI the screen becomes an entrance: the content adapts to the situation, and anyone interested can knock straight from their phone.</span></p><p class="note"><span class="sv">Utan kameror som identifierar personer. Integritet först.</span><span class="en">No cameras that identify people. Privacy first.</span></p></div><div class="card"><h3 style="margin-top:0"><span class="sv">Exempel</span><span class="en">Examples</span></h3><ul class="ex"><li><span class="sv">Innehåll som uppdateras från lager, väder, kö eller kalender</span><span class="en">Content that updates from stock, weather, queues or calendars</span></li><li><span class="sv">QR på skärmen: tittaren ställer frågor till butikens AI och får svar i mobilen</span><span class="en">QR on screen: viewers ask the store's AI questions and get answers on their phone</span></li><li><span class="sv">AI-utkast till rörlig grafik och kampanjer, godkända av en människa</span><span class="en">AI drafts of motion graphics and campaigns, approved by a person</span></li><li><span class="sv">Uthyrning av skärmar där kunden bokar och ändrar innehåll via chatt</span><span class="en">Screen rental where customers book and change content by chat</span></li></ul></div></div></section>
+    <section id="ai-team" class="alt"><div class="wrap idea"><div class="head" style="margin:0"><span class="eyebrow"><span class="sv">Vi kör vårt eget företag med AI</span><span class="en">We run our own company on AI</span></span><h2><span class="sv">Ett AI-team med en människa som chef</span><span class="en">An AI team with a human in charge</span></h2><p><span class="sv">Mediahive drivs med ett team av AI-medarbetare: en projektledare, en bokföringsgranskare och en webbansvarig. Allt viktigt godkänns av en människa.</span><span class="en">Mediahive runs with a team of AI workers: a project leader, a bookkeeping reviewer, and a web lead. Everything important is approved by a person.</span></p></div><div class="card"><h3 style="margin-top:0"><span class="sv">Exempel</span><span class="en">Examples</span></h3><ul class="ex"><li><span class="sv">Ett meddelande från ägaren blir research, plan, utkast och granskning</span><span class="en">One message from the owner becomes research, a plan, drafts and a review</span></li><li><span class="sv">Botarna delar ett gemensamt minne med beslut och öppna frågor</span><span class="en">The bots share a common memory of decisions and open questions</span></li><li><span class="sv">Det vi lär oss själva blir tjänster till våra kunder</span><span class="en">What we learn ourselves becomes services for our customers</span></li></ul></div></div></section>
+    <section id="fler"><div class="wrap"><div class="head"><span class="eyebrow"><span class="sv">Fler idéer</span><span class="en">More ideas</span></span><h2><span class="sv">Små idéer som sparar stora mängder tid</span><span class="en">Small ideas that save a lot of time</span></h2><p><span class="sv">Några av dem kör vi redan, andra är på väg.</span><span class="en">Some of these we already run, others are on their way.</span></p></div><div class="grid g3"><article class="card"><h3 style="margin-top:0"><span class="sv">Svensk AI-receptionist för hantverkare</span><span class="en">Swedish AI receptionist for trades</span></h3><p><span class="sv">Svarar när telefonen ringer på taket.</span><span class="en">Answers when the phone rings on the roof.</span></p></article><article class="card"><h3 style="margin-top:0"><span class="sv">Offert från flygfoto</span><span class="en">Quotes from aerial imagery</span></h3><p><span class="sv">Tak, ytor och plåtlista innan första besöket.</span><span class="en">Roof, areas and sheet-metal list before the first visit.</span></p></article><article class="card"><h3 style="margin-top:0"><span class="sv">Sms som startknapp</span><span class="en">Text messages as a trigger</span></h3><p><span class="sv">Ett vanligt sms kan starta ett AI-flöde, utan app.</span><span class="en">A plain text can start an AI workflow, no app needed.</span></p></article><article class="card"><h3 style="margin-top:0"><span class="sv">Ägarens ja i fickan</span><span class="en">The owner's yes in your pocket</span></h3><p><span class="sv">Målet: varje viktig AI-handling väntar på ett tryck i mobilen. Under utveckling.</span><span class="en">The goal: every important AI action waits for one tap on the phone. In development.</span></p></article><article class="card"><h3 style="margin-top:0"><span class="sv">Tillit till AI på jobbet</span><span class="en">Trusting AI at work</span></h3><p><span class="sv">Utbildning byggd på boken The Wrench: när AI låter säker men har fel.</span><span class="en">Training built on the book The Wrench: when AI sounds sure but is wrong.</span></p></article><article class="card"><h3 style="margin-top:0"><span class="sv">Testboten</span><span class="en">The test bot</span></h3><p><span class="sv">AI som testar det mesta: webbplatser, formulär, chattbotar, appar och flöden, som en ny kund skulle göra, och rapporterar vad som brister.</span><span class="en">AI that tests almost anything: websites, forms, chatbots, apps and workflows, the way a new customer would, and reports what breaks.</span></p></article><article class="card"><h3 style="margin-top:0"><span class="sv">Referenskortet</span><span class="en">The Referral Card</span></h3><p><span class="sv">Tryckklara referenskort för nätverkssäljare på minuter.</span><span class="en">Print-ready referral cards for network sellers in minutes.</span></p></article></div></div></section>
+    <section class="alt"><div class="wrap"><div class="cta-band"><div><h2><span class="sv">Har du en idé som borde finnas?</span><span class="en">Got an idea that should exist?</span></h2><p><span class="sv">Testa den med min idé-assistent direkt i din telefon, eller hör av dig. Berätta om den, vi återkommer.</span><span class="en">Try it out with my idea assistant right on your phone, or get in touch. Tell us about it, we'll get back to you.</span></p></div><div class="ctas-row"><a class="btn btn-accent" href="https://idea.botknock.com/?lang=sv" target="_blank" rel="noopener" data-sv-href="https://idea.botknock.com/?lang=sv" data-en-href="https://idea.botknock.com/?lang=en"><span class="sv">Prata med min idé-assistent</span><span class="en">Talk to my idea assistant</span></a><a class="btn btn-ghost" href="mailto:kai@mediahiveab.com?subject=Mediahive%20AB%20%E2%80%94%20id%C3%A9"><span class="sv">Skicka mejl</span><span class="en">Send email</span></a></div></div></div></section>
+  </main>
+  <footer>
+    <div class="wrap foot">
+      <div><strong style="color:#fff">Mediahive AB</strong> · <span class="sv">Org.nr</span><span class="en">Org. no.</span> 559493-6790 · Västerås, Sverige</div>
+      <div><a href="/">mediahiveab.com</a> · <a href="mailto:kai@mediahiveab.com">kai@mediahiveab.com</a></div>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var root = document.documentElement, sv = document.getElementById("lang-sv"), en = document.getElementById("lang-en");
+      function setLang(l) {
+        root.setAttribute("lang", l);
+        sv.setAttribute("aria-pressed", l === "sv"); en.setAttribute("aria-pressed", l === "en");
+        document.title = l === "en" ? "Ideas — AI to AI, Badger, screens and AI teams | Mediahive AB" : "Idéer — AI som pratar med AI, Badger, skärmar och AI-team | Mediahive AB";
+        try { localStorage.setItem("mh-lang", l); } catch (e) {}
+      }
+      sv.addEventListener("click", function () { setLang("sv"); });
+      en.addEventListener("click", function () { setLang("en"); });
+      var saved = null; try { saved = localStorage.getItem("mh-lang"); } catch (e) {}
+      if (saved === "en" || saved === "sv") setLang(saved);
+      else if (navigator.language && navigator.language.toLowerCase().indexOf("sv") !== 0) setLang("en");
+    })();
+  </script>
+<script>(function(){function f(){var l=document.documentElement.lang==="en"?"en":"sv";document.querySelectorAll("[data-sv-href]").forEach(function(a){a.href=a.getAttribute("data-"+l+"-href")})}f();new MutationObserver(f).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]})})();</script>
+</body>
+</html>
