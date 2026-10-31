@@ -24,7 +24,7 @@ npm install
 npx wrangler pages deploy public --project-name=mediahiveab
 ```
 
-Or push to `main` — GitHub Actions deploys via wrangler (secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`).
+Deploys are manual: run `npm run deploy` (same command as above; it uploads `public/` only). There is no GitHub Actions workflow, and pushing to `main` does not deploy. The Pages project is Direct Upload (not Git-connected). Always deploy `public`, never `.`.
 
 ## Contents
 
