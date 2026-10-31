@@ -4,7 +4,7 @@
   "private": true,
   "description": "Mediahive AB company website — practical AI for businesses.",
   "scripts": {
-    "deploy": "wrangler pages deploy . --project-name=mediahiveab"
+    "deploy": "wrangler pages deploy public --project-name=mediahiveab"
   },
   "dependencies": {
     "wrangler": "^3.114.0"
