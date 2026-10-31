@@ -139,6 +139,9 @@
     .product dt{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600}
     .product dd{margin:.15rem 0 0;color:#fff}
     /* about */
+    .photo{margin:0;position:relative}
+    .photo img{display:block;width:100%;height:clamp(240px,42vw,520px);object-fit:cover;object-position:center 40%}
+    .photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:2.2rem 0 1rem;background:linear-gradient(180deg,transparent,rgba(14,26,43,.75));color:#fff;font-size:.95rem}
     .about{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start}
     .avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(140deg,var(--accent),var(--ink));display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.8rem}
     .about h3{margin:0 0 .2rem;color:var(--ink);font-size:1.3rem}
@@ -321,6 +324,14 @@
         </div>
       </div>
     </section>
+
+    <figure class="photo">
+      <picture>
+        <source type="image/webp" srcset="/img/vasteras-malaren-skymning-1200.webp 1200w, /img/vasteras-malaren-skymning-2000.webp 2000w" sizes="100vw">
+        <img src="/img/vasteras-malaren-skymning-1200.jpg" srcset="/img/vasteras-malaren-skymning-1200.jpg 1200w, /img/vasteras-malaren-skymning-2000.jpg 2000w" sizes="100vw" width="2000" height="1302" loading="lazy" decoding="async" alt="Västerås i skymning med Mälaren och höstträd / Västerås at dusk by Lake Mälaren">
+      </picture>
+      <figcaption><div class="wrap"><span class="sv">Västerås vid Mälaren. Här finns vi, och vi jobbar med företag i hela Sverige.</span><span class="en">Västerås by Lake Mälaren. This is where we're based, working with businesses across Sweden.</span></div></figcaption>
+    </figure>
 
     <section>
       <div class="wrap about">
