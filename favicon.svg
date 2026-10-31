@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="MediaHive">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Mediahive">
   <rect width="32" height="32" rx="7" fill="#143052"/>
   <g fill="none" stroke="#FFFFFF" stroke-width="1.35" stroke-linejoin="round"><polygon points="11.67,7.65 7.34,10.15 7.34,15.15 11.67,17.65 16.00,15.15 16.00,10.15"/><polygon points="20.33,7.65 16.00,10.15 16.00,15.15 20.33,17.65 24.66,15.15 24.66,10.15"/><polygon points="16.00,15.15 11.67,17.65 11.67,22.65 16.00,25.15 20.33,22.65 20.33,17.65"/></g>
   <g stroke="#2BB8B8" stroke-width="0.6"><line x1="11.67" y1="12.65" x2="16" y2="16.4"/><line x1="20.33" y1="12.65" x2="16" y2="16.4"/><line x1="16.00" y1="20.15" x2="16" y2="16.4"/></g>
