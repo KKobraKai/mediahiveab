@@ -7,12 +7,20 @@
   <meta name="description" content="Mediahive AB är en ärlig AI-partner för små och medelstora företag. Automation, AI-assistenter, skräddarsydda verktyg och workshops. Från Västerås till hela Sverige, på plats eller på distans. Tydliga priser, ingen inlåsning.">
   <link rel="canonical" href="https://mediahiveab.com/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#0E1A2B">
   <meta property="og:title" content="Mediahive AB — Praktisk AI för företag">
   <meta property="og:description" content="En ärlig AI-partner för företag som inte har tid att lista ut AI själva. Västerås · Mälardalen · på distans.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mediahiveab.com/">
   <meta property="og:locale" content="sv_SE">
+  <meta property="og:image" content="https://mediahiveab.com/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Mediahive AB, AI-assistenter och automation för småföretag, Västerås">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://mediahiveab.com/og-image.jpg">
   <meta property="og:locale:alternate" content="en_US">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,9 +31,10 @@
     "@type": "ProfessionalService",
     "name": "Mediahive AB",
     "url": "https://mediahiveab.com/",
+    "logo": "https://mediahiveab.com/apple-touch-icon.png",
     "description": "Practical AI partner for small and mid-sized businesses: automation, AI assistants, custom tools and web apps, bot-to-bot integration, advisory and workshops.",
     "telephone": "+46729820484",
-    "email": "kaj.nybom@gmail.com",
+    "email": "kai@mediahiveab.com",
     "taxID": "559493-6790",
     "address": {"@type": "PostalAddress", "addressLocality": "Västerås", "postalCode": "723 56", "addressCountry": "SE"},
     "areaServed": [
@@ -39,7 +48,7 @@
     ],
     "availableLanguage": ["sv", "en"],
     "memberOf": {"@type": "Organization", "name": "Företagarna Västerås", "url": "https://www.foretagarna.se/foreningar/vasteras/"},
-    "founder": {"@type": "Person", "name": "Kaj Nybom", "jobTitle": "AI-utvecklare / AI developer", "memberOf": {"@type": "Organization", "name": "BNI Elit Västerås"}},
+    "founder": {"@type": "Person", "name": "Kaj Nybom", "image": "https://mediahiveab.com/img/kaj-nybom.jpg", "jobTitle": "AI-utvecklare / AI developer", "memberOf": {"@type": "Organization", "name": "BNI Elit Västerås"}},
     "makesOffer": [
       {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "AI-automation av vardagsarbete"}},
       {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "AI-assistenter för företag och kunder"}},
@@ -143,7 +152,8 @@
     .photo img{display:block;width:100%;height:clamp(240px,42vw,520px);object-fit:cover;object-position:center 40%}
     .photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:2.2rem 0 1rem;background:linear-gradient(180deg,transparent,rgba(14,26,43,.75));color:#fff;font-size:.95rem}
     .about{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start}
-    .avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(140deg,var(--accent),var(--ink));display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.8rem}
+    .avatar{display:block;width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px #fff,0 6px 18px rgba(14,26,43,.18)}
+    .avatar img{display:block;width:100%;height:100%;object-fit:cover}
     .about h3{margin:0 0 .2rem;color:var(--ink);font-size:1.3rem}
     .about .role{color:var(--accent-2);font-weight:600;margin:0 0 .8rem;font-size:.95rem}
     .about p{margin:0 0 .8rem;color:var(--muted)}
@@ -186,7 +196,7 @@
 <body>
   <header class="top">
     <div class="wrap nav">
-      <a class="brand" href="#top"><img src="/favicon.svg" alt="" width="30" height="30">Mediahive AB</a>
+      <a class="brand" href="#top"><img src="/favicon.svg" alt="MediaHive logo" width="30" height="30">Mediahive AB</a>
       <nav class="links" aria-label="Huvudmeny">
         <a href="#tjanster"><span class="sv">Tjänster</span><span class="en">Services</span></a>
         <a href="#sa-jobbar-vi"><span class="sv">Så jobbar vi</span><span class="en">How we work</span></a>
@@ -335,7 +345,7 @@
 
     <section>
       <div class="wrap about">
-        <div class="avatar" aria-hidden="true">KN</div>
+        <picture class="avatar"><source type="image/webp" srcset="/img/kaj-nybom.webp"><img src="/img/kaj-nybom.jpg" width="120" height="120" loading="lazy" decoding="async" alt="Kaj Nybom"></picture>
         <div>
           <h3>Kaj Nybom</h3>
           <p class="role"><span class="sv">Grundare · AI-utvecklare · BNI Elit Västerås</span><span class="en">Founder · AI developer · BNI Elit Västerås</span></p>
@@ -370,12 +380,12 @@
           <div class="card">
             <h3 style="margin-top:0"><span class="sv">Boka ett samtal</span><span class="en">Book a call</span></h3>
             <ul class="clist">
-              <li><span class="k"><span class="sv">E-post</span><span class="en">Email</span></span><a href="mailto:kaj.nybom@gmail.com?subject=Mediahive%20AB%20%E2%80%94%20kontakt">kaj.nybom@gmail.com</a></li>
+              <li><span class="k"><span class="sv">E-post</span><span class="en">Email</span></span><a href="mailto:kai@mediahiveab.com?subject=Mediahive%20AB%20%E2%80%94%20kontakt">kai@mediahiveab.com</a></li>
               <li><span class="k"><span class="sv">Telefon</span><span class="en">Phone</span></span><a href="tel:+46729820484">072-982 04 84</a></li>
               <li><span class="k"><span class="sv">Område</span><span class="en">Area</span></span><span><span class="sv">Västerås, Mälardalen och på distans</span><span class="en">Västerås, Mälardalen and remote</span></span></li>
             </ul>
             <div class="ctas-row">
-              <a class="btn btn-dark" href="mailto:kaj.nybom@gmail.com?subject=Mediahive%20AB%20%E2%80%94%20boka%20samtal"><span class="sv">Skicka mejl</span><span class="en">Send email</span></a>
+              <a class="btn btn-dark" href="mailto:kai@mediahiveab.com?subject=Mediahive%20AB%20%E2%80%94%20boka%20samtal"><span class="sv">Skicka mejl</span><span class="en">Send email</span></a>
               <a class="btn btn-accent" href="tel:+46729820484"><span class="sv">Ring nu</span><span class="en">Call now</span></a>
             </div>
           </div>
@@ -383,7 +393,7 @@
             <span class="eyebrow">BNI Elit Västerås</span>
             <h3><span class="sv">Gästbesök på BNI</span><span class="en">Visit BNI as a guest</span></h3>
             <p><span class="sv">Nyfiken på hur BNI fungerar? Du är välkommen som gäst till BNI Elit Västerås. Kaj sitter i kategorin AI-utvecklare.</span><span class="en">Curious how BNI works? You're welcome as a guest at BNI Elit Västerås. Kaj holds the AI developer category.</span></p>
-            <p style="margin-top:1.2rem"><a class="btn btn-dark btn-sm" href="mailto:kaj.nybom@gmail.com?subject=G%C3%A4stbes%C3%B6k%20BNI%20Elit%20V%C3%A4ster%C3%A5s"><span class="sv">Boka gästbesök</span><span class="en">Book a guest visit</span></a></p>
+            <p style="margin-top:1.2rem"><a class="btn btn-dark btn-sm" href="mailto:kai@mediahiveab.com?subject=G%C3%A4stbes%C3%B6k%20BNI%20Elit%20V%C3%A4ster%C3%A5s"><span class="sv">Boka gästbesök</span><span class="en">Book a guest visit</span></a></p>
           </div>
         </div>
       </div>
@@ -393,7 +403,7 @@
   <footer>
     <div class="wrap foot">
       <div><strong style="color:#fff">Mediahive AB</strong> · <span class="sv">Org.nr</span><span class="en">Org. no.</span> 559493-6790 · Västerås, Sverige</div>
-      <div><a href="mailto:kaj.nybom@gmail.com">kaj.nybom@gmail.com</a> · <a href="tel:+46729820484">072-982 04 84</a> · <a href="https://referralcard.ai/">referralcard.ai</a></div>
+      <div><a href="mailto:kai@mediahiveab.com">kai@mediahiveab.com</a> · <a href="tel:+46729820484">072-982 04 84</a> · <a href="https://referralcard.ai/">referralcard.ai</a> · <a href="/integritet/"><span class="sv">Integritetspolicy</span><span class="en">Privacy policy</span></a></div>
     </div>
   </footer>
 
