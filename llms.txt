@@ -19,7 +19,7 @@
 
 ## How we work
 
-- Starts with a short, free call; then a fixed price for a clearly scoped first step, so the cost is known before anything is built.
+- Starts with a short call about where time goes today; then a written proposal for a clearly scoped first step, before anything is built.
 - No lock-in: the customer owns what is built and gets documentation to run it themselves or switch supplier.
 - Plain language, no jargon.
 
