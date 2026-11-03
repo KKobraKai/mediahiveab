@@ -933,15 +933,13 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
                 <div class="links">
                   <a class="btn" id="sv-link" href="https://www.google.com/maps/@?api=1&amp;map_action=pano&amp;viewpoint=59.6099,16.5448" target="_blank" rel="noopener">Öppna Google Street View här</a>
                 </div>
-                <label class="x-form" style="grid-template-columns: minmax(0, 1fr)"><span>Mapillary token (valfritt)</span>
-                  <input class="x-in" id="mly-token" type="password" autocomplete="off" spellcheck="false" placeholder="MLY|…" />
-                </label>
+                <input id="mly-token" type="hidden" value="" />
                 <div class="x-row">
-                  <button class="btn" type="button" id="mly-btn" disabled>Hämta närmaste gatubilder</button>
-                  <span class="x-status" id="mly-status" aria-live="polite">Mapillary-token saknas</span>
+                  <button class="btn" type="button" id="mly-btn">Hämta närmaste gatubilder</button>
+                  <span class="x-status" id="mly-status" aria-live="polite">Klar att hämta runt punkten.</span>
                 </div>
                 <div class="x-thumbs" id="mly-thumbs"></div>
-                <p class="fineprint">Token sparas bara i minnet. Inga Google-bilder bäddas in eller laddas ned.</p>
+                <p class="fineprint">Inga Google-bilder bäddas in eller laddas ned.</p>
               </div>
             </aside>
           </div>
@@ -1612,20 +1610,15 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
 
         /* ---------- Mapillary ---------- */
         function mlyState() {
-          var has = $("mly-token").value.trim() !== "";
-          $("mly-btn").disabled = !has;
-          if (!has) $("mly-status").textContent = "Mapillary-token saknas";
-          else if ($("mly-status").textContent === "Mapillary-token saknas") $("mly-status").textContent = "Klar att hämta runt punkten.";
+          $("mly-btn").disabled = false;
+          if (/token saknas/.test($("mly-status").textContent)) $("mly-status").textContent = "Klar att hämta runt punkten.";
         }
         $("mly-token").addEventListener("input", mlyState);
         $("mly-btn").addEventListener("click", function () {
-          var token = $("mly-token").value.trim();
-          if (!token) return mlyState();
           var p = svPoint();
           var dLat = 30 / 111320, dLng = 30 / (111320 * Math.cos(rad(p.lat)));
           var bbox = [p.lng - dLng, p.lat - dLat, p.lng + dLng, p.lat + dLat].map(function (v) { return v.toFixed(6); }).join(",");
-          var url = "https://graph.mapillary.com/images?access_token=" + encodeURIComponent(token) +
-            "&fields=id,captured_at,thumb_1024_url,computed_geometry&bbox=" + bbox + "&limit=8";
+          var url = "/api/mapillary?bbox=" + bbox;
           $("mly-status").textContent = "Hämtar…";
           $("mly-thumbs").innerHTML = "";
           fetch(url).then(function (r) {
@@ -1653,7 +1646,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             });
           }).catch(function (err) {
             mly = [];
-            $("mly-status").textContent = "Kunde inte hämta (" + err.message + "). Kontrollera token.";
+            $("mly-status").textContent = "Kunde inte hämta (" + err.message + "). Försök igen.";
           });
         });
 
