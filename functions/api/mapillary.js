@@ -4,6 +4,10 @@ export async function onRequestGet({ request, env }) {
   const u = new URL(request.url);
   const bbox = (u.searchParams.get("bbox") || "").split(",").map(Number);
   const json = (o, s) => new Response(JSON.stringify(o), { status: s || 200, headers: { "content-type": "application/json", "cache-control": "no-store" } });
+  const allowed = (h) => h === "mediahiveab.com" || h === "www.mediahiveab.com";
+  const hostOf = (v) => { try { return new URL(v).hostname; } catch { return ""; } };
+  const origin = request.headers.get("origin"), referer = request.headers.get("referer");
+  if (!allowed(hostOf(origin || referer || ""))) return json({ error: "forbidden" }, 403);
   if (!env.MAPILLARY_TOKEN) return json({ error: "token_missing" }, 503);
   if (bbox.length !== 4 || bbox.some(isNaN)) return json({ error: "bad_bbox" }, 400);
   const [w, s, e, n] = bbox;
