@@ -1,0 +1,1798 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Takmätning Jägervalls</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap"
+    />
+    <style>
+/* Hark's design tokens and component styles. Each component's rules follow its @component comment. style-gates: data */
+
+/* @component foundations */
+:root {
+  color-scheme: light dark;
+
+  --text-primary: light-dark(#1d1d1f, #f5f5f7);         /* body text */
+  --text-secondary: light-dark(#636366, #a1a1a6);       /* supporting grey text */
+  --text-tertiary: light-dark(#1d1d1f4d, #f5f5f74d);    /* hollow dots, faint marks; never body text */
+  --text-primary-on: light-dark(#f5f5f7, #1d1d1f);      /* text on --fill-primary */
+  --text-secondary-on: light-dark(#aeaeb2, #5c5c60);    /* grey text on --fill-primary */
+  --fill-primary: light-dark(#1d1d1f, #f5f5f7);         /* the strong fill: solid chips, the nav, the badge */
+  --fill-primary-on: light-dark(#f5f5f7, #1d1d1f);      /* the page background */
+  --fill-secondary: light-dark(#1d1d1f80, #f5f5f780);
+  --fill-tertiary: light-dark(#e8e8ea, #2a2a2d);        /* the grey card, panel and row tint */
+  --fill-segment: light-dark(#3a3a3c, #e2e2e4);         /* the nav's tab track */
+  --fill-system-green: #00a665;                         /* status: done, ready */
+  --fill-system-orange: #ff4d00;                        /* status: now, current */
+  --fill-system-red: light-dark(#da2f35, #f1555b);      /* status: blocked, error */
+  --transparent-primary: light-dark(#1d1d1f4d, #f5f5f74d);
+  --stroke-primary: light-dark(#1d1d1f24, #f5f5f724);   /* strong hairline */
+  --stroke-secondary: light-dark(#1d1d1f12, #f5f5f712); /* faint hairline between rows */
+  --stroke-primary-on: light-dark(#f5f5f71a, #1d1d1f1a);
+  --stroke-composer: light-dark(#f5f5f780, #1d1d1f80);  /* the callout's glass edge */
+  --stroke-system-orange: #ff4d0026;
+  --hover-wash: light-dark(#1d1d1f0d, #f5f5f70d);
+  --hover-wash-primary-on: light-dark(#f9f9fa26, #1d1d1f14);
+
+  /* The hero is light text over a dark photo in both themes. */
+  --hero-surface: #161f39;
+  --hero-text: #f5f5f7;
+  --hero-text-muted: #f5f5f7cc;
+  --hero-scrim-strong: rgb(22 31 57 / 0.78);
+  --hero-scrim-soft: rgb(22 31 57 / 0.3);
+  --hero-scrim-side: rgb(22 31 57 / 0.45);
+  --hero-glass: rgb(22 31 57 / 0.42);
+  --hero-glass-faint: rgb(22 31 57 / 0.35);
+  --hero-glass-stroke: rgb(245 245 247 / 0.28);
+
+  --mat-regular: light-dark(rgb(255 255 255 / 0.56), rgb(29 29 31 / 0.55));
+  --mat-thin: light-dark(rgb(255 255 255 / 0.22), rgb(29 29 31 / 0.4));
+  --mat-agent: light-dark(rgb(255 255 255 / 0.84), rgb(29 29 31 / 0.66));
+  --mat-inverse: color-mix(in srgb, var(--fill-primary) 86%, transparent);  /* the nav: dark on light, light on dark */
+  --hark-blur: blur(50px) saturate(1.6);
+  --hark-shadow: 0 8px 40px #1d1d1f1f;
+
+  --sans: "GT Standard", "GT Standard L", "Geist", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --lh: 1.3;                                            /* every text style is 130% */
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 600;
+  --size-caption: 12px;                                 /* the smallest text allowed */
+  --size-meta: 13px;
+  --size-small: 14px;
+  --size-body: 15px;
+  --size-prose: 16px;
+  --size-heading: 20px;
+  --size-figure: clamp(24px, 3vw, 32px);
+  --size-title: clamp(26px, 3vw, 32px);
+  --size-display: clamp(34px, 5vw, 48px);
+  --size-lede: clamp(16px, 1.7vw, 20px);
+
+  --type-caption: var(--weight-regular) var(--size-caption)/var(--lh) var(--sans);
+  --type-tag: var(--weight-medium) var(--size-caption)/var(--lh) var(--sans);
+  --type-small: var(--weight-regular) var(--size-small)/var(--lh) var(--sans);
+  --type-label: var(--weight-medium) var(--size-small)/var(--lh) var(--sans);
+  --type-body: var(--weight-regular) var(--size-body)/var(--lh) var(--sans);
+  --type-body-strong: var(--weight-medium) var(--size-body)/var(--lh) var(--sans);
+  --type-heading: var(--weight-medium) var(--size-heading)/var(--lh) var(--sans);
+  --type-lede: var(--weight-medium) var(--size-lede)/var(--lh) var(--sans);
+  --type-figure: var(--weight-regular) var(--size-figure)/var(--lh) var(--sans);
+  --type-title: var(--weight-regular) var(--size-title)/var(--lh) var(--sans);
+  --type-display: var(--weight-medium) var(--size-display)/var(--lh) var(--sans);
+  --type-numeral: var(--weight-regular) 48px/1 var(--sans);
+
+  --r-s: 12px;
+  --r-m: 16px;
+  --r-l: 24px;
+  --r-xl: 32px;
+  --r-pill: 100px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-quick: 160ms;
+  --dur-draw: 1400ms;
+
+  --page-max: 1120px;
+  --gutter: clamp(16px, 3vw, 32px);                     /* the page's side padding */
+  --tap: 44px;                                          /* the smallest touch target */
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--fill-primary-on);
+  color: var(--text-primary);
+  font: var(--type-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+figure { margin-inline: 0; }
+a { color: inherit; }
+b, strong { font-weight: var(--weight-bold); }
+p { margin: 0; text-wrap: pretty; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+small { font-size: max(var(--size-caption), 0.85em); }
+.sub { color: var(--text-secondary); }
+
+:focus-visible { outline: 2px solid var(--fill-primary); outline-offset: 3px; border-radius: 6px; }
+
+/* @component page */
+.page {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+  padding-block: 12px 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+.main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+
+.glass {
+  background: var(--mat-inverse);
+  -webkit-backdrop-filter: var(--hark-blur);
+  backdrop-filter: var(--hark-blur);
+  border: 1px solid var(--stroke-primary-on);
+}
+.nav {
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  z-index: 20;
+  justify-self: center;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--hark-shadow);
+}
+.nav :focus-visible { outline-color: var(--fill-primary-on); }
+.seg {
+  display: flex;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-radius: var(--r-pill);
+  background: var(--fill-segment);
+}
+.seg::-webkit-scrollbar { display: none; }
+.seg a {
+  flex: none;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  font: var(--type-label);
+  color: var(--text-secondary-on);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.seg a:hover { color: var(--text-primary-on); }
+/* The active tab carries its own fill so its text is measured against it. */
+.seg a[aria-current="true"] { background: var(--fill-primary-on); color: var(--text-primary); }
+.theme-btn {
+  flex: none;
+  width: 36px; height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hover-wash-primary-on);
+  color: var(--text-primary-on);
+  cursor: pointer;
+}
+.theme-btn:hover { box-shadow: inset 0 0 0 100px var(--hover-wash-primary-on); }
+.theme-btn::before { content: ""; width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor; background: linear-gradient(to right, light-dark(currentColor, transparent) 50%, light-dark(transparent, currentColor) 50%); }
+@media (max-width: 599px) {
+  .seg a { display: flex; align-items: center; min-height: var(--tap); }
+  .theme-btn { width: var(--tap); height: var(--tap); }
+}
+
+/* @component footer */
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--stroke-secondary);
+  font-size: var(--size-small);
+  color: var(--text-secondary);
+}
+.foot strong { color: var(--text-primary); }
+.foot nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.foot nav a {
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: var(--fill-tertiary);
+  color: var(--text-primary);
+  font: var(--type-tag);
+  text-decoration: none;
+}
+.foot nav a:hover { box-shadow: inset 0 0 0 100px var(--hover-wash); }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--r-xl);
+  background: var(--fill-primary);
+  color: var(--text-primary-on);
+  box-shadow: var(--hark-shadow);
+  font: var(--weight-medium) var(--size-body)/1.1 var(--sans);
+  text-decoration: none;
+}
+.badge:hover { box-shadow: var(--hark-shadow), inset 0 0 0 100px var(--hover-wash-primary-on); }
+.hark-mark { display: inline-grid; place-items: center; }
+.hark-mark svg { display: block; }
+@media (max-width: 599px) {
+  .foot nav a { display: inline-flex; align-items: center; min-height: var(--tap); min-width: var(--tap); }
+  .badge { min-height: var(--tap); }
+}
+
+/* @component chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: var(--r-pill);
+  font: var(--type-tag);
+  max-width: 100%;
+  background: var(--fill-tertiary);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+.chip::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: inset 0 0 0 1.5px var(--text-tertiary);
+}
+.chip--solid { background: var(--fill-primary); color: var(--text-primary-on); }
+.chip--solid::before { background: var(--fill-system-green); box-shadow: none; }
+td .chip { white-space: nowrap; }
+/* @component dot */
+.dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font: var(--type-tag);
+  color: var(--text-primary);
+}
+.dot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--fill-system-green); }
+tbody th .dot { display: flex; width: fit-content; }
+/* @component pill */
+.pill {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: var(--r-pill);
+  background: var(--fill-tertiary);
+  color: var(--text-secondary);
+  font: var(--type-tag);
+  white-space: normal;
+  vertical-align: 1px;
+}
+/* @component button, link and links */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 5px 12px;
+  border-radius: var(--r-s);
+  background: var(--fill-primary-on);
+  color: var(--text-primary);
+  border: 1px solid var(--stroke-primary);
+  font: var(--type-tag);
+  text-decoration: none;
+  max-width: 100%;
+  transition: box-shadow var(--dur-quick) ease;
+}
+.btn:hover { box-shadow: inset 0 0 0 100px var(--hover-wash); }
+.btn[target="_blank"]::after { content: "\2197"; font-size: 11px; color: var(--text-secondary); }
+.link {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--stroke-primary);
+  text-underline-offset: 3px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.link:hover { text-decoration-color: currentColor; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (pointer: coarse), (max-width: 599px) { .btn { min-height: var(--tap); padding-inline: 14px; } }
+@media (max-width: 599px) {
+  .link { display: inline-flex; align-items: center; min-width: var(--tap); min-height: var(--tap); margin: -13px 0; vertical-align: middle; }
+}
+/* @component text and fineprint */
+.prose { display: grid; gap: 12px; max-width: 68ch; font-size: var(--size-prose); }
+.fineprint { font-size: var(--size-small); color: var(--text-secondary); max-width: 70ch; }
+/* @component hero */
+.hero {
+  position: relative;
+  min-height: clamp(460px, 64vh, 660px);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  color: var(--hero-text);
+  isolation: isolate;
+  box-shadow: var(--hark-shadow);
+  background: var(--hero-surface);
+}
+/* Without a photo the hero is as tall as its copy, so the callout sits beside the copy instead of over it. */
+.hero:not(:has(.hero__img)) { min-height: 0; background: var(--hero-surface) center / cover no-repeat; }
+.hero:not(:has(.hero__img))::after { background: linear-gradient(to right, var(--hero-scrim-side) 0%, transparent 60%); }
+@media (min-width: 761px) {
+  .hero:not(:has(.hero__img)) > .callout { position: static; flex: none; align-self: flex-start; margin: clamp(16px, 2.4vw, 24px) clamp(16px, 2.4vw, 24px) clamp(16px, 2.4vw, 24px) auto; }
+}
+.hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 60%;
+  z-index: -2;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, var(--hero-scrim-strong) 0%, var(--hero-scrim-soft) 42%, transparent 66%),
+    linear-gradient(to right, var(--hero-scrim-side) 0%, transparent 60%);
+}
+.hero__copy {
+  display: grid;
+  gap: 14px;
+  max-width: 40rem;
+  padding: clamp(24px, 4vw, 48px);
+  padding-bottom: clamp(28px, 3.4vw, 44px);
+}
+.hero__eyebrow {
+  justify-self: start;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: var(--hero-glass);
+  border: 1px solid var(--hero-glass-stroke);
+  -webkit-backdrop-filter: var(--hark-blur);
+  backdrop-filter: var(--hark-blur);
+  font: var(--type-label);
+}
+.hero h1 { font: var(--type-display); letter-spacing: 0; }
+.hero h1 em { font-style: normal; }
+.hero__sub { font: var(--type-lede); max-width: 34ch; }
+.hero__meta { font-size: var(--size-small); color: var(--hero-text-muted); }
+.hero__credit {
+  position: absolute;
+  right: clamp(20px, 3vw, 32px);
+  bottom: 16px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: var(--hero-glass-faint);
+  -webkit-backdrop-filter: var(--hark-blur);
+  backdrop-filter: var(--hark-blur);
+  font: var(--type-caption);
+  color: var(--hero-text-muted);
+}
+.hero > .callout {
+  position: absolute;
+  top: clamp(16px, 2.4vw, 24px);
+  right: clamp(16px, 2.4vw, 24px);
+  width: min(320px, calc(100% - 32px));
+}
+@media (max-width: 760px) {
+  .hero { flex-direction: column; justify-content: flex-end; align-items: stretch; min-height: 0; }
+  .hero__img { object-position: 22% 50%; }
+  .hero__copy { padding-top: 260px; padding-bottom: 28px; }
+  .hero:not(:has(.hero__img)) .hero__copy { padding-top: clamp(24px, 4vw, 48px); }
+  .hero__credit { top: 16px; right: 16px; bottom: auto; }
+  .hero > .callout { position: static; width: auto; margin: 0 12px 12px; }
+}
+/* @component callout */
+.callout {
+  max-width: 420px;
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px 18px;
+  border-radius: var(--r-l);
+  background: var(--mat-agent);
+  -webkit-backdrop-filter: var(--hark-blur);
+  backdrop-filter: var(--hark-blur);
+  border: 1px solid var(--stroke-composer);
+  box-shadow: var(--hark-shadow);
+  color: var(--text-primary);
+  font-size: var(--size-small);
+}
+.callout__head { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-weight: var(--weight-medium); }
+.callout__head svg { color: var(--text-primary); }
+.callout__lead { font-size: var(--size-body); }
+.callout .fineprint { font-size: var(--size-caption); }
+.callout .btn { justify-self: start; }
+/* @component stats */
+.stats { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); padding-top: 8px; }
+.stat {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 4px;
+  padding: 12px 24px;
+  border-left: 1px solid var(--stroke-secondary);
+}
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat__fig { font: var(--type-figure); font-variant-numeric: tabular-nums; }
+.stat__label { font-size: var(--size-small); color: var(--text-secondary); }
+@media (max-width: 760px) {
+  .stats { grid-auto-flow: row; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; padding-top: 0; }
+  .stat { grid-column: 1 / -1; grid-template-columns: subgrid; align-items: baseline; gap: 12px; padding: 14px 0; border-left: 0; border-top: 1px solid var(--stroke-secondary); }
+  .stat:first-child { border-top: 0; }
+}
+/* @component section */
+.section {
+  padding-block: clamp(40px, 6vw, 72px) clamp(16px, 2vw, 24px);
+  border-top: 1px solid var(--stroke-secondary);
+  scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 72px); /* Clears the sticky .nav: its top offset plus its tallest height, 56px. */
+  min-width: 0;
+}
+.section > * + * { margin-top: clamp(20px, 2.4vw, 28px); }
+.section > .head + * { margin-top: 0; }
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: 10px 40px;
+  align-items: end;
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+.head__eyebrow { grid-column: 1 / -1; font: var(--type-label); color: var(--text-secondary); }
+.head h2 { font: var(--type-title); }
+.head__sub { justify-self: end; font-size: var(--size-body); color: var(--text-secondary); max-width: 44ch; text-align: right; }
+@media (max-width: 900px) { .head { grid-template-columns: 1fr; } .head__sub { justify-self: start; text-align: left; } }
+/* @component table */
+.table-wrap { margin-inline: -12px; padding-inline: 12px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font: var(--type-small); font-variant-numeric: tabular-nums; }
+caption { text-align: left; font: var(--type-caption); color: var(--text-secondary); padding: 0 0 10px; }
+th, td { text-align: left; vertical-align: top; padding: 12px; border-bottom: 1px solid var(--stroke-secondary); }
+th:first-child, td:first-child { padding-left: 0; }
+th:last-child, td:last-child { padding-right: 0; }
+thead th {
+  font: var(--type-tag);
+  color: var(--text-secondary);
+  border-bottom-color: var(--stroke-primary);
+  padding-top: 0;
+  padding-bottom: 8px;
+  white-space: nowrap;
+}
+tbody th { font-weight: var(--weight-bold); }
+tbody tr:last-child > * { border-bottom: 0; }
+.rowhead { white-space: nowrap; }
+td small, th small { display: block; font: var(--type-caption); color: var(--text-secondary); margin-top: 2px; }
+td.num { font-weight: var(--weight-bold); white-space: nowrap; }
+td.num small { white-space: normal; }
+.muted { color: var(--text-secondary); }
+tr.is-highlight > * { background: var(--fill-tertiary); }
+tr.is-highlight > :first-child { box-shadow: -12px 0 var(--fill-tertiary); }
+tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
+.after-table { margin-top: 20px; padding-inline: 12px; }
+@media (max-width: 599px) {
+  .table-wrap table, .table-wrap tbody, .table-wrap tr, .table-wrap th, .table-wrap td { display: block; }
+  .table-wrap thead { display: none; }
+  .table-wrap caption { display: block; text-align: left; }
+  .table-wrap tbody tr { padding: 12px 0; border-bottom: 1px solid var(--stroke-secondary); }
+  .table-wrap tbody tr.is-highlight { margin-inline: -12px; padding-inline: 12px; background: var(--fill-tertiary); }
+  .table-wrap tbody tr.is-highlight > * { background: none; box-shadow: none; }
+  .table-wrap tbody tr > * { border-bottom: 0; padding: 2px 0; }
+  .table-wrap tbody td.is-empty { display: none; }
+  .table-wrap tbody td[data-label] { display: grid; grid-template-columns: minmax(0, 8em) minmax(0, 1fr); column-gap: 12px; }
+  .table-wrap tbody td[data-label]::before { content: attr(data-label) " "; color: var(--text-secondary); font-size: var(--size-caption); }
+  .rowhead { white-space: normal; }
+}
+/* @component compare */
+.compare { margin-inline: -12px; overflow-x: auto; scroll-snap-type: x mandatory; }
+.compare table { table-layout: fixed; min-width: calc(var(--compare-cols, 3) * 200px); }
+.compare th, .compare td { scroll-snap-align: start; padding-inline: 12px; }
+.compare thead th { font: var(--type-body-strong); color: var(--text-primary); white-space: normal; padding-top: 0; padding-bottom: 14px; border-bottom-color: var(--stroke-secondary); }
+/* On light tiles a white product backdrop blends into the grey. */
+.compare__media { position: relative; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; width: 100%; aspect-ratio: 4 / 3; max-height: 240px; margin: 0 0 12px; padding: 16px; border-radius: var(--r-m); background: var(--fill-tertiary); }
+.compare__media img { max-width: 100%; max-height: 100%; mix-blend-mode: multiply; }
+.compare thead th > .chip { display: flex; width: fit-content; margin-top: 8px; }
+.compare:has(.compare__media) thead th:not(:has(.compare__media))::before { content: ""; display: block; width: 100%; aspect-ratio: 4 / 3; max-height: 240px; margin-bottom: 12px; border-radius: var(--r-m); background: var(--fill-tertiary); }
+:root[data-theme="dark"] .compare__media img { mix-blend-mode: normal; border-radius: var(--r-s); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .compare__media img { mix-blend-mode: normal; border-radius: var(--r-s); } }
+/* The header column shrinks to nothing on screen but stays in the table, so screen readers keep each value's row header. */
+.js .compare tbody th[scope="row"], .js .compare thead td:first-child { width: 0; padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.js .compare td[data-label]::before { content: attr(data-label); content: attr(data-label) / ""; display: block; margin-bottom: 4px; font: var(--type-caption); color: var(--text-secondary); }
+@media (max-width: 599px) { .compare table { min-width: calc(var(--compare-cols, 3) * 68vw); } }
+/* @component steps */
+.step {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) minmax(220px, 0.78fr);
+  gap: 16px 28px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--stroke-secondary);
+}
+.step > * { min-width: 0; }
+.steps > .step:last-child { border-bottom: 0; }
+.step p + p { margin-top: 8px; }
+.step__num { font: var(--type-numeral); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.step__eyebrow { margin-top: 8px; font: var(--type-label); color: var(--text-secondary); }
+.step h3 { font: var(--type-heading); margin-bottom: 12px; }
+.step__pills { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.step__pills li {
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--stroke-primary);
+  font-size: var(--size-meta);
+  color: var(--text-secondary);
+  max-width: 100%;
+}
+.step__pills b { color: var(--text-primary); font-weight: var(--weight-bold); }
+.step__panel {
+  align-self: start;
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: var(--r-m);
+  background: var(--fill-tertiary);
+  font-size: var(--size-small);
+}
+.step__panel dt { font-size: var(--size-caption); color: var(--text-secondary); margin-bottom: 2px; }
+.step__panel dd { margin: 0 0 12px; }
+.step__panel dd:last-child { margin-bottom: 0; }
+.step__panel .fineprint { display: block; margin-top: 6px; font-size: var(--size-caption); }
+.step__panel .btn { margin-top: 8px; }
+.step__figure { grid-column: 2 / span 2; margin: 0; }
+.step__figure img { width: 100%; height: clamp(200px, 26vw, 320px); object-fit: cover; border-radius: var(--r-m); }
+.step__figure figcaption { font-size: var(--size-caption); color: var(--text-secondary); padding-top: 10px; }
+@media (min-width: 901px) {
+  .step:not(:has(> .step__panel)) { grid-template-columns: 112px minmax(0, 1fr); }
+  .step:not(:has(> .step__panel)) > .step__figure { grid-column: 2; }
+}
+@media (max-width: 900px) {
+  .step { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .step__figure { grid-column: 1; }
+  .step__intro { display: flex; align-items: baseline; gap: 14px; }
+  .step__num { font-size: 40px; }
+  .step__eyebrow { margin-top: 0; }
+}
+/* @component checklist */
+.checklist { display: grid; grid-template-columns: minmax(0, 1.4fr) auto minmax(0, 1fr); column-gap: 20px; list-style: none; margin: 0; padding: 0; }
+.checklist:not(:has(.checklist__note)) { grid-template-columns: minmax(0, 1fr) auto; }
+.checklist > li {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  row-gap: 8px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--stroke-secondary);
+}
+.checklist > li:last-child { border-bottom: 0; }
+.checklist__item { grid-column: 1; font-weight: var(--weight-bold); }
+.checklist > li > .chip { grid-column: 2; justify-self: start; }
+.checklist:not(:has(.checklist__note)) > li > .chip { justify-self: end; }
+.checklist__item small { display: block; font-weight: var(--weight-regular); font-size: var(--size-caption); color: var(--text-secondary); margin-top: 2px; }
+.checklist__note { grid-column: 3; font-size: var(--size-small); color: var(--text-secondary); }
+.checklist > li.is-done .checklist__item { text-decoration: line-through; text-decoration-color: var(--text-tertiary); }
+@media (max-width: 760px) {
+  .checklist { grid-template-columns: minmax(0, 1fr) auto; }
+  .checklist > li > .chip { justify-self: end; }
+  .checklist__note { grid-column: 1 / -1; }
+}
+/* @component breakdown */
+.breakdown { max-width: 720px; }
+@media (min-width: 901px) { .section > .breakdown, .section > .aside { max-width: calc((100% - 40px) * 1.65 / 2.65); } }
+.breakdown dl { margin: 0; }
+.breakdown .row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--stroke-secondary);
+}
+.breakdown dt { font-size: var(--size-body); }
+.breakdown dt small { display: block; color: var(--text-secondary); font-size: var(--size-meta); margin-top: 2px; }
+.breakdown dd { margin: 0; font-weight: var(--weight-bold); font-size: var(--size-body); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.breakdown .row--total {
+  margin-top: -1px;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--stroke-primary);
+  border-bottom: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.breakdown .row--total dt { font: var(--type-body-strong); }
+.breakdown .row--total dd { font: var(--type-figure); white-space: normal; }
+.breakdown .fineprint { margin-top: 16px; }
+/* @component pair */
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); align-items: start; }
+.pair:has(> :is(.callout, .aside):last-child) { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); column-gap: 40px; }
+.pair > .callout { max-width: none; }
+@media (max-width: 760px) { .pair, .pair:has(> :is(.callout, .aside):last-child) { grid-template-columns: minmax(0, 1fr); } }
+/* @component timeline */
+.timeline { display: grid; grid-template-columns: 210px minmax(0, 1fr) auto; column-gap: 28px; list-style: none; margin-inline: 0; margin-bottom: 0; padding: 0; }
+.timeline > li {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  row-gap: 8px;
+  align-items: start;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--stroke-secondary);
+}
+.timeline > li:first-child { padding-top: 0; }
+.timeline > li:last-child { border-bottom: 0; padding-bottom: 0; }
+.timeline__when { display: flex; align-items: baseline; gap: 12px; font-weight: var(--weight-bold); }
+.timeline__when::before {
+  content: "";
+  width: 8px; height: 8px;
+  flex: none;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--text-tertiary);
+  transform: translateY(-1px);
+}
+.timeline > li.is-current .timeline__when::before { background: var(--fill-system-orange); box-shadow: 0 0 0 4px var(--stroke-system-orange); }
+.timeline > li > p:has(> .chip:only-child) { justify-self: end; }
+.timeline__what ul { margin: 0; padding-left: 18px; }
+.timeline__what li { margin-bottom: 4px; }
+.timeline__what li:last-child { margin-bottom: 0; }
+.timeline__what p + p { margin-top: 6px; }
+@media (max-width: 900px) {
+  .timeline { grid-template-columns: minmax(0, 1fr); }
+  .timeline > li > p:has(> .chip:only-child) { justify-self: start; }
+  .timeline__what, .timeline > li > p:last-child { padding-left: 20px; }
+}
+/* @component cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+.cards:has(> :nth-child(4):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cards > div { padding: 22px 24px; border-radius: var(--r-m); background: var(--fill-tertiary); }
+.cards h3 { font: var(--type-heading); margin-bottom: 10px; }
+.cards ul { margin: 0; padding: 0; list-style: none; }
+.cards li { padding: 10px 0; border-bottom: 1px solid var(--stroke-secondary); }
+.cards li:last-child { border-bottom: 0; padding-bottom: 0; }
+.cards__media { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; aspect-ratio: 4 / 3; max-height: 220px; margin: 0 0 14px; padding: 12px; border-radius: var(--r-s); background: var(--fill-primary-on); }
+.cards__media img { max-width: 100%; max-height: 100%; mix-blend-mode: multiply; }
+:root[data-theme="dark"] .cards__media img { mix-blend-mode: normal; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cards__media img { mix-blend-mode: normal; } }
+.cards .quote { font: var(--type-heading); margin-bottom: 8px; text-wrap: balance; }
+@media (max-width: 900px) { .cards { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .cards:has(> :nth-child(4):last-child) { grid-template-columns: minmax(0, 1fr); } }
+/* @component aside */
+.aside {
+  max-width: 62ch;
+  padding: 20px 22px;
+  border: 1.5px dashed var(--stroke-primary);
+  border-radius: var(--r-m);
+}
+.aside h3 { font: var(--type-heading); margin-bottom: 6px; }
+/* @component chart */
+.chart { margin-bottom: 8px; padding: 20px 20px 12px; border-radius: var(--r-m); background: var(--fill-tertiary); overflow-x: auto; }
+.chart__cap { font-size: var(--size-caption); color: var(--text-secondary); margin-bottom: 12px; }
+.chart svg { width: 100%; height: auto; display: block; }
+.pf-grid { stroke: var(--stroke-primary); stroke-width: 1; }
+.pf-line { stroke: var(--fill-primary); stroke-width: 2.4; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.pf-fill { fill: var(--fill-primary); opacity: 0.07; }
+.pf-dot { fill: var(--fill-primary-on); stroke: var(--fill-primary); stroke-width: 2; }
+.pf-alt { fill: var(--text-primary); font: var(--weight-bold) var(--size-body) var(--sans); text-anchor: middle; }
+.pf-name { fill: var(--text-secondary); font: var(--weight-medium) var(--size-meta) var(--sans); text-anchor: middle; }
+.pf-num { fill: var(--text-tertiary); font: var(--weight-medium) var(--size-meta) var(--sans); text-anchor: middle; }
+.pf-axis { fill: var(--text-secondary); font: var(--weight-regular) var(--size-caption) var(--sans); }
+.js .chart:not(.is-in) .pf-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; }
+.js .chart.is-in .pf-line { stroke-dasharray: 1400; stroke-dashoffset: 0; transition: stroke-dashoffset var(--dur-draw) var(--ease-out) 120ms; }
+@media (prefers-reduced-motion: reduce) { .js .chart .pf-line { stroke-dasharray: none; stroke-dashoffset: 0; transition: none; } }
+/* @component figure */
+.band { margin-inline: 0; margin-bottom: 0; }
+.band img { width: 100%; height: clamp(240px, 40vw, 520px); object-fit: cover; border-radius: var(--r-xl); }
+.band figcaption { font-size: var(--size-caption); color: var(--text-secondary); padding: 10px 4px 0; }
+.is-portrait img { width: auto; max-width: 100%; height: clamp(320px, 48vw, 560px); }
+
+</style>
+    <style>
+.hero:not(:has(.hero__img)) { background-image: url("data:image/webp;base64,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"); }
+
+</style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <style>
+      .x-app { max-width: none; padding-block: 16px 32px; gap: 14px; }
+      .x-app button { cursor: pointer; }
+      .x-app button:disabled { opacity: 0.45; cursor: not-allowed; }
+      .x-top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+      .x-top h1 { font: var(--type-title); }
+      .x-meta { font: var(--type-small); color: var(--text-secondary); margin-top: 4px; }
+      .x-warn {
+        display: flex; align-items: flex-start; gap: 10px;
+        padding: 10px 14px; border-radius: var(--r-s);
+        background: color-mix(in srgb, var(--fill-system-orange) 9%, var(--fill-primary-on));
+        border: 1px solid var(--stroke-system-orange);
+        font: var(--type-label);
+      }
+      .x-warn::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: var(--fill-system-orange); }
+      .x-src { font: var(--type-caption); color: var(--text-secondary); }
+      .x-tabs { display: flex; gap: 4px; padding: 4px; border-radius: var(--r-pill); background: var(--fill-tertiary); width: fit-content; max-width: 100%; }
+      .x-tabs button {
+        border: 0; background: none; color: var(--text-secondary);
+        font: var(--type-label); padding: 8px 16px; min-height: 38px; border-radius: var(--r-pill); white-space: nowrap;
+      }
+      .x-tabs button[aria-selected="true"] { background: var(--fill-primary); color: var(--text-primary-on); }
+      .x-work { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 440px); gap: 16px; align-items: start; }
+      .x-mapcol { display: grid; gap: 10px; min-width: 0; }
+      .x-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+      .x-bar form { display: flex; gap: 8px; flex: 1 1 320px; min-width: 0; }
+      .x-bar form .x-in { flex: 1; min-width: 0; }
+      #map { height: max(72vh, 480px); border-radius: var(--r-l); border: 1px solid var(--stroke-primary); z-index: 0; }
+      .x-results { list-style: none; margin: 0; padding: 0; border: 1px solid var(--stroke-primary); border-radius: var(--r-s); overflow: hidden; }
+      .x-results:empty { display: none; }
+      .x-results li + li { border-top: 1px solid var(--stroke-secondary); }
+      .x-results button { width: 100%; text-align: left; border: 0; background: var(--fill-primary-on); color: var(--text-primary); font: var(--type-small); padding: 10px 12px; min-height: var(--tap); }
+      .x-results button:hover { background: var(--fill-tertiary); }
+      .x-status { font: var(--type-small); color: var(--text-secondary); }
+      .x-side { display: grid; gap: 12px; max-height: calc(100vh - 32px); overflow-y: auto; position: sticky; top: 16px; padding-right: 4px; overscroll-behavior: contain; }
+      .x-panel { background: var(--fill-tertiary); border-radius: var(--r-m); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+      .x-panel h2 { font: var(--type-body-strong); display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+      .x-panel h2 small { font: var(--type-caption); color: var(--text-secondary); }
+      .x-in {
+        font: var(--type-small); color: var(--text-primary); background: var(--fill-primary-on);
+        border: 1px solid var(--stroke-primary); border-radius: var(--r-s); padding: 6px 10px; min-height: 36px; width: 100%; min-width: 0;
+      }
+      .x-in:focus-visible { outline: 2px solid var(--fill-primary); outline-offset: 1px; }
+      textarea.x-in { resize: vertical; min-height: 60px; font: var(--type-small); }
+      .x-num { width: 76px; text-align: right; font-variant-numeric: tabular-nums; }
+      .x-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+      .x-form label { display: grid; gap: 4px; font: var(--type-caption); color: var(--text-secondary); }
+      .x-form .x-wide { grid-column: 1 / -1; }
+      .x-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+      .x-row label { display: flex; gap: 8px; align-items: center; font: var(--type-small); }
+      .x-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; list-style: none; margin: 0; padding: 0; font: var(--type-caption); color: var(--text-secondary); }
+      .x-legend li { display: flex; align-items: center; gap: 6px; }
+      .x-legend i { width: 18px; height: 4px; border-radius: 2px; display: inline-block; }
+      .x-panel table td, .x-panel table th { padding: 8px 6px; vertical-align: middle; }
+      .x-panel table td:first-child, .x-panel table th:first-child { padding-left: 0; }
+      .x-panel table td:last-child, .x-panel table th:last-child { padding-right: 0; }
+      .x-panel tfoot td, .x-panel tfoot th { border-top: 1px solid var(--stroke-primary); font-weight: var(--weight-bold); }
+      .x-panel tfoot tr + tr td, .x-panel tfoot tr + tr th { border-top: 0; }
+      .x-panel table .x-in { min-height: 32px; padding: 4px 8px; }
+      .x-del { border: 0; background: none; color: var(--text-secondary); font: var(--type-label); width: 32px; height: 32px; border-radius: 50%; }
+      .x-del:hover { background: var(--hover-wash); color: var(--text-primary); }
+      .x-empty { font: var(--type-small); color: var(--text-secondary); }
+      .x-r { text-align: right !important; white-space: nowrap; }
+      .x-thumbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .x-thumbs a { display: grid; gap: 4px; text-decoration: none; color: var(--text-primary); font: var(--type-caption); }
+      .x-thumbs img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-s); background: var(--fill-primary-on); }
+      .x-len.leaflet-tooltip { font: var(--type-tag); padding: 2px 6px; border-radius: 6px; box-shadow: none; border: 0; background: rgb(29 29 31 / 0.82); color: #f5f5f7; }
+      .x-len.leaflet-tooltip::before { display: none; }
+      .x-fall.leaflet-tooltip { font: var(--type-tag); padding: 3px 8px; border-radius: var(--r-pill); border: 0; background: rgb(255 255 255 / 0.9); color: #1d1d1f; box-shadow: none; text-align: center; }
+      .x-fall.leaflet-tooltip::before { display: none; }
+      .x-dlg { border: 1px solid var(--stroke-primary); border-radius: var(--r-l); background: var(--fill-primary-on); color: var(--text-primary); padding: 20px; width: min(440px, calc(100vw - 32px)); box-shadow: var(--hark-shadow); }
+      .x-dlg::backdrop { background: rgb(0 0 0 / 0.4); }
+      .x-dlg h2 { font: var(--type-heading); margin-bottom: 12px; }
+      .x-dlg form { display: grid; gap: 14px; }
+      .x-dlg .links { justify-content: flex-end; }
+      .x-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 1000; background: var(--fill-primary); color: var(--text-primary-on); font: var(--type-label); padding: 10px 18px; border-radius: var(--r-pill); box-shadow: var(--hark-shadow); }
+      .x-disc-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px 24px; }
+      .x-disc-head h2 { font: var(--type-heading); }
+      .x-disc-head p { font: var(--type-body); color: var(--text-secondary); margin-top: 4px; }
+      .x-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 12px; align-items: start; }
+      .x-q { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--stroke-secondary); }
+      .x-q label { display: flex; gap: 10px; align-items: flex-start; font: var(--type-body); cursor: pointer; }
+      .x-q input[type="checkbox"] { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--fill-system-green); }
+      .x-q.is-done label span { color: var(--text-secondary); }
+      .x-q textarea { min-height: 52px; }
+      #x-print { display: none; }
+      @media (max-width: 900px) {
+        .x-work { grid-template-columns: minmax(0, 1fr); }
+        .x-side { position: static; max-height: none; overflow: visible; padding-right: 0; }
+        #map { height: 65vh; }
+      }
+      @media (max-width: 599px) {
+        .x-tabs button { min-height: var(--tap); }
+        .x-in { min-height: var(--tap); }
+        .x-form { grid-template-columns: minmax(0, 1fr); }
+        .x-panel .table-wrap tbody td[data-label] { grid-template-columns: minmax(0, 7em) minmax(0, 1fr); align-items: center; }
+        .x-r { text-align: left !important; }
+      }
+      @media print {
+        body { background: #fff; color: #000; }
+        .x-app > * { display: none !important; }
+        .x-app > #x-print { display: block !important; }
+        #x-print pre { font: 11pt/1.45 var(--sans); white-space: pre-wrap; margin: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page x-app" id="top">
+      <header class="x-top">
+        <div>
+          <h1>Takmätning – utkast från flygbild</h1>
+          <p class="x-meta">Jägervalls Bleck &amp; Plåt AB, Västerås · Möte tis 3 nov 2026 · Internt, Mediahive</p>
+        </div>
+        <div class="x-tabs" role="tablist" aria-label="Vy">
+          <button type="button" role="tab" id="tab-mat" aria-controls="view-mat" aria-selected="true">Takmätning</button>
+          <button type="button" role="tab" id="tab-disc" aria-controls="view-disc" aria-selected="false" tabindex="-1">Discovery – 3 nov</button>
+        </div>
+      </header>
+      <p class="x-warn" role="note">Utkast. Mått från flygbild och angiven taklutning. Verifiera på plats (drönare/inmätning) innan plåt tillverkas.</p>
+      <p class="x-src">Bild: Esri World Imagery (tillfälligt). Lantmäteriets ortofoto 16 cm kopplas in efter godkänd Geotorget-behörighet.</p>
+
+      <main class="main">
+        <!-- TAB 1 -->
+        <section id="view-mat" role="tabpanel" aria-labelledby="tab-mat">
+          <div class="x-work">
+            <div class="x-mapcol">
+              <div class="x-bar">
+                <form id="search-form" role="search">
+                  <input class="x-in" id="search-q" type="search" placeholder="Sök adress, t.ex. Bastborregatan 10, Västerås" aria-label="Adress" autocomplete="off" />
+                  <button class="btn" type="submit">Sök</button>
+                </form>
+                <button class="btn" type="button" id="jump-bast">Hoppa till Bastborregatan 10, Västerås</button>
+              </div>
+              <ul class="x-results" id="results" aria-label="Sökträffar"></ul>
+              <p class="x-status" id="search-status" aria-live="polite">Vald adress: ingen ännu</p>
+              <div id="map" aria-label="Karta med flygbild"></div>
+              <div class="x-bar">
+                <button class="btn" type="button" id="btn-copy">Kopiera sammanfattning</button>
+                <button class="btn" type="button" id="btn-print">Skriv ut</button>
+                <button class="btn" type="button" id="btn-clear">Rensa allt</button>
+                <span class="x-status">Klicka i kartan för att sätta en vald punkt när inget ritverktyg är aktivt.</span>
+              </div>
+            </div>
+
+            <aside class="x-side" aria-label="Mätpaneler">
+              <div class="x-panel">
+                <h2>Rita <small>Verktygen uppe till vänster i kartan</small></h2>
+                <p class="x-status">Polygon = takyta (fall). Linje = kant. Penna redigerar, papperskorg tar bort.</p>
+                <div class="x-row">
+                  <label>Standardlutning <input class="x-in x-num" id="def-pitch" type="number" min="0" max="80" step="0.5" value="27" inputmode="decimal" /> °</label>
+                </div>
+                <ul class="x-legend" id="legend"></ul>
+              </div>
+
+              <div class="x-panel">
+                <h2>Takytor (fall) <small id="facet-count">0 st</small></h2>
+                <div class="table-wrap" id="facet-wrap" hidden>
+                  <table>
+                    <thead><tr><th scope="col">Namn</th><th scope="col">Lutning °</th><th scope="col" class="x-r">Plan m²</th><th scope="col" class="x-r">Verklig m²</th><th scope="col"><span class="sub" aria-label="Ta bort"></span></th></tr></thead>
+                    <tbody id="facet-body"></tbody>
+                    <tfoot><tr><th scope="row" colspan="2">Totalt</th><td class="x-r" id="facet-plan"></td><td class="x-r" id="facet-real"></td><td></td></tr></tfoot>
+                  </table>
+                </div>
+                <p class="x-empty" id="facet-empty">Inga takytor än. Rita en polygon runt varje takfall.</p>
+              </div>
+
+              <div class="x-panel">
+                <h2>Kanter <small id="edge-count">0 st</small></h2>
+                <div class="table-wrap" id="edge-wrap" hidden>
+                  <table>
+                    <thead><tr><th scope="col">Typ</th><th scope="col">Lutning °</th><th scope="col" class="x-r">Plan m</th><th scope="col" class="x-r">Verklig m</th><th scope="col"><span class="sub" aria-label="Ta bort"></span></th></tr></thead>
+                    <tbody id="edge-body"></tbody>
+                  </table>
+                </div>
+                <p class="x-empty" id="edge-empty">Inga kanter än. Rita en linje längs takfot, nock, gavel med mera.</p>
+              </div>
+
+              <div class="x-panel">
+                <h2>Detaljer</h2>
+                <div class="x-form" id="details">
+                  <label>Antal skorstenar <input class="x-in" type="number" min="0" step="1" value="0" data-d="skorstenar" inputmode="numeric" /></label>
+                  <label>Ventilationshuvar/genomföringar <input class="x-in" type="number" min="0" step="1" value="0" data-d="genomf" inputmode="numeric" /></label>
+                  <label>Antal takfönster <input class="x-in" type="number" min="0" step="1" value="0" data-d="takfonster" inputmode="numeric" /></label>
+                  <label>Takstege (m) <input class="x-in" type="number" min="0" step="0.5" value="0" data-d="stege" inputmode="decimal" /></label>
+                  <label>Snörasskydd (m) <input class="x-in" type="number" min="0" step="0.5" value="0" data-d="snoras" inputmode="decimal" /></label>
+                  <label>Stuprör, antal <input class="x-in" type="number" min="0" step="1" value="0" data-d="stupAntal" inputmode="numeric" /></label>
+                  <label>Höjd per stuprör (m) <input class="x-in" type="number" min="0" step="0.5" value="5" data-d="stupHojd" inputmode="decimal" /></label>
+                  <label>Spill % <input class="x-in" type="number" min="0" max="100" step="1" value="10" data-d="spill" inputmode="decimal" /></label>
+                  <label class="x-wide">Takmaterial
+                    <select class="x-in" data-d="material">
+                      <option>Plåt – falsat</option>
+                      <option>Plåt – profil</option>
+                      <option>Betongpannor</option>
+                      <option>Tegelpannor</option>
+                      <option>Papp</option>
+                      <option>Annat</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              <div class="x-panel">
+                <h2>Plåtlista (utkast) <small id="spill-note">Spill 10 % på löpmeter</small></h2>
+                <div class="table-wrap" id="bom-wrap" hidden>
+                  <table>
+                    <thead><tr><th scope="col">Post</th><th scope="col" class="x-r">Mängd</th><th scope="col">Enhet</th><th scope="col">À-pris (kr)</th><th scope="col" class="x-r">Summa</th></tr></thead>
+                    <tbody id="bom-body"></tbody>
+                    <tfoot id="bom-foot" hidden>
+                      <tr><th scope="row" colspan="4">Summa exkl. moms</th><td class="x-r" id="sum-ex"></td></tr>
+                      <tr><th scope="row" colspan="4">Moms 25 %</th><td class="x-r" id="sum-vat"></td></tr>
+                      <tr><th scope="row" colspan="4">Summa inkl. moms</th><td class="x-r" id="sum-inc"></td></tr>
+                    </tfoot>
+                  </table>
+                </div>
+                <p class="x-empty" id="bom-empty">Listan byggs när du ritar takytor och kanter eller fyller i detaljer.</p>
+                <p class="fineprint">ROT-avdrag beräknas ej här.</p>
+              </div>
+
+              <div class="x-panel">
+                <h2>Gatubild</h2>
+                <p class="x-status" id="sv-point">Punkt: kartans mitt</p>
+                <div class="links">
+                  <a class="btn" id="sv-link" href="https://www.google.com/maps/@?api=1&amp;map_action=pano&amp;viewpoint=59.6099,16.5448" target="_blank" rel="noopener">Öppna Google Street View här</a>
+                </div>
+                <label class="x-form" style="grid-template-columns: minmax(0, 1fr)"><span>Mapillary token (valfritt)</span>
+                  <input class="x-in" id="mly-token" type="password" autocomplete="off" spellcheck="false" placeholder="MLY|…" />
+                </label>
+                <div class="x-row">
+                  <button class="btn" type="button" id="mly-btn" disabled>Hämta närmaste gatubilder</button>
+                  <span class="x-status" id="mly-status" aria-live="polite">Mapillary-token saknas</span>
+                </div>
+                <div class="x-thumbs" id="mly-thumbs"></div>
+                <p class="fineprint">Token sparas bara i minnet. Inga Google-bilder bäddas in eller laddas ned.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- TAB 2 -->
+        <section id="view-disc" role="tabpanel" aria-labelledby="tab-disc" hidden>
+          <div class="x-disc-head">
+            <div>
+              <h2>Discovery – Jägervalls, tis 3 nov 2026</h2>
+              <p>Kartlägg ett jobb från första kontakt till faktura. Fråga först, föreslå sen.</p>
+            </div>
+            <div class="x-row">
+              <span class="x-status" id="disc-progress"></span>
+              <button class="btn" type="button" id="btn-copy-notes">Kopiera anteckningar</button>
+              <span class="x-status" id="notes-status" aria-live="polite"></span>
+            </div>
+          </div>
+          <div class="x-groups" id="disc-groups" style="margin-top: 16px"></div>
+        </section>
+      </main>
+
+      <div id="x-print" aria-hidden="true"><pre id="print-pre"></pre></div>
+    </div>
+
+    <dialog class="x-dlg" id="dlg-edge">
+      <form method="dialog" id="edge-form">
+        <h2>Vilken kant är det?</h2>
+        <label class="x-form" style="grid-template-columns: minmax(0, 1fr)"><span>Kanttyp</span>
+          <select class="x-in" id="edge-type"></select>
+        </label>
+        <label class="x-form" style="grid-template-columns: minmax(0, 1fr)"><span>Lutning (°)</span>
+          <input class="x-in" id="edge-pitch" type="number" min="0" max="80" step="0.5" inputmode="decimal" />
+        </label>
+        <div class="links"><button class="btn" value="ok" type="submit">Spara kant</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="x-dlg" id="dlg-confirm">
+      <form method="dialog">
+        <h2>Rensa allt?</h2>
+        <p class="x-status">Alla takytor, kanter, detaljer, priser och gatubilder tas bort. Det går inte att ångra.</p>
+        <div class="links"><button class="btn" value="cancel">Avbryt</button><button class="btn" value="ok">Rensa allt</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="x-dlg" id="dlg-copy">
+      <form method="dialog">
+        <h2>Kopiera manuellt</h2>
+        <p class="x-status">Webbläsaren tillät inte automatisk kopiering. Texten är markerad: tryck Ctrl+C eller Cmd+C.</p>
+        <textarea class="x-in" id="copy-area" rows="12" readonly></textarea>
+        <div class="links"><button class="btn" value="close">Stäng</button></div>
+      </form>
+    </dialog>
+
+    <script>
+/* Page behaviors for Hark's component library: the nav, the theme toggle, tables, line charts and images. style-gates: data */
+(function () {
+  "use strict";
+  var doc = document, root = doc.documentElement;
+  root.classList.add("js");
+  var LOGO = '<svg width="SIZE" height="SIZE" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path fill="currentColor" d="M25.096 30c-.072 0-.12-.048-.168-.12-4.776-6.384-12.216-10.8-20.736-11.688C4.048 18.168 4 18.096 4 18s.048-.168.192-.192c8.52-.888 15.96-5.304 20.736-11.688.048-.072.096-.12.168-.12s.096.024.168.072A15.02 15.02 0 0 1 31.12 18a15.02 15.02 0 0 1-5.856 11.928c-.072.048-.096.072-.168.072"/></svg>';
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function each(a, f) { return (a || []).map(f).join(""); }
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+
+  function niceBounds(vals) {
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    var step = Math.pow(10, Math.floor(Math.log10(Math.max(hi - lo, 1e-9))));
+    lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+    return hi === lo ? [lo - step, hi + step] : [lo, hi];
+  }
+  function fmtNum(v) { return Number(v).toLocaleString("en-US", { maximumFractionDigits: 2 }); }
+  function chartSVG(pts, opt, W) {
+    W = Math.max(320, Math.round(W || 960));
+    var L = 40, R = W - 40, T = 30, Bt = 210;
+    var stagger = pts.length > 1 && (R - L) / (pts.length - 1) < 96;
+    var nameY = function (i) { return 236 + (stagger && i % 2 ? 16 : 0); };
+    var valueY = function (i, py) { return stagger && i % 2 ? Math.min(py + 22, Bt - 4) : py - 13; };
+    var H = (opt.numbered ? 268 : 248) + (stagger ? 16 : 0);
+    var bounds = niceBounds(pts.length ? pts.map(function (p) { return +p[1]; }) : [0, 1]), lo = bounds[0], hi = bounds[1];
+    var x = function (i) { return L + (R - L) * (pts.length < 2 ? 0.5 : i / (pts.length - 1)); };
+    var y = function (v) { return Bt - (Bt - T) * (v - lo) / (hi - lo || 1); };
+    var unit = opt.unit ? " " + opt.unit : "";
+    var line = pts.map(function (p, i) { return (i ? "L" : "M") + x(i).toFixed(1) + "," + y(p[1]).toFixed(1); }).join(" ");
+    var svg = '<g class="pf-grid">' + [30, 120, 210].map(function (gy) { return '<line x1="' + L + '" y1="' + gy + '" x2="' + R + '" y2="' + gy + '"></line>'; }).join("") + "</g>" +
+      '<text class="pf-axis" x="0" y="34">' + fmtNum(hi) + '</text><text class="pf-axis" x="0" y="124">' + fmtNum((lo + hi) / 2) + '</text><text class="pf-axis" x="0" y="214">' + fmtNum(lo) + "</text>" +
+      '<path class="pf-fill" d="' + line + " L" + R + "," + Bt + " L" + L + "," + Bt + ' Z"></path><path class="pf-line" d="' + line + '"></path>';
+    pts.forEach(function (p, i) {
+      var anchor = i === 0 ? ' text-anchor="start"' : i === pts.length - 1 ? ' text-anchor="end"' : "";
+      svg += '<circle class="pf-dot" cx="' + x(i) + '" cy="' + y(p[1]) + '" r="4.5"></circle>' +
+        '<text class="pf-alt" x="' + x(i) + '" y="' + valueY(i, y(p[1])) + '"' + anchor + ">" + esc(fmtNum(p[1]) + unit) + "</text>" +
+        '<text class="pf-name" x="' + x(i) + '" y="' + nameY(i) + '"' + anchor + ">" + esc(p[0]) + "</text>";
+      if (i && opt.numbered) svg += '<text class="pf-num" x="' + ((x(i - 1) + x(i)) / 2) + '" y="' + (H - 10) + '">' + pad2(i) + "</text>";
+    });
+    return ((opt.caption ? '<p class="chart__cap">' + esc(opt.caption) + "</p>" : "") +
+      '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(opt.label || opt.caption || "Line chart") + '">' + svg + "</svg>");
+  }
+
+  function contentWidth(el) {
+    var cs = getComputedStyle(el);
+    return el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  }
+  function drawCharts() {
+    [].slice.call(doc.querySelectorAll(".chart[data-points]")).forEach(function (p) {
+      var pts = p.getAttribute("data-points").split(",").map(function (x) { var m = x.split(":"); return [m[0].trim(), +m[1]]; });
+      p.innerHTML = chartSVG(pts, { caption: p.getAttribute("data-caption"), unit: p.getAttribute("data-unit"),
+        label: p.getAttribute("aria-label"), numbered: p.hasAttribute("data-numbered") }, contentWidth(p));
+    });
+  }
+  function autoNav() {
+    var sections = [].slice.call(doc.querySelectorAll("section[data-nav]"));
+    var header = doc.querySelector("header.nav[data-auto]");
+    if (header) {
+      header.innerHTML = '<nav class="seg" aria-label="Sections">' +
+        each(sections, function (s) { return '<a href="#' + esc(s.id) + '">' + esc(s.getAttribute("data-nav")) + "</a>"; }) + "</nav>" +
+        '<button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to dark theme"></button>';
+    }
+    [].slice.call(doc.querySelectorAll(".foot nav[data-auto]")).forEach(function (n) {
+      n.innerHTML = '<a href="#top">Top</a>' + each(sections, function (s) { return '<a href="#' + esc(s.id) + '">' + esc(s.getAttribute("data-nav")) + "</a>"; });
+    });
+    drawCharts();
+    window.addEventListener("resize", function () { clearTimeout(drawCharts.t); drawCharts.t = setTimeout(drawCharts, 150); }, { passive: true });
+    [].slice.call(doc.querySelectorAll(".table-wrap table")).forEach(function (t) {
+      var names = [].map.call(t.querySelectorAll("thead th"), function (th) { return th.textContent.trim(); });
+      [].slice.call(t.querySelectorAll("tbody tr")).forEach(function (tr) {
+        [].slice.call(tr.children).forEach(function (c, i) {
+          if (c.tagName !== "TD") return;
+          if (!c.textContent.trim() && !c.querySelector("img, svg")) c.classList.add("is-empty");
+          else if (names[i] && !c.hasAttribute("data-label")) c.setAttribute("data-label", names[i]);
+        });
+      });
+    });
+    [].slice.call(doc.querySelectorAll(".compare table")).forEach(function (t) {
+      t.parentNode.style.setProperty("--compare-cols", t.querySelectorAll("thead th").length);
+      [].slice.call(t.querySelectorAll(".compare__media .chip")).forEach(function (chip) {
+        chip.closest("th").appendChild(chip);
+      });
+      [].slice.call(t.querySelectorAll("tbody tr")).forEach(function (tr) {
+        var head = tr.querySelector("th"), label = head ? head.textContent.trim() : "";
+        [].slice.call(tr.querySelectorAll("td")).forEach(function (td) {
+          if (label && !td.hasAttribute("data-label")) td.setAttribute("data-label", label);
+        });
+      });
+    });
+    [].slice.call(doc.querySelectorAll(".step__figure img, .band img")).forEach(function (im) {
+      var mark = function () { if (im.naturalHeight > im.naturalWidth) im.parentNode.classList.add("is-portrait"); };
+      if (im.complete) mark(); else im.addEventListener("load", mark);
+    });
+    [].slice.call(doc.querySelectorAll(".hark-mark:empty")).forEach(function (m) { m.innerHTML = LOGO.replace(/SIZE/g, m.getAttribute("data-size") || "20"); });
+  }
+
+  function behaviors() {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var btn = doc.getElementById("theme-btn"), mq = window.matchMedia("(prefers-color-scheme: dark)");
+    try { var saved = localStorage.getItem("hark-theme"); if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved); } catch (e) { /* storage blocked: follow the system theme */ }
+    function current() { var t = root.getAttribute("data-theme"); return t === "light" || t === "dark" ? t : (mq.matches ? "dark" : "light"); }
+    function label() { if (btn) btn.setAttribute("aria-label", current() === "dark" ? "Switch to light theme" : "Switch to dark theme"); }
+    if (btn) btn.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("hark-theme", next); } catch (e) { /* storage blocked: the choice lasts this visit */ }
+      label();
+    });
+    label();
+
+    var seg = doc.querySelector(".seg");
+    if (seg) {
+      var links = [].slice.call(seg.querySelectorAll("a"));
+      var targets = links.map(function (a) { return doc.getElementById(a.getAttribute("href").slice(1)); });
+      var active = -2;
+      var reveal = function (i) {
+        if (i < 0) return;
+        var a = links[i];
+        var l = a.offsetLeft - 8, r = a.offsetLeft + a.offsetWidth + 8;
+        if (l < seg.scrollLeft || r > seg.scrollLeft + seg.clientWidth) seg.scrollTo({ left: l, behavior: reduce ? "auto" : "smooth" });
+      };
+      var sync = function (force) {
+        var line = window.innerHeight * 0.32, cur = -1;
+        targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top <= line) cur = i; });
+        if (cur === active && !force) return;
+        active = cur;
+        links.forEach(function (a, i) { if (i === cur) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+        reveal(cur);
+      };
+      var ticking = false;
+      window.addEventListener("scroll", function () {
+        if (ticking) return; ticking = true;
+        window.requestAnimationFrame(function () { sync(false); ticking = false; });
+      }, { passive: true });
+      window.addEventListener("resize", function () { sync(true); }, { passive: true });
+      if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(function () { sync(true); });
+      sync(true);
+    }
+
+    [].slice.call(doc.querySelectorAll(".chart")).forEach(function (chart) {
+      if (reduce || !("IntersectionObserver" in window)) { chart.classList.add("is-in"); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { chart.classList.add("is-in"); io.disconnect(); } });
+      }, { threshold: 0.3 });
+      io.observe(chart);
+    });
+  }
+
+  function start() {
+    autoNav();
+    behaviors();
+  }
+  if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
+
+</script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script>
+      (function () {
+        "use strict";
+        var $ = function (id) { return document.getElementById(id); };
+        var WARN = "Utkast. Mått från flygbild och angiven taklutning. Verifiera på plats (drönare/inmätning) innan plåt tillverkas.";
+
+        /* ---------- helpers ---------- */
+        function num(v, d) {
+          var n = parseFloat(String(v == null ? "" : v).replace(/\s/g, "").replace(",", "."));
+          return isFinite(n) ? n : (d === undefined ? 0 : d);
+        }
+        function pitchOf(v) { return Math.min(80, Math.max(0, num(v, 0))); }
+        var rad = function (deg) { return (deg * Math.PI) / 180; };
+        function f1(n) { return n.toLocaleString("sv-SE", { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
+        function f0(n) { return Math.round(n).toLocaleString("sv-SE"); }
+        function kr(n) { return Math.round(n).toLocaleString("sv-SE") + " kr"; }
+        function el(tag, attrs, text) {
+          var e = document.createElement(tag);
+          if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+          if (text != null) e.textContent = text;
+          return e;
+        }
+        var toastTimer;
+        function toast(msg) {
+          var t = document.querySelector(".x-toast");
+          if (!t) { t = el("div", { class: "x-toast", role: "status" }); document.body.appendChild(t); }
+          t.textContent = msg; t.hidden = false;
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () { t.hidden = true; }, 2200);
+        }
+        function copyText(text) {
+          function fallback() {
+            var ta = el("textarea"); ta.value = text;
+            ta.style.position = "fixed"; ta.style.opacity = "0"; ta.style.top = "0";
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            var ok = false;
+            try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+            document.body.removeChild(ta);
+            if (ok) { toast("Kopierat"); return; }
+            var area = $("copy-area"); area.value = text;
+            try { $("dlg-copy").showModal(); } catch (e) { $("dlg-copy").setAttribute("open", ""); }
+            area.focus(); area.select();
+          }
+          toast("Kopierar…");
+          var settled = false;
+          function once(fn) { return function () { if (settled) return; settled = true; fn(); }; }
+          var ok = once(function () { toast("Kopierat"); });
+          var fb = once(fallback);
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(ok, fb);
+              setTimeout(fb, 800);
+              return;
+            }
+          } catch (e) {}
+          fb();
+        }
+        function openDialog(d) { try { d.showModal(); } catch (e) { d.setAttribute("open", ""); } }
+
+        /* ---------- tabs ---------- */
+        var tabs = [$("tab-mat"), $("tab-disc")];
+        function selectTab(t) {
+          tabs.forEach(function (b) {
+            var on = b === t;
+            b.setAttribute("aria-selected", on ? "true" : "false");
+            b.tabIndex = on ? 0 : -1;
+            $(b.getAttribute("aria-controls")).hidden = !on;
+          });
+          if (t === tabs[0] && map) setTimeout(function () { map.invalidateSize(); }, 50);
+        }
+        tabs.forEach(function (b, i) {
+          b.addEventListener("click", function () { selectTab(b); });
+          b.addEventListener("keydown", function (e) {
+            if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+              var n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+              selectTab(n); n.focus();
+            }
+          });
+        });
+
+        /* ---------- edge types ---------- */
+        var TYPES = [
+          { k: "takfot", name: "Takfot", color: "#0a84ff" },
+          { k: "nock", name: "Nock", color: "#ff375f" },
+          { k: "gavel", name: "Gavel/vindskiva", color: "#ff9f0a" },
+          { k: "valm", name: "Valm", color: "#bf5af2" },
+          { k: "ranndal", name: "Ränndal", color: "#64d2ff" },
+          { k: "vagg", name: "Väggansutning/anslutning", color: "#ffd60a" },
+          { k: "ovrigt", name: "Övrigt", color: "#ffffff" }
+        ];
+        var TYPE = {}; TYPES.forEach(function (t) { TYPE[t.k] = t; });
+        function trueLength(type, plan, p) {
+          var r = rad(p);
+          if (type === "gavel") return plan / Math.cos(r);
+          if (type === "valm" || type === "ranndal") return plan * Math.sqrt(1 + Math.pow(Math.tan(r), 2) / 2);
+          return plan;
+        }
+        TYPES.forEach(function (t) {
+          var li = el("li"); var i = el("i"); i.style.background = t.color;
+          if (t.k === "ovrigt") i.style.boxShadow = "inset 0 0 0 1px var(--stroke-primary)";
+          li.appendChild(i); li.appendChild(document.createTextNode(t.name));
+          $("legend").appendChild(li);
+          $("edge-type").appendChild(el("option", { value: t.k }, t.name));
+        });
+
+        /* ---------- state ---------- */
+        var facets = [], edges = [], fallNo = 0;
+        var prices = {};
+        var address = "";
+        var point = null, pointMarker = null;
+        var mly = [];
+        var busy = false, busyUntil = 0;
+        function defPitch() { return pitchOf($("def-pitch").value); }
+
+        /* ---------- map ---------- */
+        var map = L.map("map", { zoomControl: true, maxZoom: 22 }).setView([59.6099, 16.5448], 13);
+        var esri = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+          maxNativeZoom: 18, maxZoom: 22, attribution: "Esri, Maxar, Earthstar Geographics"
+        }).addTo(map);
+        var osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxNativeZoom: 19, maxZoom: 22, opacity: 0.55, attribution: "© OpenStreetMap-bidragsgivare"
+        });
+        L.control.layers({ "Flygbild (Esri)": esri }, { "Gator och namn (OpenStreetMap)": osm }, { collapsed: true }).addTo(map);
+        L.control.scale({ imperial: false }).addTo(map);
+        var drawn = new L.FeatureGroup().addTo(map);
+
+        /* Swedish labels for Leaflet.draw */
+        var dl = L.drawLocal;
+        dl.draw.toolbar.buttons.polygon = "Takyta (fall)";
+        dl.draw.toolbar.buttons.polyline = "Kant";
+        dl.draw.toolbar.actions = { title: "Avbryt ritning", text: "Avbryt" };
+        dl.draw.toolbar.finish = { title: "Avsluta ritning", text: "Avsluta" };
+        dl.draw.toolbar.undo = { title: "Ta bort senaste punkten", text: "Ångra punkt" };
+        dl.draw.handlers.polygon.tooltip = { start: "Klicka för att börja rita takytan.", cont: "Klicka för nästa hörn.", end: "Klicka på första punkten för att stänga ytan." };
+        dl.draw.handlers.polyline.tooltip = { start: "Klicka för att börja kanten.", cont: "Klicka för nästa punkt.", end: "Klicka på sista punkten för att avsluta." };
+        dl.draw.handlers.polyline.error = "<strong>Fel:</strong> linjer får inte korsa varandra.";
+        dl.edit.toolbar.actions.save = { title: "Spara ändringar", text: "Spara" };
+        dl.edit.toolbar.actions.cancel = { title: "Avbryt redigering", text: "Avbryt" };
+        dl.edit.toolbar.actions.clearAll = { title: "Ta bort allt ritat", text: "Ta bort allt" };
+        dl.edit.toolbar.buttons = { edit: "Redigera", editDisabled: "Inget att redigera", remove: "Ta bort", removeDisabled: "Inget att ta bort" };
+        dl.edit.handlers.edit.tooltip = { text: "Dra i punkterna för att justera.", subtext: "Avbryt ångrar ändringarna." };
+        dl.edit.handlers.remove.tooltip = { text: "Klicka på en yta eller kant för att ta bort den." };
+
+        /* Leaflet 1.9 + draw 1.0.4: stop touch-capable desktops from closing shapes early */
+        if (!L.Browser.mobile && L.Draw && L.Draw.Polyline) L.Draw.Polyline.prototype._onTouch = L.Util.falseFn;
+
+        map.addControl(new L.Control.Draw({
+          position: "topleft",
+          draw: {
+            polygon: { showArea: false, shapeOptions: { color: "#ffd60a", weight: 2, fillOpacity: 0.15 } },
+            polyline: { metric: true, shapeOptions: { color: "#ffffff", weight: 4, opacity: 0.95 } },
+            rectangle: false, circle: false, marker: false, circlemarker: false
+          },
+          edit: { featureGroup: drawn }
+        }));
+
+        ["draw:drawstart", "draw:editstart", "draw:deletestart"].forEach(function (ev) { map.on(ev, function () { busy = true; }); });
+        ["draw:drawstop", "draw:editstop", "draw:deletestop"].forEach(function (ev) {
+          map.on(ev, function () { busy = false; busyUntil = Date.now() + 400; recompute(); });
+        });
+
+        function planArea(layer) {
+          var ll = layer.getLatLngs(); while (Array.isArray(ll[0])) ll = ll[0];
+          return L.GeometryUtil.geodesicArea(ll);
+        }
+        function planLength(layer) {
+          var ll = layer.getLatLngs(); while (Array.isArray(ll[0])) ll = ll[0];
+          var s = 0; for (var i = 1; i < ll.length; i++) s += map.distance(ll[i - 1], ll[i]);
+          return s;
+        }
+
+        map.on(L.Draw.Event.CREATED, function (e) {
+          var layer = e.layer;
+          drawn.addLayer(layer);
+          if (e.layerType === "polygon") {
+            fallNo++;
+            var f = { id: L.stamp(layer), layer: layer, name: "Fall " + fallNo, pitch: defPitch() };
+            facets.push(f);
+            layer.bindTooltip("", { permanent: true, direction: "center", className: "x-fall" });
+            renderFacets();
+          } else if (e.layerType === "polyline") {
+            var ed = { id: L.stamp(layer), layer: layer, type: "ovrigt", pitch: defPitch() };
+            edges.push(ed);
+            layer.bindTooltip("", { permanent: true, direction: "center", className: "x-len" });
+            styleEdge(ed);
+            renderEdges();
+            askEdge(ed);
+          }
+          recompute();
+        });
+        map.on("draw:edited draw:editvertex draw:editmove", function () { recompute(); });
+        map.on(L.Draw.Event.DELETED, function (e) {
+          var gone = {};
+          e.layers.eachLayer(function (l) { gone[L.stamp(l)] = true; });
+          facets = facets.filter(function (f) { return !gone[f.id]; });
+          edges = edges.filter(function (x) { return !gone[x.id]; });
+          renderFacets(); renderEdges(); recompute();
+        });
+
+        function styleEdge(ed) { ed.layer.setStyle({ color: TYPE[ed.type].color, weight: 4, opacity: 0.95 }); }
+
+        /* edge type dialog */
+        var pendingEdge = null;
+        function askEdge(ed) {
+          pendingEdge = ed;
+          $("edge-type").value = ed.type;
+          $("edge-pitch").value = ed.pitch;
+          openDialog($("dlg-edge"));
+          setTimeout(function () { $("edge-type").focus(); }, 30);
+        }
+        $("dlg-edge").addEventListener("close", function () {
+          if (!pendingEdge) return;
+          pendingEdge.type = $("edge-type").value;
+          pendingEdge.pitch = pitchOf($("edge-pitch").value);
+          styleEdge(pendingEdge);
+          pendingEdge = null;
+          renderEdges(); recompute();
+        });
+        $("edge-form").addEventListener("submit", function (e) {
+          if (!$("dlg-edge").showModal) { e.preventDefault(); $("dlg-edge").removeAttribute("open"); $("dlg-edge").dispatchEvent(new Event("close")); }
+        });
+
+        /* map click: chosen point */
+        function setPoint(latlng, label) {
+          point = L.latLng(latlng);
+          if (!pointMarker) {
+            pointMarker = L.circleMarker(point, { radius: 7, color: "#ffffff", weight: 2, fillColor: "#ff4d00", fillOpacity: 1 })
+              .bindTooltip("Vald punkt", { direction: "top", offset: [0, -8] }).addTo(map);
+          } else pointMarker.setLatLng(point);
+          updateStreetView();
+        }
+        map.on("click", function (e) {
+          if (busy || Date.now() < busyUntil) return;
+          setPoint(e.latlng);
+        });
+        map.on("moveend", updateStreetView);
+        function svPoint() { return point || map.getCenter(); }
+        function svUrl() {
+          var p = svPoint();
+          return "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + p.lat.toFixed(6) + "," + p.lng.toFixed(6);
+        }
+        function updateStreetView() {
+          var p = svPoint();
+          $("sv-link").href = svUrl();
+          $("sv-point").textContent = (point ? "Punkt: vald punkt " : "Punkt: kartans mitt ") + p.lat.toFixed(5) + ", " + p.lng.toFixed(5);
+        }
+
+        /* ---------- facets table ---------- */
+        function renderFacets() {
+          var body = $("facet-body"); body.innerHTML = "";
+          facets.forEach(function (f) {
+            var tr = el("tr");
+            var tdN = el("td", { "data-label": "Namn" });
+            var inN = el("input", { class: "x-in", type: "text", value: f.name, "aria-label": "Namn på takfall" });
+            inN.addEventListener("input", function () { f.name = inN.value; recompute(); });
+            tdN.appendChild(inN);
+            var tdP = el("td", { "data-label": "Lutning °" });
+            var inP = el("input", { class: "x-in x-num", type: "number", min: "0", max: "80", step: "0.5", value: f.pitch, inputmode: "decimal", "aria-label": "Lutning för " + f.name });
+            inP.addEventListener("input", function () { f.pitch = pitchOf(inP.value); recompute(); });
+            tdP.appendChild(inP);
+            var tdA = el("td", { class: "x-r", "data-label": "Plan m²", "data-f": "plan" });
+            var tdR = el("td", { class: "x-r num", "data-label": "Verklig m²", "data-f": "real" });
+            var tdX = el("td");
+            var x = el("button", { type: "button", class: "x-del", "aria-label": "Ta bort " + f.name, title: "Ta bort" }, "×");
+            x.addEventListener("click", function () {
+              drawn.removeLayer(f.layer);
+              facets = facets.filter(function (o) { return o !== f; });
+              renderFacets(); recompute();
+            });
+            tdX.appendChild(x);
+            [tdN, tdP, tdA, tdR, tdX].forEach(function (c) { tr.appendChild(c); });
+            f.row = tr;
+            body.appendChild(tr);
+          });
+          $("facet-wrap").hidden = !facets.length;
+          $("facet-empty").hidden = !!facets.length;
+          $("facet-count").textContent = facets.length + " st";
+        }
+
+        /* ---------- edges table ---------- */
+        function renderEdges() {
+          var body = $("edge-body"); body.innerHTML = "";
+          edges.forEach(function (ed) {
+            var tr = el("tr");
+            var tdT = el("td", { "data-label": "Typ" });
+            var sel = el("select", { class: "x-in", "aria-label": "Kanttyp" });
+            TYPES.forEach(function (t) { var o = el("option", { value: t.k }, t.name); if (t.k === ed.type) o.selected = true; sel.appendChild(o); });
+            sel.style.borderLeft = "4px solid " + TYPE[ed.type].color;
+            sel.addEventListener("change", function () { ed.type = sel.value; sel.style.borderLeft = "4px solid " + TYPE[ed.type].color; styleEdge(ed); recompute(); });
+            tdT.appendChild(sel);
+            var tdP = el("td", { "data-label": "Lutning °" });
+            var inP = el("input", { class: "x-in x-num", type: "number", min: "0", max: "80", step: "0.5", value: ed.pitch, inputmode: "decimal", "aria-label": "Lutning för kanten" });
+            inP.addEventListener("input", function () { ed.pitch = pitchOf(inP.value); recompute(); });
+            tdP.appendChild(inP);
+            var tdA = el("td", { class: "x-r", "data-label": "Plan m", "data-f": "plan" });
+            var tdR = el("td", { class: "x-r num", "data-label": "Verklig m", "data-f": "real" });
+            var tdX = el("td");
+            var x = el("button", { type: "button", class: "x-del", "aria-label": "Ta bort kanten", title: "Ta bort" }, "×");
+            x.addEventListener("click", function () {
+              drawn.removeLayer(ed.layer);
+              edges = edges.filter(function (o) { return o !== ed; });
+              renderEdges(); recompute();
+            });
+            tdX.appendChild(x);
+            [tdT, tdP, tdA, tdR, tdX].forEach(function (c) { tr.appendChild(c); });
+            ed.row = tr;
+            body.appendChild(tr);
+          });
+          $("edge-wrap").hidden = !edges.length;
+          $("edge-empty").hidden = !!edges.length;
+          $("edge-count").textContent = edges.length + " st";
+        }
+
+        /* ---------- details ---------- */
+        function details() {
+          var d = {};
+          document.querySelectorAll("#details [data-d]").forEach(function (i) {
+            d[i.getAttribute("data-d")] = i.tagName === "SELECT" ? i.value : Math.max(0, num(i.value, 0));
+          });
+          return d;
+        }
+        $("details").addEventListener("input", recompute);
+        $("details").addEventListener("change", recompute);
+
+        /* ---------- plåtlista ---------- */
+        var POSTS = [
+          { k: "area", name: "Takyta total", unit: "m²", q: function (s) { return s.realArea; } },
+          { k: "takfot", name: "Takfotsplåt", unit: "m", q: function (s) { return s.edge.takfot; } },
+          { k: "nock", name: "Nockplåt", unit: "m", q: function (s) { return s.edge.nock; } },
+          { k: "gavel", name: "Vindskiveplåt", unit: "m", q: function (s) { return s.edge.gavel; } },
+          { k: "valm", name: "Valmplåt", unit: "m", q: function (s) { return s.edge.valm; } },
+          { k: "ranndal", name: "Ränndalsplåt", unit: "m", q: function (s) { return s.edge.ranndal; } },
+          { k: "vagg", name: "Väggskiva/anslutningsplåt", unit: "m", q: function (s) { return s.edge.vagg; } },
+          { k: "ranna", name: "Hängränna", unit: "m", q: function (s) { return s.edge.takfot; } },
+          { k: "stupror", name: "Stuprör", unit: "m", q: function (s) { return s.d.stupAntal * s.d.stupHojd; } },
+          { k: "skorsten", name: "Skorstensbeslag", unit: "st", q: function (s) { return s.d.skorstenar; } },
+          { k: "genomf", name: "Genomföringar", unit: "st", q: function (s) { return s.d.genomf; } },
+          { k: "takfonster", name: "Takfönsterbeslag", unit: "st", q: function (s) { return s.d.takfonster; } },
+          { k: "stege", name: "Takstege", unit: "m", q: function (s) { return s.d.stege; } },
+          { k: "snoras", name: "Snörasskydd", unit: "m", q: function (s) { return s.d.snoras; } }
+        ];
+        POSTS.forEach(function (p) {
+          var tr = el("tr");
+          tr.appendChild(el("th", { scope: "row" }, p.name));
+          var tq = el("td", { class: "x-r num", "data-label": "Mängd" });
+          tr.appendChild(tq);
+          tr.appendChild(el("td", { class: "muted", "data-label": "Enhet" }, p.unit));
+          var tp = el("td", { "data-label": "À-pris (kr)" });
+          var inp = el("input", { class: "x-in x-num", type: "text", inputmode: "decimal", placeholder: "–", "aria-label": "À-pris för " + p.name });
+          inp.addEventListener("input", function () { prices[p.k] = inp.value; recompute(); });
+          tp.appendChild(inp); tr.appendChild(tp);
+          var ts = el("td", { class: "x-r", "data-label": "Summa" });
+          tr.appendChild(ts);
+          p.tr = tr; p.tq = tq; p.ts = ts; p.inp = inp;
+          $("bom-body").appendChild(tr);
+        });
+
+        /* ---------- compute ---------- */
+        var S = null;
+        function recompute() {
+          var d = details();
+          var spill = d.spill;
+          var s = { d: d, facets: [], edges: [], edge: {}, edgePlan: {}, planArea: 0, realArea: 0, rows: [], sumEx: 0, priced: false };
+          TYPES.forEach(function (t) { s.edge[t.k] = 0; s.edgePlan[t.k] = 0; });
+
+          facets.forEach(function (f) {
+            var a = planArea(f.layer), r = a / Math.cos(rad(f.pitch));
+            s.planArea += a; s.realArea += r;
+            s.facets.push({ name: f.name, pitch: f.pitch, plan: a, real: r });
+            if (f.row) { f.row.querySelector('[data-f="plan"]').textContent = f1(a); f.row.querySelector('[data-f="real"]').textContent = f1(r); }
+            f.layer.setTooltipContent(f.name + "<br>" + f1(r) + " m²");
+          });
+          $("facet-plan").textContent = f1(s.planArea);
+          $("facet-real").textContent = f1(s.realArea);
+
+          edges.forEach(function (ed) {
+            var pl = planLength(ed.layer), tl = trueLength(ed.type, pl, ed.pitch);
+            s.edge[ed.type] += tl; s.edgePlan[ed.type] += pl;
+            s.edges.push({ type: ed.type, pitch: ed.pitch, plan: pl, real: tl });
+            if (ed.row) { ed.row.querySelector('[data-f="plan"]').textContent = f1(pl); ed.row.querySelector('[data-f="real"]').textContent = f1(tl); }
+            ed.layer.setTooltipContent(f1(pl) + " m" + (Math.abs(tl - pl) > 0.05 ? " (" + f1(tl) + ")" : ""));
+          });
+
+          var visible = 0;
+          POSTS.forEach(function (p) {
+            var q = p.q(s) || 0;
+            if (p.unit === "m") q = q * (1 + spill / 100);
+            var show = q > 0.0001;
+            p.tr.hidden = !show;
+            if (!show) return;
+            visible++;
+            p.tq.textContent = p.unit === "st" ? f0(q) : f1(q);
+            var price = prices[p.k] != null && String(prices[p.k]).trim() !== "" ? num(prices[p.k], NaN) : NaN;
+            var sum = isFinite(price) ? q * price : null;
+            if (sum != null) { s.sumEx += sum; s.priced = true; }
+            p.ts.textContent = sum != null ? kr(sum) : "–";
+            s.rows.push({ name: p.name, q: q, unit: p.unit, price: isFinite(price) ? price : null, sum: sum });
+          });
+          $("bom-wrap").hidden = !visible;
+          $("bom-empty").hidden = !!visible;
+          $("bom-foot").hidden = !s.priced;
+          $("sum-ex").textContent = kr(s.sumEx);
+          $("sum-vat").textContent = kr(s.sumEx * 0.25);
+          $("sum-inc").textContent = kr(s.sumEx * 1.25);
+          $("spill-note").textContent = "Spill " + String(spill).replace(".", ",") + " % på löpmeter";
+          S = s;
+        }
+
+        /* ---------- search ---------- */
+        function geocode(q) {
+          var url = "https://nominatim.openstreetmap.org/search?format=json&countrycodes=se&limit=5&accept-language=sv&q=" + encodeURIComponent(q);
+          return fetch(url, { headers: { Accept: "application/json" } }).then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
+          });
+        }
+        function choose(name, lat, lng) {
+          address = name;
+          $("results").innerHTML = "";
+          $("search-status").textContent = "Vald adress: " + name;
+          map.flyTo([lat, lng], 19);
+          setPoint([lat, lng]);
+        }
+        $("search-form").addEventListener("submit", function (e) {
+          e.preventDefault();
+          var q = $("search-q").value.trim();
+          if (!q) return;
+          $("search-status").textContent = "Söker…";
+          $("results").innerHTML = "";
+          geocode(q).then(function (res) {
+            if (!res.length) { $("search-status").textContent = "Inga träffar för ”" + q + "”."; return; }
+            $("search-status").textContent = res.length + " träffar. Välj en.";
+            res.forEach(function (r) {
+              var li = el("li"); var b = el("button", { type: "button" }, r.display_name);
+              b.addEventListener("click", function () { choose(r.display_name, +r.lat, +r.lon); });
+              li.appendChild(b); $("results").appendChild(li);
+            });
+          }).catch(function () { $("search-status").textContent = "Sökningen misslyckades. Kontrollera nätet och försök igen."; });
+        });
+        $("jump-bast").addEventListener("click", function () {
+          var fb = "Bastborregatan 10, Västerås";
+          $("search-status").textContent = "Söker Bastborregatan 10…";
+          geocode(fb).then(function (res) {
+            if (res.length) choose(res[0].display_name, +res[0].lat, +res[0].lon);
+            else choose(fb + " (ungefärligt läge)", 59.6195, 16.487);
+          }).catch(function () { choose(fb + " (ungefärligt läge)", 59.6195, 16.487); });
+        });
+
+        /* ---------- Mapillary ---------- */
+        function mlyState() {
+          var has = $("mly-token").value.trim() !== "";
+          $("mly-btn").disabled = !has;
+          if (!has) $("mly-status").textContent = "Mapillary-token saknas";
+          else if ($("mly-status").textContent === "Mapillary-token saknas") $("mly-status").textContent = "Klar att hämta runt punkten.";
+        }
+        $("mly-token").addEventListener("input", mlyState);
+        $("mly-btn").addEventListener("click", function () {
+          var token = $("mly-token").value.trim();
+          if (!token) return mlyState();
+          var p = svPoint();
+          var dLat = 30 / 111320, dLng = 30 / (111320 * Math.cos(rad(p.lat)));
+          var bbox = [p.lng - dLng, p.lat - dLat, p.lng + dLng, p.lat + dLat].map(function (v) { return v.toFixed(6); }).join(",");
+          var url = "https://graph.mapillary.com/images?access_token=" + encodeURIComponent(token) +
+            "&fields=id,captured_at,thumb_1024_url,computed_geometry&bbox=" + bbox + "&limit=8";
+          $("mly-status").textContent = "Hämtar…";
+          $("mly-thumbs").innerHTML = "";
+          fetch(url).then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
+          }).then(function (j) {
+            var list = (j.data || []).map(function (im) {
+              var c = im.computed_geometry && im.computed_geometry.coordinates;
+              return {
+                id: im.id,
+                date: im.captured_at ? new Date(im.captured_at).toISOString().slice(0, 10) : "okänt datum",
+                thumb: im.thumb_1024_url,
+                dist: c ? map.distance(p, L.latLng(c[1], c[0])) : null
+              };
+            });
+            list.sort(function (a, b) { return (a.dist == null ? 1e9 : a.dist) - (b.dist == null ? 1e9 : b.dist); });
+            mly = list.slice(0, 8);
+            if (!mly.length) { $("mly-status").textContent = "Inga gatubilder inom cirka 30 m. Prova en annan punkt."; return; }
+            $("mly-status").textContent = mly.length + " bilder, närmast först.";
+            mly.forEach(function (m) {
+              var a = el("a", { href: "https://www.mapillary.com/app/?pKey=" + m.id, target: "_blank", rel: "noopener" });
+              if (m.thumb) a.appendChild(el("img", { src: m.thumb, alt: "Mapillary-bild " + m.date, loading: "lazy" }));
+              a.appendChild(el("span", null, m.date + (m.dist != null ? " · " + Math.round(m.dist) + " m" : "")));
+              $("mly-thumbs").appendChild(a);
+            });
+          }).catch(function (err) {
+            mly = [];
+            $("mly-status").textContent = "Kunde inte hämta (" + err.message + "). Kontrollera token.";
+          });
+        });
+
+        /* ---------- summary ---------- */
+        function summary() {
+          recompute();
+          var s = S, d = s.d, L1 = [];
+          var today = new Date().toLocaleDateString("sv-SE");
+          L1.push("TAKMÄTNING – UTKAST FRÅN FLYGBILD");
+          L1.push("Kund: Jägervalls Bleck & Plåt AB, Västerås");
+          L1.push("Adress: " + (address || "ej angiven"));
+          L1.push("Datum: " + today);
+          L1.push("");
+          L1.push("TAKYTOR");
+          if (!s.facets.length) L1.push("Inga takytor ritade.");
+          s.facets.forEach(function (f) {
+            L1.push("- " + f.name + ": lutning " + String(f.pitch).replace(".", ",") + "°, planarea " + f1(f.plan) + " m², verklig takarea " + f1(f.real) + " m²");
+          });
+          if (s.facets.length) L1.push("Totalt: planarea " + f1(s.planArea) + " m², verklig takarea " + f1(s.realArea) + " m²");
+          L1.push("");
+          L1.push("KANTER (verklig längd, utan spill)");
+          var anyEdge = false;
+          TYPES.forEach(function (t) {
+            if (s.edgePlan[t.k] > 0) { anyEdge = true; L1.push("- " + t.name + ": " + f1(s.edge[t.k]) + " m (plan " + f1(s.edgePlan[t.k]) + " m)"); }
+          });
+          if (!anyEdge) L1.push("Inga kanter ritade.");
+          L1.push("");
+          L1.push("DETALJER");
+          L1.push("- Takmaterial: " + d.material);
+          L1.push("- Skorstenar: " + f0(d.skorstenar));
+          L1.push("- Ventilationshuvar/genomföringar: " + f0(d.genomf));
+          L1.push("- Takfönster: " + f0(d.takfonster));
+          L1.push("- Takstege: " + f1(d.stege) + " m");
+          L1.push("- Snörasskydd: " + f1(d.snoras) + " m");
+          L1.push("- Stuprör: " + f0(d.stupAntal) + " st × " + f1(d.stupHojd) + " m");
+          L1.push("- Spill: " + String(d.spill).replace(".", ",") + " %");
+          L1.push("");
+          L1.push("PLÅTLISTA (UTKAST, spill ingår på löpmeter)");
+          if (!s.rows.length) L1.push("Tom.");
+          s.rows.forEach(function (r) {
+            var q = r.unit === "st" ? f0(r.q) : f1(r.q);
+            L1.push("- " + r.name + ": " + q + " " + r.unit + (r.price != null ? " × " + r.price.toLocaleString("sv-SE") + " kr = " + kr(r.sum) : ""));
+          });
+          if (s.priced) {
+            L1.push("Summa exkl. moms: " + kr(s.sumEx));
+            L1.push("Moms 25 %: " + kr(s.sumEx * 0.25));
+            L1.push("Summa inkl. moms: " + kr(s.sumEx * 1.25));
+          }
+          L1.push("ROT-avdrag beräknas ej här.");
+          L1.push("");
+          L1.push("GATUBILDER");
+          L1.push("- Google Street View: " + svUrl());
+          if (mly.length) mly.forEach(function (m) { L1.push("- Mapillary " + m.id + " (" + m.date + "): https://www.mapillary.com/app/?pKey=" + m.id); });
+          else L1.push("- Inga Mapillary-bilder hämtade.");
+          L1.push("");
+          L1.push("Bild: Esri World Imagery (tillfälligt).");
+          L1.push("OBS: " + WARN);
+          return L1.join("\n");
+        }
+        $("btn-copy").addEventListener("click", function () { copyText(summary()); });
+        function fillPrint() { $("print-pre").textContent = summary(); }
+        window.addEventListener("beforeprint", fillPrint);
+        $("btn-print").addEventListener("click", function () {
+          fillPrint();
+          try { window.print(); } catch (e) { toast("Utskrift blockeras här. Kopiera sammanfattningen i stället."); }
+        });
+
+        /* ---------- clear ---------- */
+        $("btn-clear").addEventListener("click", function () { $("dlg-confirm").returnValue = ""; openDialog($("dlg-confirm")); });
+        $("dlg-confirm").addEventListener("close", function () {
+          if ($("dlg-confirm").returnValue !== "ok") return;
+          drawn.clearLayers();
+          facets = []; edges = []; fallNo = 0; prices = {}; address = ""; mly = [];
+          if (pointMarker) { map.removeLayer(pointMarker); pointMarker = null; }
+          point = null;
+          document.querySelectorAll("#details [data-d]").forEach(function (i) {
+            if (i.tagName === "SELECT") i.selectedIndex = 0;
+            else i.value = i.getAttribute("value");
+          });
+          POSTS.forEach(function (p) { p.inp.value = ""; });
+          $("results").innerHTML = ""; $("search-q").value = "";
+          $("search-status").textContent = "Vald adress: ingen ännu";
+          $("mly-thumbs").innerHTML = ""; mlyState();
+          renderFacets(); renderEdges(); recompute(); updateStreetView();
+          toast("Allt rensat");
+        });
+
+        /* ---------- discovery ---------- */
+        var DISC = [
+          ["A. AI och verktyg idag", ["Använder ni ChatGPT, Copilot eller annan AI idag? Till vad?", "Vilka system: offert, projekt, tid, ÄTA, faktura (t.ex. Bygglet, Next, Fortnox – fråga, anta inte)?"]],
+          ["B. Förfrågningar", ["Hur kommer förfrågningar in (telefon, order@-mejl, webbformulär, webbshop)?", "Vem svarar och hur snabbt?", "Hur många förfrågningar i veckan, hur många blir jobb?"]],
+          ["C. Mätning och takrapporter", ["Hur mäter ni ett tak idag (på plats, drönare, flygbild, extern tjänst)?", "Hur lång tid tar en mätning + offert?", "Har ni testat Hagr, Roof Manager eller liknande?"]],
+          ["D. Kalkyl och offert", ["Excel, program eller för hand?", "Vad gör en offert fel oftast?"]],
+          ["E. Projekt och dokumentation", ["Var sparas bilder och egenkontroller?", "Behörighet och kvalitetsdokumentation – vad krävs av er?"]],
+          ["F. ISO 14001", ["Var står ni? Vem kräver det (kunder, upphandlingar)?"]],
+          ["G. Webbshop och webb", ["Ordervolym, vanliga frågor, manuellt arbete?", "Hur fungerar samarbetet med webbyrån? (privat, ingen kritik)"]],
+          ["H. Flaskhalsen", ["Vad är det mest irriterande, återkommande momentet i veckan?", "Om en sak försvann imorgon – vilken?"]],
+          ["I. Nästa steg", ["Ett pilotförslag (en arbetare, ett mått, 30 dagar) – bara efter att vi förstått processen.", "Godkännande: vad får aldrig ske utan Johans ja?"]]
+        ];
+        var discItems = [];
+        DISC.forEach(function (g, gi) {
+          var panel = el("div", { class: "x-panel" });
+          panel.appendChild(el("h2", null, g[0]));
+          g[1].forEach(function (q, qi) {
+            var id = "q" + gi + "_" + qi;
+            var row = el("div", { class: "x-q" });
+            var lab = el("label", { for: id });
+            var cb = el("input", { type: "checkbox", id: id });
+            lab.appendChild(cb); lab.appendChild(el("span", null, q));
+            var ta = el("textarea", { class: "x-in", rows: "2", placeholder: "Anteckningar", "aria-label": "Anteckningar: " + q });
+            cb.addEventListener("change", function () { row.classList.toggle("is-done", cb.checked); discProgress(); });
+            row.appendChild(lab); row.appendChild(ta);
+            panel.appendChild(row);
+            discItems.push({ group: g[0], q: q, cb: cb, ta: ta });
+          });
+          $("disc-groups").appendChild(panel);
+        });
+        function discProgress() {
+          var n = discItems.filter(function (i) { return i.cb.checked; }).length;
+          $("disc-progress").textContent = n + " av " + discItems.length + " frågor avbockade";
+        }
+        discProgress();
+        $("btn-copy-notes").addEventListener("click", function () {
+          var out = ["DISCOVERY – Jägervalls Bleck & Plåt AB, tis 3 nov 2026", "Kartlägg ett jobb från första kontakt till faktura. Fråga först, föreslå sen.", ""];
+          var last = "";
+          discItems.forEach(function (i) {
+            if (i.group !== last) { if (last) out.push(""); out.push(i.group); last = i.group; }
+            out.push((i.cb.checked ? "[x] " : "[ ] ") + i.q);
+            var n = i.ta.value.trim();
+            if (n) out.push("    Anteckning: " + n.replace(/\n/g, "\n    "));
+          });
+          var n = discItems.filter(function (i) { return i.cb.checked; }).length;
+          $("notes-status").textContent = "Anteckningar kopierade " + new Date().toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" }) + " (" + n + " avbockade)";
+          copyText(out.join("\n"));
+        });
+
+        /* ---------- init ---------- */
+        renderFacets(); renderEdges(); recompute(); updateStreetView(); mlyState();
+      })();
+    </script>
+  </body>
+</html>
