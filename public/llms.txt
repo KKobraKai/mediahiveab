@@ -15,6 +15,7 @@
 - AI assistants for businesses and their customers: assistants that answer, book and follow up on your channels.
 - Custom AI tools and web apps built for one business's workflow.
 - Bot-to-bot communication and system integration: connecting your systems and assistants so they can receive, understand and answer requests from other bots, safely and with the owner's approval.
+- Knowledge-Centered AI Support (KCS): solve it once, reuse the answer; shared knowledge base for people and AI assistants. https://mediahiveab.com/kcs/
 - AI advisory and workshops: what is worth building and what to skip.
 
 ## How we work
