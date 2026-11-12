@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Grannaffär: sälj mer till kunder som redan litar på dig | Mediahive AB</title>
+  <meta name="description" content="Gratis verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.">
+  <link rel="canonical" href="https://mediahiveab.com/grannaffar/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#0E1A2B">
+  <meta property="og:title" content="Grannaffär: sälj mer till kunder som redan litar på dig | Mediahive AB">
+  <meta property="og:description" content="Gratis verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mediahiveab.com/grannaffar/">
+  <meta property="og:locale" content="sv_SE">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://mediahiveab.com/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Mediahive AB — Grannaffär">
+  <meta property="og:site_name" content="Mediahive AB">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Grannaffär: sälj mer till kunder som redan litar på dig | Mediahive AB">
+  <meta name="twitter:description" content="Gratis verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.">
+  <meta name="twitter:image" content="https://mediahiveab.com/og-image.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#0E1A2B;--ink-2:#1C2B40;--text:#1F2937;--muted:#5B6575;--line:#E3E7ED;
+      --bg:#FFFFFF;--bg-2:#F5F7FA;--accent:#D98E2B;--accent-2:#B8731A;--accent-soft:#FBF1E2;
+      --radius:14px;--max:1120px;
+      --shadow:0 1px 2px rgba(14,26,43,.06),0 8px 24px rgba(14,26,43,.06);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    .wrap{width:min(100% - 2.5rem,var(--max));margin-inline:auto}
+    /* language */
+    html[lang="sv"] .en, html[lang="en"] .sv{display:none!important}
+    /* header */
+    header.top{position:sticky;top:0;z-index:50;background:rgba(14,26,43,.92);backdrop-filter:blur(10px);color:#fff}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:1rem}
+    .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font-weight:700;letter-spacing:-.01em;font-size:1.08rem}
+    .brand img{width:30px;height:30px}
+    .links{display:flex;gap:1.6rem;font-size:.94rem}
+    .links a{text-decoration:none;color:#C9D2DE}
+    .links a:hover{color:#fff}
+    .right{display:flex;align-items:center;gap:.75rem}
+    .lang{display:inline-flex;border:1px solid rgba(255,255,255,.25);border-radius:999px;overflow:hidden}
+    .lang button{background:none;border:0;color:#C9D2DE;font:inherit;font-size:.8rem;font-weight:600;padding:.35rem .7rem;cursor:pointer}
+    .lang button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.25rem;border-radius:10px;font-weight:600;font-size:.97rem;text-decoration:none;border:1px solid transparent;transition:.15s}
+    .btn-accent{background:var(--accent);color:#fff}
+    .btn-accent:hover{background:var(--accent-2)}
+    .btn-ghost{border-color:rgba(255,255,255,.35);color:#fff}
+    .btn-ghost:hover{background:rgba(255,255,255,.08)}
+    .btn-dark{background:var(--ink);color:#fff}
+    .btn-dark:hover{background:var(--ink-2)}
+    .btn-sm{padding:.5rem .9rem;font-size:.88rem}
+    /* hero */
+    .hero{background:radial-gradient(900px 500px at 85% 0%,rgba(217,142,43,.22),transparent 60%),linear-gradient(180deg,var(--ink) 0%,var(--ink-2) 100%);color:#fff;padding:5.5rem 0 5rem}
+    .eyebrow{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+    .hero h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;letter-spacing:-.03em;margin:.9rem 0 1.2rem;font-weight:800;max-width:17ch}
+    .hero p.lead{font-size:1.2rem;color:#C9D2DE;max-width:58ch;margin:0 0 2rem}
+    .hero .ctas{display:flex;flex-wrap:wrap;gap:.8rem}
+    .trust{display:flex;flex-wrap:wrap;gap:.6rem 1.8rem;margin-top:3rem;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.12);font-size:.92rem;color:#AAB6C5}
+    .trust b{color:#fff;font-weight:600}
+    /* sections */
+    section{padding:5rem 0}
+    section.alt{background:var(--bg-2)}
+    .head{max-width:680px;margin-bottom:2.8rem}
+    .head h2{font-size:clamp(1.7rem,3.2vw,2.4rem);line-height:1.15;letter-spacing:-.02em;color:var(--ink);margin:.5rem 0 .8rem;font-weight:800}
+    .head p{color:var(--muted);margin:0;font-size:1.08rem}
+    .grid{display:grid;gap:1.25rem}
+    .g3{grid-template-columns:repeat(3,1fr)}
+    .g2{grid-template-columns:repeat(2,1fr)}
+    .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;box-shadow:var(--shadow)}
+    .card h3{margin:.9rem 0 .4rem;font-size:1.12rem;color:var(--ink);letter-spacing:-.01em}
+    .card p{margin:0;color:var(--muted);font-size:.98rem}
+    .ico{width:42px;height:42px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center}
+    .ico svg{width:22px;height:22px;stroke:var(--accent-2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    /* steps */
+    .steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .step{position:relative;padding:1.6rem;border-top:3px solid var(--accent);background:#fff;border-radius:0 0 var(--radius) var(--radius);box-shadow:var(--shadow)}
+    .step::before{counter-increment:s;content:"0" counter(s);font-weight:800;color:var(--accent);font-size:.9rem;letter-spacing:.05em}
+    .step h3{margin:.5rem 0 .4rem;color:var(--ink);font-size:1.1rem}
+    .step p{margin:0;color:var(--muted);font-size:.98rem}
+    .promises{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}
+    .promise{display:flex;gap:.6rem;align-items:flex-start;font-size:.95rem;color:var(--text)}
+    .promise svg{flex:0 0 20px;width:20px;height:20px;stroke:var(--accent-2);fill:none;stroke-width:2.2;margin-top:.2rem}
+    /* why */
+    .why{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center}
+    .why blockquote{margin:0;padding:1.8rem;border-left:4px solid var(--accent);background:#fff;border-radius:0 var(--radius) var(--radius) 0;box-shadow:var(--shadow);font-size:1.15rem;color:var(--ink);font-weight:500}
+    /* product */
+    .product{display:grid;grid-template-columns:1.2fr .8fr;gap:2.5rem;align-items:center;background:var(--ink);color:#fff;border-radius:20px;padding:3rem}
+    .product h2{color:#fff;font-size:clamp(1.6rem,3vw,2.2rem);margin:.5rem 0 .8rem;letter-spacing:-.02em}
+    .product p{color:#C9D2DE;margin:0 0 1.5rem}
+    .product dl{margin:0;display:grid;gap:1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:1.4rem}
+    .product dt{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600}
+    .product dd{margin:.15rem 0 0;color:#fff}
+    /* about */
+    .photo{margin:0;position:relative}
+    .photo img{display:block;width:100%;height:clamp(240px,42vw,520px);object-fit:cover;object-position:center 40%}
+    .photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:2.2rem 0 1rem;background:linear-gradient(180deg,transparent,rgba(14,26,43,.75));color:#fff;font-size:.95rem}
+    .about{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start}
+    .avatar{display:block;width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 4px #fff,0 6px 18px rgba(14,26,43,.18)}
+    .avatar img{display:block;width:100%;height:100%;object-fit:cover}
+    .about h3{margin:0 0 .2rem;color:var(--ink);font-size:1.3rem}
+    .about .role{color:var(--accent-2);font-weight:600;margin:0 0 .8rem;font-size:.95rem}
+    .about p{margin:0 0 .8rem;color:var(--muted)}
+    /* faq */
+    details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:.75rem}
+    summary{cursor:pointer;font-weight:600;color:var(--ink);list-style:none;display:flex;justify-content:space-between;gap:1rem}
+    summary::after{content:"+";color:var(--accent-2);font-weight:700}
+    details[open] summary::after{content:"–"}
+    details p{margin:.7rem 0 0;color:var(--muted)}
+    /* contact */
+    .contact{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem}
+    .contact .card{padding:2rem}
+    .clist{list-style:none;padding:0;margin:1.2rem 0 1.6rem;display:grid;gap:.8rem}
+    .clist li{display:flex;gap:.75rem;align-items:center}
+    .clist .k{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;min-width:84px}
+    .clist a{font-weight:600;color:var(--ink);text-decoration:none}
+    .clist a:hover{color:var(--accent-2)}
+    .ctas-row{display:flex;gap:.7rem;flex-wrap:wrap}
+    .bni{background:var(--accent-soft);border-color:#F1DDBD}
+    /* footer */
+    footer{background:var(--ink);color:#AAB6C5;padding:2.5rem 0;font-size:.9rem}
+    .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
+    footer a{color:#fff;text-decoration:none}
+    @media (max-width:900px){
+      .links{display:none}
+      .g3,.steps{grid-template-columns:1fr 1fr}
+      .promises{grid-template-columns:1fr 1fr}
+      .why,.product,.contact{grid-template-columns:1fr}
+      .product{padding:2rem}
+    }
+    @media (max-width:600px){
+      .g3,.g2,.steps,.promises{grid-template-columns:1fr}
+      .hero{padding:4rem 0 3.5rem}
+      section{padding:3.8rem 0}
+      .about{grid-template-columns:1fr}
+      .right .btn{display:none}
+    }
+  
+    /* article page */
+    .article{padding:4rem 0 5rem}
+    .article .lede{font-size:1.25rem;color:var(--muted);max-width:62ch;margin:0 0 2rem}
+    .article h1{font-size:clamp(2rem,4vw,3rem);line-height:1.12;letter-spacing:-.03em;color:var(--ink);margin:.6rem 0 1rem;font-weight:800;max-width:22ch}
+    .article h2{font-size:1.35rem;color:var(--ink);margin:2.4rem 0 .8rem;letter-spacing:-.01em;font-weight:700}
+    .article p{max-width:68ch;margin:0 0 1.1rem;color:var(--text)}
+    .article ul{max-width:68ch;margin:0 0 1.4rem;padding-left:1.2rem;color:var(--text)}
+    .article li{margin:.45rem 0}
+    .article .tm{font-size:.9rem;color:var(--muted);margin-top:2.5rem;max-width:68ch}
+    .article .cta-row{margin:2rem 0 0;display:flex;flex-wrap:wrap;gap:.8rem}
+    .card a.card-link{display:block;text-decoration:none;color:inherit;margin:-1.6rem;padding:1.6rem;border-radius:var(--radius)}
+    .card a.card-link:hover h3{color:var(--accent-2)}
+    .tool{max-width:720px}
+    .lbl{display:block;font-weight:600;color:var(--ink);margin-bottom:.5rem}
+    select{width:100%;font:inherit;padding:.8rem 1rem;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
+    .results:not(:empty){margin-top:1.4rem}
+    .ideas{margin:0 0 1rem;padding-left:1.3rem;display:grid;gap:.45rem;color:var(--ink);font-weight:500}
+    .hint{margin:0;color:var(--muted);font-size:.98rem}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" width="30" height="30">Mediahive AB</a>
+      <nav class="links" aria-label="Huvudmeny">
+        <a href="/#tjanster"><span class="sv">Tjänster</span><span class="en">Services</span></a>
+        <a href="/#sa-jobbar-vi"><span class="sv">Så jobbar vi</span><span class="en">How we work</span></a>
+        <a href="/#referenskortet"><span class="sv">Referenskortet</span><span class="en">Referral Card</span></a>
+        <a href="/#fragor"><span class="sv">Frågor</span><span class="en">FAQ</span></a>
+        <a href="/#kontakt"><span class="sv">Kontakt</span><span class="en">Contact</span></a>
+      </nav>
+      <div class="right">
+        <div class="lang" role="group" aria-label="Språk / Language">
+          <button type="button" id="lang-sv" aria-pressed="true">SV</button>
+          <button type="button" id="lang-en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-accent btn-sm" href="/#kontakt"><span class="sv">Boka samtal</span><span class="en">Book a call</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow"><span class="sv">Grannaffär · gratis verktyg</span><span class="en">Next-door business · free tool</span></span>
+        <h1>
+          <span class="sv">Dina kunder litar redan på dig. Vad mer kan du sälja till dem?</span>
+          <span class="en">Your customers already trust you. What else could you sell them?</span>
+        </h1>
+        <p class="lead">
+          <span class="sv">Takläggaren kan sälja hängrännor. Hängrännefirman kan sälja tak och lövskydd. Skyltfirman kan trycka vykort. Välj din bransch och se vilka grannaffärer som passar dig.</span>
+          <span class="en">The roofer can sell gutters. The gutter firm can sell roofs and gutter guards. The sign shop can print postcards. Pick your trade and see which next-door services fit you.</span>
+        </p>
+        <div class="ctas">
+          <a class="btn btn-accent" href="#verktyg"><span class="sv">Testa verktyget</span><span class="en">Try the tool</span></a>
+          <a class="btn btn-ghost" href="#stegen"><span class="sv">Så fungerar det</span><span class="en">How it works</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="verktyg">
+      <div class="wrap">
+        <div class="head">
+          <span class="eyebrow"><span class="sv">Steg 1</span><span class="en">Step 1</span></span>
+          <h2><span class="sv">Hitta dina grannaffärer</span><span class="en">Find your next-door services</span></h2>
+          <p><span class="sv">Inget sparas och inget skickas. Allt händer i din webbläsare.</span><span class="en">Nothing is saved or sent. It all happens in your browser.</span></p>
+        </div>
+        <div class="card tool">
+          <label for="trade" class="lbl"><span class="sv">Min bransch</span><span class="en">My trade</span></label>
+          <select id="trade"></select>
+          <div id="results" class="results" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt" id="stegen">
+      <div class="wrap">
+        <div class="head">
+          <span class="eyebrow"><span class="sv">Tre vägar</span><span class="en">Three ways</span></span>
+          <h2><span class="sv">Lägg till, samarbeta eller lämna över</span><span class="en">Add, partner or hand over</span></h2>
+          <p><span class="sv">Samma förtroende, tre sätt att använda det. Välj det som passar var du är.</span><span class="en">The same trust, three ways to use it. Pick the one that fits where you are.</span></p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <h3><span class="sv">Lägg till</span><span class="en">Add</span></h3>
+            <p><span class="sv">Sälj tjänsten i ditt eget namn. En underleverantör kan göra jobbet, men kunden är fortfarande din.</span><span class="en">Sell the service in your own name. A subcontractor can do the work, but the customer stays yours.</span></p>
+          </div>
+          <div class="step">
+            <h3><span class="sv">Samarbeta</span><span class="en">Partner</span></h3>
+            <p><span class="sv">Inget intresse av att göra det själv? Vi matchar dig med en firma i en grannbransch, och ni skickar kunder till varandra.</span><span class="en">No wish to do it yourself? We match you with a firm in a neighbouring trade, and you send each other customers.</span></p>
+          </div>
+          <div class="step">
+            <h3><span class="sv">Lämna över</span><span class="en">Hand over</span></h3>
+            <p><span class="sv">Närmar du dig pension? Sälj företaget eller kundstocken till en grannfirma och fortsätt som ansiktet utåt så länge du vill.</span><span class="en">Nearing retirement? Sell the business or the customer base to a neighbouring firm and stay on as its face for as long as you like.</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="head">
+          <span class="eyebrow"><span class="sv">Bra att veta</span><span class="en">Good to know</span></span>
+          <h2><span class="sv">Frågor</span><span class="en">Questions</span></h2>
+        </div>
+        <details>
+          <summary><span class="sv">Får jag sälja en tjänst som en underleverantör utför?</span><span class="en">Can I sell a service a subcontractor delivers?</span></summary>
+          <p><span class="sv">Ja. Du säljer i ditt eget namn och underleverantören gör jobbet åt dig. Kunden är din, och underleverantören får bara det som jobbet kräver. Ett kort skriftligt avtal med underleverantören är klokt.</span><span class="en">Yes. You sell in your own name and the subcontractor does the work for you. The customer stays yours, and the subcontractor gets only what the job needs. A short written agreement with the subcontractor is wise.</span></p>
+        </details>
+        <details>
+          <summary><span class="sv">När gäller GDPR?</span><span class="en">When does GDPR apply?</span></summary>
+          <p><span class="sv">Köps hela bolaget (aktierna) stannar kundregistret i samma bolag, och GDPR påverkas inte av affären. Det blir aktuellt först när bara kundlistan säljs, till exempel från en enskild firma, eller när du lämnar en kund vidare till en partner som säljer i eget namn. Då behövs en laglig grund och kunderna ska informeras.</span><span class="en">If the whole company (its shares) is bought, the customer register stays in the same company and the deal does not affect GDPR. It only matters when just the customer list is sold, for example from a sole trader, or when you pass a customer to a partner who sells in their own name. Then you need a legal basis and customers must be told.</span></p>
+        </details>
+        <details>
+          <summary><span class="sv">Vad kostar det?</span><span class="en">What does it cost?</span></summary>
+          <p><span class="sv">Verktyget är gratis. För matchning och överlåtelser ger vi ett förslag när vi vet vad du behöver.</span><span class="en">The tool is free. For matching and hand-overs we make a proposal once we know what you need.</span></p>
+        </details>
+        <details>
+          <summary><span class="sv">Hur värderas mitt företag?</span><span class="en">How is my business valued?</span></summary>
+          <p><span class="sv">Vid en överlåtelse tar vi in en rådgivare som värderar företag och skriver avtalen. Vi hittar köparen och håller ihop processen.</span><span class="en">For a hand-over we bring in an adviser who values businesses and writes the contracts. We find the buyer and keep the process together.</span></p>
+        </details>
+      </div>
+    </section>
+
+    <section class="alt" id="kontakt">
+      <div class="wrap">
+        <div class="product">
+          <div>
+            <span class="eyebrow"><span class="sv">Nästa steg</span><span class="en">Next step</span></span>
+            <h2><span class="sv">Vill du bli matchad eller lämna över?</span><span class="en">Want a match or a hand-over?</span></h2>
+            <p><span class="sv">Mejla oss med din bransch, din ort och vilken väg du är intresserad av. Knappen fyller i ett utkast åt dig.</span><span class="en">Email us with your trade, your town and which way interests you. The button drafts it for you.</span></p>
+            <a class="btn btn-accent" id="mail" href="mailto:kai@mediahiveab.com?subject=Grannaff%C3%A4r"><span class="sv">Skriv till Kai</span><span class="en">Write to Kai</span></a>
+          </div>
+          <dl>
+            <div><dt><span class="sv">Gratis</span><span class="en">Free</span></dt><dd><span class="sv">Verktyget, utan konto</span><span class="en">The tool, no account</span></dd></div>
+            <div><dt><span class="sv">Lokalt</span><span class="en">Local</span></dt><dd><span class="sv">Västerås och Mälardalen först</span><span class="en">Västerås and Mälardalen first</span></dd></div>
+            <div><dt><span class="sv">Du bestämmer</span><span class="en">You decide</span></dt><dd><span class="sv">Inget händer utan ditt ja</span><span class="en">Nothing happens without your yes</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div><strong style="color:#fff">Mediahive AB</strong> · <span class="sv">Org.nr</span><span class="en">Org. no.</span> 559493-6790 · Västerås, Sverige</div>
+      <div><a href="mailto:kai@mediahiveab.com">kai@mediahiveab.com</a> · <a href="tel:+46729820484">072-982 04 84</a> · <a href="https://referralcard.ai/">referralcard.ai</a> · <a href="/integritet/"><span class="sv">Integritetspolicy</span><span class="en">Privacy policy</span></a></div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement, sv = document.getElementById("lang-sv"), en = document.getElementById("lang-en");
+      var titles = {
+        sv: "Grannaffär: sälj mer till kunder som redan litar på dig | Mediahive AB",
+        en: "Next-door business: sell more to customers who already trust you | Mediahive AB"
+      };
+      var descs = {
+        sv: "Gratis verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.",
+        en: "Free tool: find services in neighbouring trades you can sell to your existing customers, find a partner, or hand the business over to a neighbouring firm."
+      };
+      function setMeta(name, content, prop) {
+        var sel = prop ? 'meta[property="' + name + '"]' : 'meta[name="' + name + '"]';
+        var el = document.querySelector(sel);
+        if (el) el.setAttribute("content", content);
+      }
+      function setLang(l) {
+        root.setAttribute("lang", l);
+        sv.setAttribute("aria-pressed", l === "sv"); en.setAttribute("aria-pressed", l === "en");
+        document.title = titles[l];
+        setMeta("description", descs[l], false);
+        setMeta("og:title", titles[l], true);
+        setMeta("og:description", l === "sv" ? "Gratis verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma." : "Free tool: find services in neighbouring trades you can sell to your existing customers, find a partner, or hand the business over to a neighbouring firm.", true);
+        setMeta("og:locale", l === "sv" ? "sv_SE" : "en_US", true);
+        setMeta("twitter:title", titles[l], false);
+        setMeta("twitter:description", l === "sv" ? "Gratis verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma." : "Free tool: find services in neighbouring trades you can sell to your existing customers, find a partner, or hand the business over to a neighbouring firm.", false);
+        try { localStorage.setItem("mh-lang", l); } catch (e) {}
+      }
+      sv.addEventListener("click", function () { setLang("sv"); });
+      en.addEventListener("click", function () { setLang("en"); });
+      var saved = null; try { saved = localStorage.getItem("mh-lang"); } catch (e) {}
+      if (saved === "en" || saved === "sv") setLang(saved);
+      else if (navigator.language && navigator.language.toLowerCase().indexOf("sv") !== 0) setLang("en");
+    })();
+  </script>
+  <script>
+    (function () {
+      var T = [
+        {sv:"Takläggare",en:"Roofer",i:[["Hängrännor och stuprör","Gutters and downpipes"],["Lövskydd för hängrännor","Gutter guards"],["Takfönster","Roof windows"],["Snörasskydd och takstegar","Snow guards and roof ladders"],["Solpaneler, via partner","Solar panels, via a partner"]]},
+        {sv:"Hängrännefirma",en:"Gutter firm",i:[["Lövskydd","Gutter guards"],["Takbyte och takreparation","Roof replacement and repair"],["Takrengöring och mossbehandling","Roof cleaning and moss treatment"],["Dagvatten och dränering","Stormwater and drainage"],["Fönster- och fasadtvätt","Window and facade washing"]]},
+        {sv:"Skyltfirma",en:"Sign shop",i:[["Vykort och flygblad","Postcards and flyers"],["Bildekor","Vehicle graphics"],["Mässmaterial och roll-ups","Trade-show stands and roll-ups"],["Fönsterfolie","Window film"],["Profilkläder","Branded workwear"]]},
+        {sv:"Målare",en:"Painter",i:[["Tapetsering","Wallpapering"],["Fasadtvätt","Facade washing"],["Snickerireparationer","Carpentry repairs"],["Golvslipning","Floor sanding"],["Fönsterrenovering","Window restoration"]]},
+        {sv:"Elektriker",en:"Electrician",i:[["Laddbox för elbil","EV chargers"],["Solceller och batterier","Solar panels and batteries"],["Larm och kameror","Alarms and cameras"],["Smarta hem","Smart home"],["Belysning ute","Outdoor lighting"]]},
+        {sv:"Rörmokare",en:"Plumber",i:[["Badrumsrenovering","Bathroom renovation"],["Värmepumpar","Heat pumps"],["Vattenfilter","Water filters"],["Stamspolning","Drain cleaning"],["Golvvärme","Underfloor heating"]]},
+        {sv:"Städfirma",en:"Cleaning company",i:[["Fönsterputs","Window cleaning"],["Flyttstäd","Move-out cleaning"],["Mattvätt","Carpet cleaning"],["Trädgårdsskötsel","Garden care"],["Tvätt och strykning","Laundry and ironing"]]},
+        {sv:"Trädgårdsfirma",en:"Landscaper",i:[["Snöröjning","Snow clearing"],["Trädfällning","Tree felling"],["Stenläggning","Paving"],["Bevattning","Irrigation"],["Staket och plank","Fences"]]},
+        {sv:"Bilverkstad",en:"Car workshop",i:[["Däckhotell","Tyre storage"],["Biltvätt och rekond","Car wash and detailing"],["Laddbox, via elektriker","EV chargers, via an electrician"],["Hyrbil vid service","Loan car during service"],["Glasbyte","Windscreen replacement"]]},
+        {sv:"Frisör",en:"Hairdresser",i:[["Hårvårdsprodukter","Hair care products"],["Bryn och fransar","Brows and lashes"],["Bröllops- och festuppsättningar","Wedding and party styling"],["Presentkort","Gift cards"],["Hembesök","Home visits"]]},
+        {sv:"Redovisningsbyrå",en:"Accounting firm",i:[["Lön","Payroll"],["Deklarationshjälp för privatpersoner","Personal tax returns"],["Bolagsbildning","Company formation"],["Försäkringar, via partner","Insurance, via a partner"],["Generationsskifte","Business succession"]]},
+        {sv:"Fotograf",en:"Photographer",i:[["Film och drönarfoto","Video and drone photography"],["Tryck och inramning","Prints and framing"],["Fotobok","Photo books"],["Profilbilder för företag","Corporate headshots"],["Sociala medier","Social media content"]]}
+      ];
+      var sel = document.getElementById("trade"), out = document.getElementById("results"), mail = document.getElementById("mail");
+      function lang(){ return document.documentElement.getAttribute("lang") === "en" ? "en" : "sv"; }
+      function esc(s){ return s.replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+      function fill(){
+        var l = lang(), v = sel.value;
+        sel.innerHTML = '<option value="">' + (l === "sv" ? "Välj bransch" : "Choose a trade") + '</option>' +
+          T.map(function(t, n){ return '<option value="' + n + '">' + esc(t[l]) + '</option>'; }).join("") +
+          '<option value="other">' + (l === "sv" ? "Annan bransch" : "Other trade") + '</option>';
+        sel.value = v; show();
+      }
+      function show(){
+        var l = lang(), v = sel.value, sub = "Grannaffär", body = "";
+        if (v === "") { out.innerHTML = ""; }
+        else if (v === "other") {
+          out.innerHTML = '<p class="hint">' + (l === "sv"
+            ? "Fråga dig: vad köper mina kunder strax före och strax efter mig? Vem ringer de sedan? Där finns din grannaffär. Mejla oss din bransch så tittar vi på den med dig."
+            : "Ask yourself: what do my customers buy just before and just after me? Who do they call next? That is your next-door service. Email us your trade and we'll look at it with you.") + '</p>';
+          body = l === "sv" ? "Min bransch: \nOrt: \nIntresserad av: lägga till / samarbeta / lämna över" : "My trade: \nTown: \nInterested in: add / partner / hand over";
+        } else {
+          var t = T[+v];
+          out.innerHTML = '<ol class="ideas">' + t.i.map(function(x){ return "<li>" + esc(l === "sv" ? x[0] : x[1]) + "</li>"; }).join("") + '</ol>' +
+            '<p class="hint">' + (l === "sv"
+              ? "Sälj själv med en underleverantör, hitta en partner, eller fundera på vem som skulle vilja ta över dina kunder en dag."
+              : "Sell it yourself with a subcontractor, find a partner, or think about who might want to take over your customers one day.") + '</p>';
+          sub += " – " + t[l];
+          body = (l === "sv" ? "Min bransch: " : "My trade: ") + t[l] + "\n" + (l === "sv" ? "Ort: \nIntresserad av: lägga till / samarbeta / lämna över" : "Town: \nInterested in: add / partner / hand over");
+        }
+        mail.href = "mailto:kai@mediahiveab.com?subject=" + encodeURIComponent(sub) + (body ? "&body=" + encodeURIComponent(body) : "");
+      }
+      sel.addEventListener("change", show);
+      new MutationObserver(fill).observe(document.documentElement, {attributes:true, attributeFilter:["lang"]});
+      fill();
+    })();
+  </script>
+</body>
+</html>
