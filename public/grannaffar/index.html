@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Grannaffär: sälj mer till kunder som redan litar på dig | Mediahive AB</title>
-  <meta name="description" content="Verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.">
+  <meta name="description" content="Verktyg: utforska kompletterande tjänster för dina befintliga kunder och läs om samarbete eller företagsöverlåtelse.">
   <link rel="canonical" href="https://mediahiveab.com/grannaffar/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#0E1A2B">
   <meta property="og:title" content="Grannaffär: sälj mer till kunder som redan litar på dig | Mediahive AB">
-  <meta property="og:description" content="Verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.">
+  <meta property="og:description" content="Verktyg: utforska kompletterande tjänster för dina befintliga kunder och läs om samarbete eller företagsöverlåtelse.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mediahiveab.com/grannaffar/">
   <meta property="og:locale" content="sv_SE">
@@ -23,7 +23,7 @@
   <meta property="og:site_name" content="Mediahive AB">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Grannaffär: sälj mer till kunder som redan litar på dig | Mediahive AB">
-  <meta name="twitter:description" content="Verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.">
+  <meta name="twitter:description" content="Verktyg: utforska kompletterande tjänster för dina befintliga kunder och läs om samarbete eller företagsöverlåtelse.">
   <meta name="twitter:image" content="https://mediahiveab.com/og-image.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -323,8 +323,8 @@
         en: "Next-door business: sell more to customers who already trust you | Mediahive AB"
       };
       var descs = {
-        sv: "Verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma.",
-        en: "Tool: find services in neighbouring trades you can sell to your existing customers, find a partner, or hand the business over to a neighbouring firm."
+        sv: "Verktyg: utforska kompletterande tjänster för dina befintliga kunder och läs om samarbete eller företagsöverlåtelse.",
+        en: "Tool: explore complementary services for your existing customers and read about collaboration or a business transfer."
       };
       function setMeta(name, content, prop) {
         var sel = prop ? 'meta[property="' + name + '"]' : 'meta[name="' + name + '"]';
@@ -338,10 +338,10 @@
         document.title = titles[l];
         setMeta("description", descs[l], false);
         setMeta("og:title", titles[l], true);
-        setMeta("og:description", l === "sv" ? "Verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma." : "Tool: find services in neighbouring trades you can sell to your existing customers, find a partner, or hand the business over to a neighbouring firm.", true);
+        setMeta("og:description", l === "sv" ? "Verktyg: utforska kompletterande tjänster för dina befintliga kunder och läs om samarbete eller företagsöverlåtelse." : "Tool: explore complementary services for your existing customers and read about collaboration or a business transfer.", true);
         setMeta("og:locale", l === "sv" ? "sv_SE" : "en_US", true);
         setMeta("twitter:title", titles[l], false);
-        setMeta("twitter:description", l === "sv" ? "Verktyg: hitta tjänster i grannbranscher som du kan sälja till dina befintliga kunder, hitta en partner, eller lämna över företaget till en grannfirma." : "Tool: find services in neighbouring trades you can sell to your existing customers, find a partner, or hand the business over to a neighbouring firm.", false);
+        setMeta("twitter:description", l === "sv" ? "Verktyg: utforska kompletterande tjänster för dina befintliga kunder och läs om samarbete eller företagsöverlåtelse." : "Tool: explore complementary services for your existing customers and read about collaboration or a business transfer.", false);
         try { localStorage.setItem("mh-lang", l); } catch (e) {}
       }
       sv.addEventListener("click", function () { setLang("sv"); });
