@@ -4,6 +4,8 @@ export class SynergiCounter {
   constructor(state, env) {
     this.state = state;
     this.env = env;
+    // Emulate DO single-threaded request queue to ensure atomicity in Node tests
+    this._queue = Promise.resolve();
   }
   async getValue(key) {
     const raw = await this.state.storage.get(key);
@@ -24,7 +26,7 @@ export class SynergiCounter {
     const payload = JSON.stringify({ v: Number(value || 0), exp });
     await this.state.storage.put(key, payload);
   }
-  async fetch(request) {
+  async _handle(request) {
     try {
       const url = new URL(request.url);
       const op = url.pathname.split("/").pop();
@@ -69,6 +71,12 @@ export class SynergiCounter {
     } catch (e) {
       return json({ ok: false, error: String(e && e.message || e) }, 500);
     }
+  }
+  async fetch(request) {
+    const run = () => this._handle(request);
+    // Ensure queue progresses even if previous task rejected
+    this._queue = this._queue.then(run, run);
+    return this._queue;
   }
 }
 
