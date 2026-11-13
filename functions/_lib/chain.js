@@ -152,9 +152,13 @@ function safeUrl(u) {
       if (hl.startsWith("fe80")) return { ok: false, error: "ip6_linklocal" };
       if (/^fe[cdef]/.test(hl)) return { ok: false, error: "ip6_sitelocal" }; // fec0::/10 (deprecated)
       if (hl.startsWith("ff")) return { ok: false, error: "ip6_multicast" }; // ff00::/8
-      if (hl.startsWith("::ffff:")) {
-        // IPv4-mapped IPv6
-        const tail = hl.slice("::ffff:".length);
+      // NAT64 well-known prefix 64:ff9b::/96 (block outright to avoid mapped private v4)
+      if (hl.startsWith("64:ff9b::") || hl.startsWith("64:ff9b:")) return { ok: false, error: "nat64" };
+      // IPv4-embedded in IPv6
+      const mapPrefix = "::ffff:";
+      if (hl.startsWith(mapPrefix) || /^::[0-9a-f]{1,4}:[0-9a-f]{1,4}$/.test(hl)) {
+        // IPv4-mapped (dotted or hex) OR IPv4-compatible hex (::hhhh:hhhh)
+        const tail = hl.startsWith(mapPrefix) ? hl.slice(mapPrefix.length) : hl.slice("::".length);
         let a,b,c,d;
         const dotted = tail.match(/^(\d{1,3}\.){3}\d{1,3}$/);
         if (dotted) {
