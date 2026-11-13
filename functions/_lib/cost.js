@@ -60,18 +60,7 @@ export async function incIpRateLimit(env, request) {
   }
 }
 
-export async function addMonthlySpend(env, deltaSek) {
-  const cap = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
-  const ym = nowYM();
-  const key = `spend:${ym}`;
-  const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
-  const after = cur + Number(deltaSek || 0);
-  if (after > cap) {
-    return { ok: false, current: cur, triedToAdd: deltaSek, cap };
-  }
-  await env.SYNERGI_KV.put(key, String(after), { expirationTtl: 60 * 60 * 24 * 40 }); // ~40 days
-  return { ok: true, current: after, cap };
-}
+// addMonthlySpend removed; monthly accounting is done via Durable Object (reserve/adjust)
 
 export async function getMonthlySpend(env) {
   const ym = nowYM();

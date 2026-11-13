@@ -67,6 +67,6 @@ API: `functions/api/synergimotor.js` with helpers under `functions/_lib/`.
 - `SYNERGI_RATE_LIMIT_PER_IP_PER_DAY` (default 5)
 - `SYNERGI_FETCH_CAP_BYTES` (default 120_000)
 - `SYNERGI_MAX_B_COUNT` (default 5)
-- Optional Durable Object binding: `SYNERGI_COUNTER` (class `SynergiCounter` in `functions/_lib/counter.js`)
+- Required Durable Object binding: `SYNERGI_COUNTER` (class `SynergiCounter` in `functions/_lib/counter.js`)
   - For Pages, use the external Worker `synergi-counter` and bind by script_name as above.
 
