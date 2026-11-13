@@ -36,6 +36,11 @@ async function durableFetch(env, key, op, payload) {
     body: JSON.stringify({ key, ...payload })
   });
   const res = await stub.fetch(req);
+  if (!res || !res.ok) {
+    const err = new Error("durable_object_error");
+    err.code = "do_error";
+    throw err;
+  }
   const j = await res.json();
   return j;
 }
