@@ -84,7 +84,7 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
   ];
 
   // Token budgets: keep small
-  const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 800);
+  const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 60);
   const res1 = await provider.chat({ messages, responseJson: true, maxOutputTokens: maxOut });
   let content = res1.content;
   if (!content || content.error) {
