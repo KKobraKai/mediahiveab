@@ -278,7 +278,20 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
     { role: "system", content: "SJÄLVKRITIK: Ta bort generiska förslag som kunde gälla vilka parter som helst. Returnera topp 3–5 bäst rankade. STRIKT JSON med samma schema." },
     { role: "user", content: "Kandidater (10 st):\n" + JSON.stringify(content1) }
   ];
-  const res2 = await provider.chat({ messages: critMsg, responseJson: true, maxOutputTokens: maxOut });
+  let res2;
+  try {
+    res2 = await provider.chat({ messages: critMsg, responseJson: true, maxOutputTokens: maxOut });
+  } catch (e) {
+    // If the second call throws, settle using the first call's observed usage
+    if (costState) {
+      const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
+      costState.provider = res1.provider;
+      costState.model = res1.model;
+      costState.usage = { promptTokens: res1.usage?.promptTokens || 0, completionTokens: res1.usage?.completionTokens || 0 };
+      costState.estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, costState.usage);
+    }
+    return { ok: false, error: "model_exception", details: String(e && e.message || e), usage: res1.usage || {} };
+  }
   let content = res2.content;
   if (!content || content.error) {
     if (costState) {

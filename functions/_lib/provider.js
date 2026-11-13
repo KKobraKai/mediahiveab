@@ -24,6 +24,9 @@ export function createProvider(env, opts = {}) {
   if (provider === "mock-generic") {
     return new MockGenericProvider({ model, priceTable });
   }
+  if (provider === "mock-throw-crit") {
+    return new MockThrowOnCritiqueProvider({ model, priceTable });
+  }
   // default: OpenAI-compatible
   const apiKey = env.OPENAI_API_KEY;
   const apiBase = (env.OPENAI_BASE_URL || DEFAULT_API_BASE).replace(/\/+$/, "");
@@ -164,6 +167,26 @@ class MockGenericProvider {
       },
       usage
     };
+  }
+}
+
+class MockThrowOnCritiqueProvider {
+  constructor({ model, priceTable }) {
+    this.model = model || "mock-mini";
+    this.priceTable = priceTable || {};
+    this.name = "mock";
+    this._calls = 0;
+  }
+  async chat({ messages, responseJson = true }) {
+    this._calls++;
+    // On second call (critique) throw
+    if (this._calls === 2) {
+      throw new Error("critique_failed");
+    }
+    // First call returns a minimal valid JSON with usage (200/300) like MockProvider
+    const content = mockSimplePair("A", "B");
+    const usage = { promptTokens: 200, completionTokens: 300 };
+    return { provider: this.name, model: this.model, content, usage };
   }
 }
 
