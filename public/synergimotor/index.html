@@ -199,7 +199,7 @@
                 Object.keys(assumptions).forEach(function(k){
                   expr = expr.replace(new RegExp('\\b'+k+'\\b','g'), String(Number(assumptions[k].value||0)));
                 });
-                if (!/^[0-9+\\-*/().\\s]+$/.test(expr)) throw new Error("bad");
+                if (/[^0-9+*\/().\s-]/.test(expr)) throw new Error("bad");
                 // eslint-disable-next-line no-new-func
                 var num = Function('"use strict"; return ('+expr+');')();
                 if (typeof num !== "number" || !isFinite(num)) return 0;

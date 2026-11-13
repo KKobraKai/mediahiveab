@@ -25,7 +25,7 @@ export const SynergyItem = {
       if (e) return "party_" + e;
     }
     if (!Array.isArray(item.domino) || item.domino.some(x => typeof x !== "string")) return "domino";
-    if (!Array.isArray(item.firstSteps) || item.firstSteps.length === 0 || item.firstSteps.some(x => typeof x !== "string")) return "firstSteps";
+    if (!Array.isArray(item.firstSteps) || item.firstSteps.length !== 3 || item.firstSteps.some(x => typeof x !== "string" || !x.trim())) return "firstSteps_exact_3";
     if (typeof item.introMessage !== "string" || !item.introMessage.trim()) return "introMessage";
     if (typeof item.bniPitch !== "string" || !item.bniPitch.trim()) return "bniPitch";
     if (!item.assumptions || typeof item.assumptions !== "object") return "assumptions";
@@ -39,6 +39,9 @@ export const SynergyItem = {
       if (a.unit != null && typeof a.unit !== "string") return "assumption_unit_" + k;
     }
     // valueModel: { [partyName]: { minFormula: string, maxFormula: string } }
+    const partyNames = new Set(item.parties.map(p => String(p.name)));
+    const vmKeys = Object.keys(item.valueModel || {});
+    if (vmKeys.length !== partyNames.size || vmKeys.some(k => !partyNames.has(k))) return "value_model_party_mismatch";
     for (const [party, vm] of Object.entries(item.valueModel)) {
       if (!vm || typeof vm !== "object") return "value_model_obj_" + party;
       if (typeof vm.minFormula !== "string" || typeof vm.maxFormula !== "string") return "value_model_formulas_" + party;

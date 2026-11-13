@@ -15,6 +15,12 @@ export function createProvider(env, opts = {}) {
   if (provider === "stdin") {
     return new StdinProvider({ model, priceTable });
   }
+  if (provider === "mock-invalid") {
+    return new MockInvalidProvider({ model, priceTable });
+  }
+  if (provider === "mock-generic") {
+    return new MockGenericProvider({ model, priceTable });
+  }
   // default: OpenAI-compatible
   const apiKey = env.OPENAI_API_KEY;
   const apiBase = (env.OPENAI_BASE_URL || DEFAULT_API_BASE).replace(/\/+$/, "");
@@ -24,7 +30,9 @@ export function createProvider(env, opts = {}) {
 export function priceForUsage(priceTable, providerName, model, usage) {
   // priceTable: { "<provider>:<model>": { inputPer1k: SEK, outputPer1k: SEK } }
   const key = `${providerName}:${model}`;
-  const p = priceTable[key] || { inputPer1k: 2.0, outputPer1k: 6.0 }; // conservative SEK defaults
+  // Defaults representing mini-class pricing per 1k tokens in SEK (OpenAI gpt-4o-mini circa 2026: ~$0.15/$0.60 per 1M tokens)
+  const defaultMini = { inputPer1k: 0.0016, outputPer1k: 0.0064 };
+  const p = priceTable[key] || (providerName === "openai" && /gpt-4o-mini/.test(model) ? defaultMini : defaultMini);
   const inK = (usage.promptTokens || usage.inputTokens || 0) / 1000;
   const outK = (usage.completionTokens || usage.outputTokens || 0) / 1000;
   return inK * p.inputPer1k + outK * p.outputPer1k;
@@ -40,7 +48,7 @@ class MockProvider {
     // Deterministic tiny response for tests/fixtures based on inputs present in messages
     const allText = messages.map(m => m.content).join("\n").toLowerCase();
     let content = {};
-    if (allText.includes("mario") && allText.includes("lovstrand") && allText.includes("liviu") && allText.includes("voinea")) {
+    if ((allText.includes("mario") && allText.includes("lovstrand") && allText.includes("liviu") && allText.includes("voinea")) || allText.includes("solar share")) {
       content = mockSolarShareResponse();
     } else if (allText.includes("takläggare") && allText.includes("hängränne")) {
       content = mockSimplePair("Takläggare", "Hängrännefirma");
@@ -74,6 +82,50 @@ class StdinProvider {
     }
     const usage = { promptTokens: 0, completionTokens: 0 };
     return { provider: this.name, model: this.model, content, usage };
+  }
+}
+
+class MockInvalidProvider {
+  constructor({ model, priceTable }) {
+    this.model = model || "mock-mini";
+    this.priceTable = priceTable || {};
+    this.name = "mock";
+  }
+  async chat() {
+    const usage = { promptTokens: 200, completionTokens: 100 };
+    return { provider: this.name, model: this.model, content: { bad: true }, usage };
+  }
+}
+
+class MockGenericProvider {
+  constructor({ model, priceTable }) {
+    this.model = model || "mock-mini";
+    this.priceTable = priceTable || {};
+    this.name = "mock";
+  }
+  async chat() {
+    const usage = { promptTokens: 150, completionTokens: 200 };
+    return {
+      provider: this.name,
+      model: this.model,
+      content: {
+        matches: [{
+          id: "g1",
+          name: "Bundle & Upsell",
+          oneLine: "Cross-sell bundles",
+          howItWorks: "Generic",
+          parties: [{ name: "A", valueKrRange: [100, 200], gets: ["x"] }, { name: "B", valueKrRange: [50, 100], gets: ["y"] }],
+          domino: [],
+          firstSteps: ["1", "2", "3"],
+          introMessage: "Hi",
+          bniPitch: "Pitch",
+          assumptions: { a: { label: "a", value: 1 } },
+          valueModel: { A: { minFormula: "a*1", maxFormula: "a*2" }, B: { minFormula: "a*1", maxFormula: "a*2" } }
+        }],
+        sources: ["Vendor figures"]
+      },
+      usage
+    };
   }
 }
 

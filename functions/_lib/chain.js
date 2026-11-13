@@ -2,21 +2,52 @@ import { createProvider, priceForUsage } from "./provider.js";
 import { SynergyResponse, isLikelyGeneric } from "./schema.js";
 
 export async function fetchTextWithCap(url, capBytes = 120_000, timeoutMs = 6000) {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const r = await fetch(url, { headers: { "accept": "text/html, text/plain" }, signal: ctrl.signal });
-    const ct = r.headers.get("content-type") || "";
-    if (!ct.includes("text/html") && !ct.includes("text/plain")) return { text: "", bytes: 0, contentType: ct };
-    const ab = await r.arrayBuffer();
-    const buf = ab.byteLength > capBytes ? ab.slice(0, capBytes) : ab;
-    const text = new TextDecoder("utf-8").decode(buf);
-    return { text, bytes: buf.byteLength, contentType: ct };
-  } catch (e) {
-    return { text: "", bytes: 0, error: String(e && e.message || e) };
-  } finally {
-    clearTimeout(t);
+  const seen = new Set();
+  async function single(u, hops) {
+    if (hops > 3) return { text: "", bytes: 0, error: "too_many_redirects" };
+    const safe = safeUrl(u);
+    if (!safe.ok) return { text: "", bytes: 0, error: safe.error || "bad_url" };
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      const r = await fetch(u, { headers: { "accept": "text/html, text/plain" }, signal: ctrl.signal, redirect: "manual" });
+      const loc = r.headers.get("location");
+      if (r.status >= 300 && r.status < 400 && loc) {
+        const next = new URL(loc, u).toString();
+        if (seen.has(next)) return { text: "", bytes: 0, error: "redirect_loop" };
+        seen.add(next);
+        return await single(next, hops + 1);
+      }
+      const ct = r.headers.get("content-type") || "";
+      if (!ct.includes("text/html") && !ct.includes("text/plain")) return { text: "", bytes: 0, contentType: ct };
+      let bytes = 0;
+      let text = "";
+      if (r.body && typeof r.body.getReader === "function") {
+        const reader = r.body.getReader();
+        const dec = new TextDecoder("utf-8");
+        let done, value;
+        while (({ done, value } = await reader.read()), !done) {
+          bytes += value.byteLength;
+          if (bytes > capBytes) {
+            text += dec.decode(value.subarray(0, capBytes - (bytes - value.byteLength)));
+            break;
+          }
+          text += dec.decode(value, { stream: true });
+        }
+      } else {
+        const ab = await r.arrayBuffer();
+        const buf = ab.byteLength > capBytes ? ab.slice(0, capBytes) : ab;
+        bytes = buf.byteLength;
+        text = new TextDecoder("utf-8").decode(buf);
+      }
+      return { text, bytes, contentType: ct };
+    } catch (e) {
+      return { text: "", bytes: 0, error: String(e && e.message || e) };
+    } finally {
+      clearTimeout(t);
+    }
   }
+  return await single(url, 0);
 }
 
 function buildBusinessContext(a, bList, fetched) {
@@ -71,8 +102,54 @@ function postFilterGeneric(content) {
   return { ...content, matches: keep.slice(0, 5) };
 }
 
+function capList(list, max) { return Array.isArray(list) ? list.slice(0, Math.max(0, max|0)) : []; }
+
+function safeUrl(u) {
+  try {
+    const url = new URL(u);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return { ok: false, error: "bad_scheme" };
+    const host = url.hostname.toLowerCase();
+    // Block localhost / loopback
+    if (host === "localhost") return { ok: false, error: "localhost" };
+    // IPv6 literal
+    if (host.startsWith("[") && host.endsWith("]")) {
+      const h = host.slice(1, -1);
+      if (h === "::1" || h.startsWith("fc") || h.startsWith("fd") || h.startsWith("fe80")) return { ok: false, error: "ip6_private" };
+    }
+    // IPv4 literal
+    const m = host.match(/^(\d{1,3}\.){3}\d{1,3}$/);
+    if (m) {
+      const parts = host.split(".").map(Number);
+      const [a, b] = parts;
+      const ip4 = (a<<24) + (b<<16) + (parts[2]<<8) + parts[3];
+      // Private, loopback, link-local, CGNAT, test, multicast, meta
+      const inRange = (a, b, c, d, mask) => {
+        const base = (a<<24) + (b<<16) + (c<<8) + d;
+        return (ip4 & mask) === (base & mask);
+      };
+      if (inRange(127,0,0,0, 0xff000000)) return { ok: false, error: "loopback" };
+      if (inRange(10,0,0,0, 0xff000000)) return { ok: false, error: "private" };
+      if (inRange(192,168,0,0, 0xffff0000)) return { ok: false, error: "private" };
+      if (inRange(172,16,0,0, 0xfff00000)) return { ok: false, error: "private" };
+      if (inRange(100,64,0,0, 0xffc00000)) return { ok: false, error: "cgnat" };
+      if (inRange(169,254,0,0, 0xffff0000)) return { ok: false, error: "linklocal" };
+      if (host === "169.254.169.254") return { ok: false, error: "metadata" };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "bad_url" };
+  }
+}
+
+function estimateTokensFromChars(chars) {
+  return Math.ceil(chars / 4); // conservative
+}
+
 export async function runSynergyChain({ env, a, bList, goal, region, costState }) {
   const provider = createProvider(env);
+  // Caps
+  const maxB = Number(env.SYNERGI_MAX_B_COUNT || 5);
+  bList = capList(bList, maxB);
   const fetched = {};
   const urls = [a.website, ...bList.map(b => b.website)].filter(Boolean);
   await Promise.all(urls.map(async (u) => { fetched[u] = await fetchTextWithCap(u, Number(env.SYNERGI_FETCH_CAP_BYTES || 120000)); }));
@@ -83,26 +160,51 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
     { role: "user", content: userInstruction() }
   ];
 
-  // Token budgets: keep small
-  const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 60);
+  // Token budgets: generous but affordable on mini-class
+  const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000);
+  const maxPromptChars = Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000);
+  const promptChars = Math.min(messages.map(m => m.content.length).reduce((a,b)=>a+b,0), maxPromptChars);
+  const estIn1 = estimateTokensFromChars(promptChars);
   const res1 = await provider.chat({ messages, responseJson: true, maxOutputTokens: maxOut });
-  let content = res1.content;
+  let content1 = res1.content;
+  if (!content1 || content1.error) {
+    return { ok: false, error: content1 && content1.error || res1.error || "model_error", usage: res1.usage || {} };
+  }
+  // Second pass: critique & selection
+  const critMsg = [
+    { role: "system", content: "SJÄLVKRITIK: Ta bort generiska förslag som kunde gälla vilka parter som helst. Returnera topp 3–5 bäst rankade. STRIKT JSON med samma schema." },
+    { role: "user", content: "Kandidater (10 st):\n" + JSON.stringify(content1) }
+  ];
+  const res2 = await provider.chat({ messages: critMsg, responseJson: true, maxOutputTokens: maxOut });
+  let content = res2.content;
   if (!content || content.error) {
-    return { ok: false, error: content && content.error || res1.error || "model_error", usage: res1.usage || {} };
+    return { ok: false, error: content && content.error || res2.error || "model_error", usage: { promptTokens: (res1.usage?.promptTokens||0), completionTokens: (res1.usage?.completionTokens||0) } };
   }
   content = postFilterGeneric(content);
-  // Validate strict schema
   const verr = SynergyResponse.validate(content);
-  if (verr) return { ok: false, error: "schema_" + verr, usage: res1.usage || {}, content };
+  if (verr) return { ok: false, error: "schema_" + verr, usage: { promptTokens: (res1.usage?.promptTokens||0)+(res2.usage?.promptTokens||0), completionTokens: (res1.usage?.completionTokens||0)+(res2.usage?.completionTokens||0) }, content };
 
   // cost
   const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
-  const estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, res1.usage || {});
+  const usageSum = {
+    promptTokens: (res1.usage?.promptTokens || 0) + (res2.usage?.promptTokens || 0),
+    completionTokens: (res1.usage?.completionTokens || 0) + (res2.usage?.completionTokens || 0)
+  };
+  const estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, usageSum);
   if (costState) {
-    costState.usage = res1.usage || {};
+    costState.usage = usageSum;
     costState.estimatedSek = estimatedSek;
     costState.provider = res1.provider;
     costState.model = res1.model;
+    // worst-case assertion
+    const p = priceTable[`${res1.provider}:${res1.model}`] || { inputPer1k: 0.0016, outputPer1k: 0.0064 };
+    const maxInTokens = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000) * 2; // two calls
+    const maxOutTokens = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000) * 2;
+    const worstSek = (maxInTokens/1000)*p.inputPer1k + (maxOutTokens/1000)*p.outputPer1k;
+    costState.worstSek = worstSek;
+    if (worstSek > 0.5) {
+      return { ok: false, error: "budget_worst_case_exceeds", usage: usageSum, content, worstSek };
+    }
   }
   return { ok: true, result: content };
 }

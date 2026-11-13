@@ -1,12 +1,8 @@
 // Cost estimation, monthly cap enforcement, and per-IP rate limiting via KV
 export function getIp(request) {
   const h = request.headers;
-  return (
-    h.get("cf-connecting-ip") ||
-    (h.get("x-forwarded-for") || "").split(",")[0].trim() ||
-    h.get("x-real-ip") ||
-    ""
-  );
+  const ip = h.get("cf-connecting-ip") || "";
+  return ip;
 }
 
 export function nowYMD(d = new Date()) {
@@ -23,7 +19,8 @@ export function nowYM(d = new Date()) {
 }
 
 export async function incIpRateLimit(env, request) {
-  const ip = getIp(request) || "unknown";
+  const ip = getIp(request);
+  if (!ip) return { ok: false, reason: "ip_missing" };
   const limit = Number(env.SYNERGI_RATE_LIMIT_PER_IP_PER_DAY || 5);
   const day = nowYMD();
   const key = `rlip:${day}:${ip}`;
@@ -64,7 +61,37 @@ export function sanitizeOriginHost(v) {
 export function allowOrigin(request) {
   const origin = request.headers.get("origin") || request.headers.get("referer") || "";
   const host = sanitizeOriginHost(origin);
-  // only allow our domain
-  return host === "mediahiveab.com" || host === "www.mediahiveab.com" || host.endsWith(".pages.dev");
+  // only allow our domains
+  return host === "mediahiveab.com" || host === "www.mediahiveab.com" || host === "mediahiveab.pages.dev";
+}
+
+export async function reserveMonthlySpend(env, amountSek) {
+  const cap = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
+  const refuseAt = env.SYNERGI_SPEND_REFUSE_AT_SEK != null
+    ? Number(env.SYNERGI_SPEND_REFUSE_AT_SEK)
+    : Math.max(0, Math.floor(cap * Number(env.SYNERGI_SPEND_REFUSE_RATIO || 0.9)));
+  const ym = nowYM();
+  const key = `spend:${ym}`;
+  const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
+  const after = cur + Number(amountSek || 0);
+  if (after > refuseAt) return { ok: false, current: cur, refuseAt, cap };
+  await env.SYNERGI_KV.put(key, String(after), { expirationTtl: 60 * 60 * 24 * 40 });
+  return { ok: true, current: after, refuseAt, cap };
+}
+
+export async function adjustMonthlySpend(env, deltaSek) {
+  const ym = nowYM();
+  const key = `spend:${ym}`;
+  const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
+  const after = cur + Number(deltaSek || 0);
+  await env.SYNERGI_KV.put(key, String(Math.max(0, after)), { expirationTtl: 60 * 60 * 24 * 40 });
+  return { ok: true, current: after };
+}
+
+export async function incrCounter(env, keyBase) {
+  const day = nowYMD();
+  const key = `cnt:${keyBase}:${day}`;
+  const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
+  await env.SYNERGI_KV.put(key, String(cur + 1), { expirationTtl: 60 * 60 * 24 * 60 });
 }
 

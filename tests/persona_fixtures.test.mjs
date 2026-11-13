@@ -17,7 +17,7 @@ test("Mario + Liviu -> Solar Share", async () => {
   const a = { name: "Mario Lovstrand", company: "Stenvalvet", category: "Fastighetsförvaltare" };
   const bList = [{ name: "Liviu Voinea", company: "Solkraft Direkt", category: "Solenergi" }];
   const res = await runSynergyChain({ env, a, bList, goal: "Grönare fastigheter", region: "Västmanland", costState: {} });
-  assert.equal(res.ok, true);
+  assert.equal(res.ok, true, res.error || "");
   const m = res.result.matches[0];
   assert.ok(/solar share/i.test(m.name));
 });

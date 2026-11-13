@@ -25,7 +25,7 @@ test("schema validates a minimal valid item", () => {
 });
 
 test("response-level validation", () => {
-  const r = { matches: [{ id: "1", name: "x", oneLine: "y", howItWorks: "z", parties: [{ name: "A", valueKrRange: [1,2], gets: ["x"] }, { name: "B", valueKrRange: [1,2], gets: ["y"] }], domino: [], firstSteps: ["1"], introMessage: "i", bniPitch: "p", assumptions: { a: { label: "L", value: 1 } }, valueModel: { A: { minFormula: "a*1", maxFormula: "a*1" } } }], sources: ["SCB"] };
+  const r = { matches: [{ id: "1", name: "x", oneLine: "y", howItWorks: "z", parties: [{ name: "A", valueKrRange: [1,2], gets: ["x"] }, { name: "B", valueKrRange: [1,2], gets: ["y"] }], domino: [], firstSteps: ["1","2","3"], introMessage: "i", bniPitch: "p", assumptions: { a: { label: "L", value: 1 } }, valueModel: { A: { minFormula: "a*1", maxFormula: "a*1" }, B: { minFormula: "a*1", maxFormula: "a*1" } } }], sources: ["SCB"] };
   assert.equal(SynergyResponse.validate(r), null);
 });
 
