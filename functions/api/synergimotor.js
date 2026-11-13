@@ -32,9 +32,14 @@ export async function onRequestPost({ request, env }) {
   const provider = createProvider(env);
   const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
   const key = `${provider.name}:${provider.model}`;
-  const p = priceTable[key] || { inputPer1k: 0.0016, outputPer1k: 0.0064 };
+  const p = priceTable[key];
+  if (!p) {
+    return json({ error: "pricing_unknown_model", message: `Pris saknas för ${key}. Lägg till i SYNERGI_PRICE_TABLE_JSON och försök igen.` }, 400);
+  }
   const calls = 2;
-  const maxIn = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000) * calls;
+  const maxInFromPrompt = Math.ceil(Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000) / 4) * calls;
+  const maxInCfg = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000) * calls;
+  const maxIn = Math.min(maxInCfg, maxInFromPrompt);
   const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000) * calls;
   const worstSek = (maxIn/1000)*p.inputPer1k + (maxOut/1000)*p.outputPer1k;
   if (worstSek > 0.5) {
@@ -46,15 +51,20 @@ export async function onRequestPost({ request, env }) {
     return json({ error: "monthly_cap_reached", message: "Månadens budget för Synergimotorn är slut. Prova nästa månad." }, 402);
   }
   const costState = { usage: {}, estimatedSek: 0, provider: "", model: "", worstSek };
-  const res = await runSynergyChain({ env, a, bList, goal, region, costState });
-  if (!res.ok) {
-    await adjustMonthlySpend(env, -worstSek);
-    await incrCounter(env, "fail");
-    return json({ error: res.error || "run_failed", details: res.content && res.content.error }, 502);
+  let res;
+  try {
+    res = await runSynergyChain({ env, a, bList, goal, region, costState });
+  } catch (e) {
+    // fall through to settlement in finally
+    res = { ok: false, error: "exception", details: String(e && e.message || e) };
   }
-  // Settle reservation to actual
+  // Settle reservation to actual (even on failure)
   const delta = (costState.estimatedSek || 0) - worstSek;
   const adj = await adjustMonthlySpend(env, delta);
+  if (!res.ok) {
+    await incrCounter(env, "fail");
+    return json({ error: res.error || "run_failed", details: res.details || (res.content && res.content.error) }, 502);
+  }
   // Return with meta
   return json({
     ok: true,

@@ -57,7 +57,6 @@ export const SynergyResponse = {
   validate(payload) {
     if (!payload || typeof payload !== "object") return "root_not_object";
     if (!Array.isArray(payload.matches) || payload.matches.length === 0) return "matches";
-    if (payload.matches.length > 5) return "too_many_matches";
     for (const it of payload.matches) {
       const e = SynergyItem.validate(it);
       if (e) return "item_" + e;

@@ -50,6 +50,32 @@ export async function fetchTextWithCap(url, capBytes = 120_000, timeoutMs = 6000
   return await single(url, 0);
 }
 
+function trunc(s, n) {
+  if (s == null) return s;
+  const str = String(s);
+  if (!Number.isFinite(n) || n <= 0) return str;
+  return str.length > n ? str.slice(0, n) : str;
+}
+
+function capMessagesChars(messages, maxChars) {
+  if (!Array.isArray(messages)) return [];
+  const out = messages.map(m => ({ ...m }));
+  const total = () => out.reduce((sum, m) => sum + (m.content ? m.content.length : 0), 0);
+  let cur = total();
+  if (!Number.isFinite(maxChars) || maxChars <= 0) return out;
+  // Trim from the last message backwards until under cap
+  for (let i = out.length - 1; i >= 0 && cur > maxChars; i--) {
+    const m = out[i];
+    const over = cur - maxChars;
+    const c = m.content || "";
+    if (c.length <= 0) continue;
+    const reduceBy = Math.min(over, Math.max(0, c.length - 1));
+    out[i] = { ...m, content: c.slice(0, c.length - reduceBy) };
+    cur = total();
+  }
+  return out;
+}
+
 function buildBusinessContext(a, bList, fetched) {
   const aStr = [
     a.name && `Namn: ${a.name}`,
@@ -108,13 +134,45 @@ function safeUrl(u) {
   try {
     const url = new URL(u);
     if (url.protocol !== "http:" && url.protocol !== "https:") return { ok: false, error: "bad_scheme" };
-    const host = url.hostname.toLowerCase();
-    // Block localhost / loopback
-    if (host === "localhost") return { ok: false, error: "localhost" };
+    let host = url.hostname.toLowerCase();
+    // Normalize trailing dot (e.g. localhost.)
+    if (host.endsWith(".")) host = host.slice(0, -1);
+    // Block localhost / loopback and *.localhost
+    if (host === "localhost" || host.endsWith(".localhost")) return { ok: false, error: "localhost" };
     // IPv6 literal
     if (host.startsWith("[") && host.endsWith("]")) {
       const h = host.slice(1, -1);
-      if (h === "::1" || h.startsWith("fc") || h.startsWith("fd") || h.startsWith("fe80")) return { ok: false, error: "ip6_private" };
+      const hl = h.toLowerCase();
+      // Unspecified, loopback, ULA, link-local, site-local, multicast, IPv4-mapped
+      if (hl === "::" || hl === "::1") return { ok: false, error: "ip6_loopback" };
+      if (hl.startsWith("fc") || hl.startsWith("fd")) return { ok: false, error: "ip6_ula" };
+      if (hl.startsWith("fe80")) return { ok: false, error: "ip6_linklocal" };
+      if (/^fe[cdef]/.test(hl)) return { ok: false, error: "ip6_sitelocal" }; // fec0::/10 (deprecated)
+      if (hl.startsWith("ff")) return { ok: false, error: "ip6_multicast" }; // ff00::/8
+      if (hl.startsWith("::ffff:")) {
+        // IPv4-mapped IPv6
+        const tail = hl.slice("::ffff:".length);
+        const mm = tail.match(/^(\d{1,3}\.){3}\d{1,3}$/);
+        if (mm) {
+          const parts = tail.split(".").map(Number);
+          const [a, b] = parts;
+          const ip4 = (a<<24) + (b<<16) + (parts[2]<<8) + parts[3];
+          const inRange = (a, b, c, d, mask) => {
+            const base = (a<<24) + (b<<16) + (c<<8) + d;
+            return (ip4 & mask) === (base & mask);
+          };
+          if (inRange(127,0,0,0, 0xff000000)) return { ok: false, error: "loopback" };
+          if (inRange(10,0,0,0, 0xff000000)) return { ok: false, error: "private" };
+          if (inRange(192,168,0,0, 0xffff0000)) return { ok: false, error: "private" };
+          if (inRange(172,16,0,0, 0xfff00000)) return { ok: false, error: "private" };
+          if (inRange(100,64,0,0, 0xffc00000)) return { ok: false, error: "cgnat" };
+          if (inRange(169,254,0,0, 0xffff0000)) return { ok: false, error: "linklocal" };
+          if (inRange(224,0,0,0, 0xf0000000)) return { ok: false, error: "multicast" }; // 224/4
+          if (inRange(0,0,0,0, 0xff000000)) return { ok: false, error: "thisnet" }; // 0.0.0.0/8
+          if (inRange(198,18,0,0, 0xfffe0000)) return { ok: false, error: "benchmark" }; // 198.18/15
+          if (tail === "169.254.169.254") return { ok: false, error: "metadata" };
+        }
+      }
     }
     // IPv4 literal
     const m = host.match(/^(\d{1,3}\.){3}\d{1,3}$/);
@@ -133,6 +191,9 @@ function safeUrl(u) {
       if (inRange(172,16,0,0, 0xfff00000)) return { ok: false, error: "private" };
       if (inRange(100,64,0,0, 0xffc00000)) return { ok: false, error: "cgnat" };
       if (inRange(169,254,0,0, 0xffff0000)) return { ok: false, error: "linklocal" };
+      if (inRange(0,0,0,0, 0xff000000)) return { ok: false, error: "thisnet" }; // 0.0.0.0/8
+      if (inRange(224,0,0,0, 0xf0000000)) return { ok: false, error: "multicast" }; // 224/4
+      if (inRange(198,18,0,0, 0xfffe0000)) return { ok: false, error: "benchmark" }; // 198.18/15
       if (host === "169.254.169.254") return { ok: false, error: "metadata" };
     }
     return { ok: true };
@@ -149,25 +210,51 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
   const provider = createProvider(env);
   // Caps
   const maxB = Number(env.SYNERGI_MAX_B_COUNT || 5);
-  bList = capList(bList, maxB);
+  const fieldCap = Number(env.SYNERGI_FIELD_CAP_CHARS || 200);
+  // Truncate A and B basic fields eagerly to hard cap upstream payload
+  const truncA = {
+    name: trunc(a?.name, fieldCap),
+    company: trunc(a?.company, fieldCap),
+    website: trunc(a?.website, fieldCap),
+    category: trunc(a?.category, fieldCap)
+  };
+  bList = capList(Array.isArray(bList) ? bList.map(b => ({
+    name: trunc(b?.name, fieldCap),
+    company: trunc(b?.company, fieldCap),
+    website: trunc(b?.website, fieldCap),
+    category: trunc(b?.category, fieldCap)
+  })) : [], maxB);
   const fetched = {};
-  const urls = [a.website, ...bList.map(b => b.website)].filter(Boolean);
+  const urls = [truncA.website, ...bList.map(b => b.website)].filter(Boolean);
   await Promise.all(urls.map(async (u) => { fetched[u] = await fetchTextWithCap(u, Number(env.SYNERGI_FETCH_CAP_BYTES || 120000)); }));
 
-  const messages = [
-    { role: "system", content: systemPreamble(goal, region) },
-    { role: "user", content: buildBusinessContext(a, bList, fetched) },
+  const messagesRaw = [
+    { role: "system", content: systemPreamble(trunc(goal, fieldCap), trunc(region, fieldCap)) },
+    { role: "user", content: buildBusinessContext(truncA, bList, fetched) },
     { role: "user", content: userInstruction() }
   ];
 
   // Token budgets: generous but affordable on mini-class
   const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000);
   const maxPromptChars = Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000);
-  const promptChars = Math.min(messages.map(m => m.content.length).reduce((a,b)=>a+b,0), maxPromptChars);
+  const messages = capMessagesChars(messagesRaw, maxPromptChars);
+  const promptChars = messages.map(m => m.content.length).reduce((a,b)=>a+b,0);
+  if (costState) {
+    costState.promptChars = promptChars;
+    costState.maxPromptChars = maxPromptChars;
+  }
   const estIn1 = estimateTokensFromChars(promptChars);
   const res1 = await provider.chat({ messages, responseJson: true, maxOutputTokens: maxOut });
   let content1 = res1.content;
   if (!content1 || content1.error) {
+    // record partial usage for settlement
+    if (costState) {
+      const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
+      costState.provider = res1.provider;
+      costState.model = res1.model;
+      costState.usage = { promptTokens: res1.usage?.promptTokens || 0, completionTokens: res1.usage?.completionTokens || 0 };
+      costState.estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, costState.usage);
+    }
     return { ok: false, error: content1 && content1.error || res1.error || "model_error", usage: res1.usage || {} };
   }
   // Second pass: critique & selection
@@ -178,11 +265,34 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
   const res2 = await provider.chat({ messages: critMsg, responseJson: true, maxOutputTokens: maxOut });
   let content = res2.content;
   if (!content || content.error) {
+    if (costState) {
+      const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
+      costState.provider = res1.provider;
+      costState.model = res1.model;
+      costState.usage = {
+        promptTokens: (res1.usage?.promptTokens||0) + (res2.usage?.promptTokens||0),
+        completionTokens: (res1.usage?.completionTokens||0) + (res2.usage?.completionTokens||0)
+      };
+      costState.estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, costState.usage);
+    }
     return { ok: false, error: content && content.error || res2.error || "model_error", usage: { promptTokens: (res1.usage?.promptTokens||0), completionTokens: (res1.usage?.completionTokens||0) } };
   }
   content = postFilterGeneric(content);
   const verr = SynergyResponse.validate(content);
-  if (verr) return { ok: false, error: "schema_" + verr, usage: { promptTokens: (res1.usage?.promptTokens||0)+(res2.usage?.promptTokens||0), completionTokens: (res1.usage?.completionTokens||0)+(res2.usage?.completionTokens||0) }, content };
+  if (verr) {
+    if (costState) {
+      const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
+      const usage = {
+        promptTokens: (res1.usage?.promptTokens||0)+(res2.usage?.promptTokens||0),
+        completionTokens: (res1.usage?.completionTokens||0)+(res2.usage?.completionTokens||0)
+      };
+      costState.provider = res1.provider;
+      costState.model = res1.model;
+      costState.usage = usage;
+      costState.estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, usage);
+    }
+    return { ok: false, error: "schema_" + verr, usage: { promptTokens: (res1.usage?.promptTokens||0)+(res2.usage?.promptTokens||0), completionTokens: (res1.usage?.completionTokens||0)+(res2.usage?.completionTokens||0) }, content };
+  }
 
   // cost
   const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
@@ -196,14 +306,16 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
     costState.estimatedSek = estimatedSek;
     costState.provider = res1.provider;
     costState.model = res1.model;
-    // worst-case assertion
-    const p = priceTable[`${res1.provider}:${res1.model}`] || { inputPer1k: 0.0016, outputPer1k: 0.0064 };
-    const maxInTokens = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000) * 2; // two calls
-    const maxOutTokens = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000) * 2;
-    const worstSek = (maxInTokens/1000)*p.inputPer1k + (maxOutTokens/1000)*p.outputPer1k;
-    costState.worstSek = worstSek;
-    if (worstSek > 0.5) {
-      return { ok: false, error: "budget_worst_case_exceeds", usage: usageSum, content, worstSek };
+    // record worst-case at time of run for settlement math (computed in handler gate too)
+    const p = priceTable[`${res1.provider}:${res1.model}`];
+    if (p) {
+      const maxInTokens = Math.min(
+        Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000),
+        Math.ceil(Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000) / 4)
+      ) * 2;
+      const maxOutTokens = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000) * 2;
+      const worstSek = (maxInTokens/1000)*p.inputPer1k + (maxOutTokens/1000)*p.outputPer1k;
+      costState.worstSek = worstSek;
     }
   }
   return { ok: true, result: content };

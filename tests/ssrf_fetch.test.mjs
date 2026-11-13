@@ -22,6 +22,27 @@ test("blocks private and metadata IPs and non-http schemes", async () => {
   global.fetch = prev;
 });
 
+test("blocks localhost variants, multicast, benchmark, mapped IPv6, and trailing-dot hosts", async () => {
+  const bads = [
+    "http://localhost./",
+    "http://sub.localhost/",
+    "http://0.0.0.0/",
+    "http://224.0.0.1/",
+    "http://198.18.0.1/",
+    "http://[::]/",
+    "http://[ff00::1]/",
+    "http://[::ffff:127.0.0.1]/",
+    "http://[::ffff:169.254.169.254]/"
+  ];
+  const prev = global.fetch;
+  global.fetch = async function(_url, _opts) { throw new Error("should_not_fetch"); };
+  for (const u of bads) {
+    const r = await fetchTextWithCap(u, 1024);
+    assert.ok(r.error, `expected error for ${u}`);
+  }
+  global.fetch = prev;
+});
+
 test("redirects re-checked and limited", async () => {
   const prev = global.fetch;
   let callCount = 0;
@@ -34,6 +55,24 @@ test("redirects re-checked and limited", async () => {
   };
   const r = await fetchTextWithCap("https://example.com", 1024);
   assert.ok(r.error, "expected error after redirect to blocked host");
+  global.fetch = prev;
+});
+
+test("redirect manual mode and hop limit 3", async () => {
+  const prev = global.fetch;
+  let hops = 0;
+  let seenRedirectManual = false;
+  global.fetch = async function(url, opts) {
+    if (opts && opts.redirect === "manual") seenRedirectManual = true;
+    if (hops < 4) {
+      hops++;
+      return { status: 302, headers: new Map([["location","https://next.example/"+hops]]), ok: false, body: null, arrayBuffer: async () => new ArrayBuffer(0) };
+    }
+    return { status: 200, headers: new Map([["content-type","text/plain"]]), ok: true, arrayBuffer: async () => Buffer.from("ok") };
+  };
+  const r = await fetchTextWithCap("https://start.example", 1024);
+  assert.equal(seenRedirectManual, true);
+  assert.equal(r.error, "too_many_redirects");
   global.fetch = prev;
 });
 

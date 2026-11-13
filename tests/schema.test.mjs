@@ -29,6 +29,19 @@ test("response-level validation", () => {
   assert.equal(SynergyResponse.validate(r), null);
 });
 
+test("firstSteps must be exactly 3", () => {
+  const base = { id: "1", name: "x", oneLine: "y", howItWorks: "z", parties: [{ name: "A", valueKrRange: [1,2], gets: ["x"] }, { name: "B", valueKrRange: [1,2], gets: ["y"] }], domino: [], introMessage: "i", bniPitch: "p", assumptions: { a: { label: "L", value: 1 } }, valueModel: { A: { minFormula: "a*1", maxFormula: "a*1" }, B: { minFormula: "a*1", maxFormula: "a*1" } } };
+  const two = { matches: [{ ...base, firstSteps: ["1","2"] }], sources: ["SCB"] };
+  const four = { matches: [{ ...base, firstSteps: ["1","2","3","4"] }], sources: ["SCB"] };
+  assert.ok(/firstSteps/.test(SynergyResponse.validate(two)));
+  assert.ok(/firstSteps/.test(SynergyResponse.validate(four)));
+});
+
+test("valueModel keys must match parties", () => {
+  const bad = { matches: [{ id: "1", name: "x", oneLine: "y", howItWorks: "z", parties: [{ name: "A", valueKrRange: [1,2], gets: ["x"] }, { name: "B", valueKrRange: [1,2], gets: ["y"] }], domino: [], firstSteps: ["1","2","3"], introMessage: "i", bniPitch: "p", assumptions: { a: { label: "L", value: 1 } }, valueModel: { A: { minFormula: "a*1", maxFormula: "a*1" } } }], sources: ["SCB"] };
+  assert.ok(/value_model_party_mismatch/.test(SynergyResponse.validate(bad)));
+});
+
 test("generic idea detector", () => {
   assert.equal(isLikelyGeneric("Starta ett nyhetsbrev och en referral-kampanj"), true);
   assert.equal(isLikelyGeneric("Tak + hängrännor paket – komplett takjobb"), false);

@@ -18,6 +18,9 @@ export function createProvider(env, opts = {}) {
   if (provider === "mock-invalid") {
     return new MockInvalidProvider({ model, priceTable });
   }
+  if (provider === "mock-count") {
+    return new MockCountingProvider({ model, priceTable });
+  }
   if (provider === "mock-generic") {
     return new MockGenericProvider({ model, priceTable });
   }
@@ -94,6 +97,41 @@ class MockInvalidProvider {
   async chat() {
     const usage = { promptTokens: 200, completionTokens: 100 };
     return { provider: this.name, model: this.model, content: { bad: true }, usage };
+  }
+}
+
+class MockCountingProvider {
+  constructor({ model, priceTable }) {
+    this.model = model || "mock-mini";
+    this.priceTable = priceTable || {};
+    this.name = "mock";
+    globalThis.__synergi_calls__ = 0;
+  }
+  async chat() {
+    globalThis.__synergi_calls__ = (globalThis.__synergi_calls__ || 0) + 1;
+    const usage = { promptTokens: 1, completionTokens: 1 };
+    // Return minimal valid structure
+    return {
+      provider: this.name,
+      model: this.model,
+      content: {
+        matches: [{
+          id: "ok",
+          name: "Ok",
+          oneLine: "Ok",
+          howItWorks: "Ok",
+          parties: [{ name: "A", valueKrRange: [1, 2], gets: ["x"] }, { name: "B", valueKrRange: [1, 2], gets: ["y"] }],
+          domino: [],
+          firstSteps: ["1","2","3"],
+          introMessage: "hi",
+          bniPitch: "p",
+          assumptions: { a: { label: "a", value: 1 } },
+          valueModel: { A: { minFormula: "a*1", maxFormula: "a*2" }, B: { minFormula: "a*1", maxFormula: "a*2" } }
+        }],
+        sources: ["Vendor"]
+      },
+      usage
+    };
   }
 }
 
