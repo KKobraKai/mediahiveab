@@ -29,7 +29,10 @@ export async function fetchTextWithCap(url, capBytes = 120_000, timeoutMs = 6000
         while (({ done, value } = await reader.read()), !done) {
           bytes += value.byteLength;
           if (bytes > capBytes) {
-            text += dec.decode(value.subarray(0, capBytes - (bytes - value.byteLength)));
+            const already = bytes - value.byteLength;
+            const remaining = Math.max(0, capBytes - already);
+            if (remaining > 0) text += dec.decode(value.subarray(0, remaining));
+            bytes = capBytes;
             break;
           }
           text += dec.decode(value, { stream: true });
@@ -152,26 +155,37 @@ function safeUrl(u) {
       if (hl.startsWith("::ffff:")) {
         // IPv4-mapped IPv6
         const tail = hl.slice("::ffff:".length);
-        const mm = tail.match(/^(\d{1,3}\.){3}\d{1,3}$/);
-        if (mm) {
-          const parts = tail.split(".").map(Number);
-          const [a, b] = parts;
-          const ip4 = (a<<24) + (b<<16) + (parts[2]<<8) + parts[3];
-          const inRange = (a, b, c, d, mask) => {
-            const base = (a<<24) + (b<<16) + (c<<8) + d;
-            return (ip4 & mask) === (base & mask);
-          };
-          if (inRange(127,0,0,0, 0xff000000)) return { ok: false, error: "loopback" };
-          if (inRange(10,0,0,0, 0xff000000)) return { ok: false, error: "private" };
-          if (inRange(192,168,0,0, 0xffff0000)) return { ok: false, error: "private" };
-          if (inRange(172,16,0,0, 0xfff00000)) return { ok: false, error: "private" };
-          if (inRange(100,64,0,0, 0xffc00000)) return { ok: false, error: "cgnat" };
-          if (inRange(169,254,0,0, 0xffff0000)) return { ok: false, error: "linklocal" };
-          if (inRange(224,0,0,0, 0xf0000000)) return { ok: false, error: "multicast" }; // 224/4
-          if (inRange(0,0,0,0, 0xff000000)) return { ok: false, error: "thisnet" }; // 0.0.0.0/8
-          if (inRange(198,18,0,0, 0xfffe0000)) return { ok: false, error: "benchmark" }; // 198.18/15
-          if (tail === "169.254.169.254") return { ok: false, error: "metadata" };
+        let a,b,c,d;
+        const dotted = tail.match(/^(\d{1,3}\.){3}\d{1,3}$/);
+        if (dotted) {
+          [a,b,c,d] = tail.split(".").map(Number);
+        } else {
+          // hex form ::ffff:hhhh:hhhh
+          const hex = tail.match(/^([0-9a-f]{1,4}):([0-9a-f]{1,4})$/);
+          if (!hex) return { ok: false, error: "mapped_ip4_bad" };
+          const hi = parseInt(hex[1], 16);
+          const lo = parseInt(hex[2], 16);
+          const ip4 = ((hi & 0xffff) << 16) | (lo & 0xffff);
+          a = (ip4 >>> 24) & 0xff;
+          b = (ip4 >>> 16) & 0xff;
+          c = (ip4 >>> 8) & 0xff;
+          d = ip4 & 0xff;
         }
+        const ip4 = (a<<24) + (b<<16) + (c<<8) + d;
+        const inRange = (a, b, c, d, mask) => {
+          const base = (a<<24) + (b<<16) + (c<<8) + d;
+          return (ip4 & mask) === (base & mask);
+        };
+        if (inRange(127,0,0,0, 0xff000000)) return { ok: false, error: "loopback" };
+        if (inRange(10,0,0,0, 0xff000000)) return { ok: false, error: "private" };
+        if (inRange(192,168,0,0, 0xffff0000)) return { ok: false, error: "private" };
+        if (inRange(172,16,0,0, 0xfff00000)) return { ok: false, error: "private" };
+        if (inRange(100,64,0,0, 0xffc00000)) return { ok: false, error: "cgnat" };
+        if (inRange(169,254,0,0, 0xffff0000)) return { ok: false, error: "linklocal" };
+        if (inRange(224,0,0,0, 0xf0000000)) return { ok: false, error: "multicast" }; // 224/4
+        if (inRange(0,0,0,0, 0xff000000)) return { ok: false, error: "thisnet" }; // 0.0.0.0/8
+        if (inRange(198,18,0,0, 0xfffe0000)) return { ok: false, error: "benchmark" }; // 198.18/15
+        if (a===169 && b===254 && c===169 && d===254) return { ok: false, error: "metadata" };
       }
     }
     // IPv4 literal
@@ -228,16 +242,18 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
   const urls = [truncA.website, ...bList.map(b => b.website)].filter(Boolean);
   await Promise.all(urls.map(async (u) => { fetched[u] = await fetchTextWithCap(u, Number(env.SYNERGI_FETCH_CAP_BYTES || 120000)); }));
 
-  const messagesRaw = [
-    { role: "system", content: systemPreamble(trunc(goal, fieldCap), trunc(region, fieldCap)) },
-    { role: "user", content: buildBusinessContext(truncA, bList, fetched) },
-    { role: "user", content: userInstruction() }
-  ];
+  const sysMsg = { role: "system", content: systemPreamble(trunc(goal, fieldCap), trunc(region, fieldCap)) };
+  const ctxRaw = buildBusinessContext(truncA, bList, fetched);
+  const instrMsg = { role: "user", content: userInstruction() };
 
   // Token budgets: generous but affordable on mini-class
   const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000);
   const maxPromptChars = Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000);
-  const messages = capMessagesChars(messagesRaw, maxPromptChars);
+  // Preserve system + instruction intact; trim only context to fit under cap
+  const fixedLen = sysMsg.content.length + instrMsg.content.length;
+  const ctxCap = Math.max(0, maxPromptChars - fixedLen);
+  const ctxMsg = { role: "user", content: ctxRaw.length > ctxCap ? ctxRaw.slice(0, ctxCap) : ctxRaw };
+  const messages = [sysMsg, ctxMsg, instrMsg];
   const promptChars = messages.map(m => m.content.length).reduce((a,b)=>a+b,0);
   if (costState) {
     costState.promptChars = promptChars;

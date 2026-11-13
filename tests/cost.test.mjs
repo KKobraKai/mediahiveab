@@ -28,8 +28,36 @@ test("monthly cap refusal", async () => {
   assert.equal(Number(ms.current.toFixed(2)), 1.00);
 });
 
+function makeDoBinding() {
+  const store = new Map();
+  return {
+    idFromName(name) { return { name }; },
+    get(id) {
+      return {
+        async fetch(req) {
+          const url = new URL(req.url);
+          const op = url.pathname.split("/").pop();
+          const body = await req.json();
+          const key = body.key;
+          const get = () => Number(store.get(key) || 0);
+          const put = (v) => { store.set(key, String(v)); };
+          if (op === "inc") {
+            const cur = get();
+            const limit = Number(body.limit || Infinity);
+            if (cur + Number(body.delta || 1) > limit) return new Response(JSON.stringify({ ok: false, count: cur }), { headers: { "content-type":"application/json" } });
+            const next = cur + Number(body.delta || 1);
+            put(next);
+            return new Response(JSON.stringify({ ok: true, count: next }), { headers: { "content-type":"application/json" } });
+          }
+          return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { "content-type":"application/json" } });
+        }
+      };
+    }
+  };
+}
+
 test("rate limit per ip per day", async () => {
-  const env = { SYNERGI_KV: makeKv(), SYNERGI_RATE_LIMIT_PER_IP_PER_DAY: "2" };
+  const env = { SYNERGI_KV: makeKv(), SYNERGI_RATE_LIMIT_PER_IP_PER_DAY: "2", SYNERGI_COUNTER: makeDoBinding() };
   const hmap = new Map([["cf-connecting-ip","1.2.3.4"]]);
   const req = { headers: { get: (k) => hmap.get(k) } };
   let r = await incIpRateLimit(env, req); assert.equal(r.ok, true);

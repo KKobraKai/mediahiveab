@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { fetchTextWithCap } from "../functions/_lib/chain.js";
 
-test("blocks private and metadata IPs and non-http schemes", async () => {
+test("blocks private and metadata IPs and non-http schemes - no network call made", async () => {
   const bads = [
     "ftp://example.com/",
     "http://localhost/",
@@ -14,15 +14,17 @@ test("blocks private and metadata IPs and non-http schemes", async () => {
     "http://172.16.0.1/"
   ];
   const prev = global.fetch;
-  global.fetch = async function(_url, _opts) { throw new Error("should_not_fetch"); };
+  let calls = 0;
+  global.fetch = async function(_url, _opts) { calls++; return { ok:false, status:599, headers: new Map(), arrayBuffer: async () => new ArrayBuffer(0) }; };
   for (const u of bads) {
     const r = await fetchTextWithCap(u, 1024);
     assert.ok(r.error, `expected error for ${u}`);
   }
+  assert.equal(calls, 0, "fetch must not be called for blocked URLs");
   global.fetch = prev;
 });
 
-test("blocks localhost variants, multicast, benchmark, mapped IPv6, and trailing-dot hosts", async () => {
+test("blocks localhost variants, multicast, benchmark, mapped IPv6 (dotted and hex), and trailing-dot hosts - no network call made", async () => {
   const bads = [
     "http://localhost./",
     "http://sub.localhost/",
@@ -32,14 +34,18 @@ test("blocks localhost variants, multicast, benchmark, mapped IPv6, and trailing
     "http://[::]/",
     "http://[ff00::1]/",
     "http://[::ffff:127.0.0.1]/",
-    "http://[::ffff:169.254.169.254]/"
+    "http://[::ffff:169.254.169.254]/",
+    "http://[::ffff:7f00:1]/",
+    "http://[::ffff:a9fe:a9fe]/"
   ];
   const prev = global.fetch;
-  global.fetch = async function(_url, _opts) { throw new Error("should_not_fetch"); };
+  let calls = 0;
+  global.fetch = async function(_url, _opts) { calls++; return { ok:false, status:599, headers: new Map(), arrayBuffer: async () => new ArrayBuffer(0) }; };
   for (const u of bads) {
     const r = await fetchTextWithCap(u, 1024);
     assert.ok(r.error, `expected error for ${u}`);
   }
+  assert.equal(calls, 0, "fetch must not be called for blocked URLs");
   global.fetch = prev;
 });
 

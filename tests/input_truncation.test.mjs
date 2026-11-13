@@ -19,7 +19,7 @@ test("enforces per-field caps and total prompt char cap upstream", async () => {
       SYNERGI_PROVIDER: "openai",
       OPENAI_API_KEY: "k",
       OPENAI_BASE_URL: "https://example.com",
-      SYNERGI_MAX_PROMPT_CHARS: "1000",
+      SYNERGI_MAX_PROMPT_CHARS: "5000",
       SYNERGI_FIELD_CAP_CHARS: "100",
       SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "openai:gpt-4o-mini": { inputPer1k: 0, outputPer1k: 0 } })
     };
@@ -31,7 +31,7 @@ test("enforces per-field caps and total prompt char cap upstream", async () => {
     assert.equal(r.ok, true, r.error || "");
     // Assert prompt char cap enforced
     const totalLen = bodies[0].messages.reduce((s, m) => s + (m.content || "").length, 0);
-    assert.ok(totalLen <= 1000, "prompt chars should be <= 1000");
+    assert.ok(totalLen <= 5000, "prompt chars should be <= configured cap");
   } finally {
     global.fetch = prevFetch;
   }

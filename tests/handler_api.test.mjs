@@ -4,6 +4,46 @@ import { onRequestPost } from "../functions/api/synergimotor.js";
 
 function makeEnv(overrides = {}) {
   const m = new Map();
+  function makeDoBinding() {
+    const store = new Map();
+    return {
+      idFromName(name) { return { name }; },
+      get(id) {
+        return {
+          async fetch(req) {
+            const url = new URL(req.url);
+            const op = url.pathname.split("/").pop();
+            const body = await req.json();
+            const key = body.key;
+            const get = () => Number(store.get(key) || 0);
+            const put = (v) => { store.set(key, String(v)); };
+            if (op === "inc") {
+              const cur = get();
+              const limit = Number(body.limit || Infinity);
+              if (cur + Number(body.delta || 1) > limit) return new Response(JSON.stringify({ ok: false, count: cur }), { headers: { "content-type":"application/json" } });
+              const next = cur + Number(body.delta || 1);
+              put(next);
+              return new Response(JSON.stringify({ ok: true, count: next }), { headers: { "content-type":"application/json" } });
+            }
+            if (op === "reserve") {
+              const cur = get();
+              const after = cur + Number(body.amount || 0);
+              if (after > Number(body.refuseAt || 0)) return new Response(JSON.stringify({ ok: false, current: cur }), { headers: { "content-type":"application/json" } });
+              put(after);
+              return new Response(JSON.stringify({ ok: true, current: after }), { headers: { "content-type":"application/json" } });
+            }
+            if (op === "adjust") {
+              const cur = get();
+              const next = Math.max(0, cur + Number(body.delta || 0));
+              put(next);
+              return new Response(JSON.stringify({ ok: true, current: next }), { headers: { "content-type":"application/json" } });
+            }
+            return new Response(JSON.stringify({ ok: false }), { status: 400, headers: { "content-type":"application/json" } });
+          }
+        };
+      }
+    };
+  }
   return {
     SYNERGI_KV: { async get(k){ return m.get(k)||null; }, async put(k,v){ m.set(k,v); } },
     SYNERGI_PROVIDER: "mock",
@@ -13,6 +53,7 @@ function makeEnv(overrides = {}) {
     SYNERGI_SPEND_REFUSE_AT_SEK: "0.9",
     SYNERGI_MAX_INPUT_TOKENS: "3000",
     SYNERGI_MAX_OUTPUT_TOKENS: "3000",
+    SYNERGI_COUNTER: makeDoBinding(),
     ...overrides
   };
 }
@@ -70,25 +111,20 @@ test("unknown pricing model fails closed", async () => {
 });
 
 test("reservation occurs before upstream call", async () => {
-  const m = new Map();
   const env = makeEnv({
-    SYNERGI_KV: { async get(k){ return m.get(k)||null; }, async put(k,v){ m.set(k,v); } },
     SYNERGI_SPEND_CAP_SEK: "100",
     SYNERGI_SPEND_REFUSE_AT_SEK: "100",
     SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "mock:mock-mini": { inputPer1k: 0.001, outputPer1k: 0.001 } })
   });
   const r = await onRequestPost({ request: req({ a: { name:"A", category:"Takläggare" }, bList: [{ name:"B", category:"Hängrännefirma"}] }, { origin: "https://mediahiveab.com", "cf-connecting-ip":"8.8.8.8" }), env });
   const j = await r.json();
-  // spend key should exist upon success
-  const ym = new Date(); const key = `spend:${ym.getUTCFullYear()}${String(ym.getUTCMonth()+1).padStart(2,"0")}`;
-  assert.ok(m.has(key));
   assert.equal(j && j.ok, true);
+  // spendMonth should be > 0 only if reservation occurred before adjust
+  assert.ok((j.meta && j.meta.spendMonth) > 0);
 });
 
 test("settlement on failure accounts for actual usage", async () => {
-  const m = new Map();
   const env = makeEnv({
-    SYNERGI_KV: { async get(k){ return m.get(k)||null; }, async put(k,v){ m.set(k,v); } },
     SYNERGI_PROVIDER: "mock-invalid",
     SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "mock:mock-mini": { inputPer1k: 1, outputPer1k: 1 } }),
     SYNERGI_SPEND_CAP_SEK: "100",
@@ -99,16 +135,12 @@ test("settlement on failure accounts for actual usage", async () => {
   const r = await onRequestPost({ request: req({ a: { name:"A" }, bList: [{ name:"B"}] }, { origin: "https://mediahiveab.com", "cf-connecting-ip":"9.9.9.9" }), env });
   const j = await r.json();
   assert.equal(r.status, 502);
-  // After failure, spend should equal actual usage across two calls (400 in + 200 out) = 0.6 SEK
-  const ym = new Date(); const key = `spend:${ym.getUTCFullYear()}${String(ym.getUTCMonth()+1).padStart(2,"0")}`;
-  const cur = Number(m.get(key) || "0");
-  assert.equal(Number(cur.toFixed(3)), 0.600);
+  // After failure, spendMonth should equal actual usage across two calls (400 in + 200 out) = 0.6 SEK
+  assert.equal(Number((j.meta && j.meta.spendMonth).toFixed(3)), 0.600);
 });
 
 test("settlement on success accounts for actual usage", async () => {
-  const m = new Map();
   const env = makeEnv({
-    SYNERGI_KV: { async get(k){ return m.get(k)||null; }, async put(k,v){ m.set(k,v); } },
     SYNERGI_PROVIDER: "mock",
     SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "mock:mock-mini": { inputPer1k: 1, outputPer1k: 1 } }),
     SYNERGI_SPEND_CAP_SEK: "100",
@@ -120,8 +152,6 @@ test("settlement on success accounts for actual usage", async () => {
   const j = await r.json();
   assert.equal(j && j.ok, true);
   // Mock provider uses usage promptTokens=200, completionTokens=300 per call; two calls => 1.0 SEK
-  const ym = new Date(); const key = `spend:${ym.getUTCFullYear()}${String(ym.getUTCMonth()+1).padStart(2,"0")}`;
-  const cur = Number(m.get(key) || "0");
-  assert.equal(Number(cur.toFixed(3)), 1.000);
+  assert.equal(Number((j.meta && j.meta.spendMonth).toFixed(3)), 1.000);
 });
 

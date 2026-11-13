@@ -15,6 +15,7 @@ export async function onRequestPost({ request, env }) {
   const rate = await incIpRateLimit(env, request);
   if (!rate.ok) {
     if (rate.reason === "ip_missing") return json({ error: "ip_required", message: "Din IP-adress behövs för att köra verktyget." }, 400);
+    if (rate.reason === "counter_required") return json({ error: "counter_unavailable", message: "Systemets räknare är inte tillgänglig. Försök igen senare." }, 503);
     return json({ error: "rate_limited", message: "För många körningar från din IP idag. Försök igen i morgon." }, 429);
   }
   // Monthly spend gate
@@ -47,6 +48,9 @@ export async function onRequestPost({ request, env }) {
   }
   const resv = await reserveMonthlySpend(env, worstSek);
   if (!resv.ok) {
+    if (resv.reason === "counter_required") {
+      return json({ error: "counter_unavailable", message: "Systemets budgeträknare är inte tillgänglig. Försök igen senare." }, 503);
+    }
     await incrCounter(env, "overcap");
     return json({ error: "monthly_cap_reached", message: "Månadens budget för Synergimotorn är slut. Prova nästa månad." }, 402);
   }
@@ -63,7 +67,18 @@ export async function onRequestPost({ request, env }) {
   const adj = await adjustMonthlySpend(env, delta);
   if (!res.ok) {
     await incrCounter(env, "fail");
-    return json({ error: res.error || "run_failed", details: res.details || (res.content && res.content.error) }, 502);
+    return json({
+      error: res.error || "run_failed",
+      details: res.details || (res.content && res.content.error),
+      meta: {
+        provider: costState.provider,
+        model: costState.model,
+        usage: costState.usage,
+        estimatedSek: Number((costState.estimatedSek || 0).toFixed(3)),
+        spendMonth: adj.current,
+        capSek: Number(env.SYNERGI_SPEND_CAP_SEK || 100)
+      }
+    }, 502);
   }
   // Return with meta
   return json({

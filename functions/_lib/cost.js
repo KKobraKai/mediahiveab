@@ -23,6 +23,11 @@ function hasDurable(env) {
 }
 
 async function durableFetch(env, key, op, payload) {
+  if (!hasDurable(env)) {
+    const e = new Error("durable_object_missing");
+    e.code = "do_missing";
+    throw e;
+  }
   const id = env.SYNERGI_COUNTER.idFromName(key);
   const stub = env.SYNERGI_COUNTER.get(id);
   const req = new Request(`https://do/synergi/${op}`, {
@@ -41,22 +46,13 @@ export async function incIpRateLimit(env, request) {
   const limit = Number(env.SYNERGI_RATE_LIMIT_PER_IP_PER_DAY || 5);
   const day = nowYMD();
   const key = `rlip:${day}:${ip}`;
-  if (hasDurable(env)) {
-    try {
-      const r = await durableFetch(env, key, "inc", { delta: 1, limit, ttl: 86400 + 3600 });
-      if (!r.ok) return { ok: false, ip, count: r.count, limit, reason: r.reason || "rate_limited" };
-      return { ok: true, ip, count: r.count, limit };
-    } catch (e) {
-      // Fallback to KV if DO invocation fails
-    }
+  try {
+    const r = await durableFetch(env, key, "inc", { delta: 1, limit, ttl: 86400 + 3600 });
+    if (!r.ok) return { ok: false, ip, count: r.count, limit, reason: r.reason || "rate_limited" };
+    return { ok: true, ip, count: r.count, limit };
+  } catch (e) {
+    return { ok: false, reason: "counter_required" };
   }
-  const n = await env.SYNERGI_KV.get(key);
-  const cur = Number(n || "0") || 0;
-  if (cur >= limit) {
-    return { ok: false, ip, count: cur, limit };
-  }
-  await env.SYNERGI_KV.put(key, String(cur + 1), { expirationTtl: 86400 + 3600 }); // ~1 day
-  return { ok: true, ip, count: cur + 1, limit };
 }
 
 export async function addMonthlySpend(env, deltaSek) {
@@ -106,56 +102,32 @@ export async function reserveMonthlySpend(env, amountSek) {
     : Math.max(0, Math.floor(cap * Number(env.SYNERGI_SPEND_REFUSE_RATIO || 0.9)));
   const ym = nowYM();
   const key = `spend:${ym}`;
-  if (hasDurable(env)) {
-    try {
-      const r = await durableFetch(env, key, "reserve", { amount: Number(amountSek || 0), refuseAt, ttl: 60 * 60 * 24 * 40 });
-      return { ok: !!r.ok, current: r.current, refuseAt, cap };
-    } catch (e) {
-      // fall through to KV
-    }
-  }
   try {
-    const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
-    const after = cur + Number(amountSek || 0);
-    if (after > refuseAt) return { ok: false, current: cur, refuseAt, cap };
-    await env.SYNERGI_KV.put(key, String(after), { expirationTtl: 60 * 60 * 24 * 40 });
-    return { ok: true, current: after, refuseAt, cap };
+    const r = await durableFetch(env, key, "reserve", { amount: Number(amountSek || 0), refuseAt, ttl: 60 * 60 * 24 * 40 });
+    return { ok: !!r.ok, current: r.current, refuseAt, cap };
   } catch (e) {
-    return { ok: false, current: 0, refuseAt, cap, error: "kv_write_failed" };
+    return { ok: false, reason: "counter_required" };
   }
 }
 
 export async function adjustMonthlySpend(env, deltaSek) {
   const ym = nowYM();
   const key = `spend:${ym}`;
-  if (hasDurable(env)) {
-    try {
-      const r = await durableFetch(env, key, "adjust", { delta: Number(deltaSek || 0), ttl: 60 * 60 * 24 * 40 });
-      return { ok: !!r.ok, current: r.current };
-    } catch (e) {
-      // fall through to KV
-    }
-  }
   try {
-    const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
-    const after = cur + Number(deltaSek || 0);
-    await env.SYNERGI_KV.put(key, String(Math.max(0, after)), { expirationTtl: 60 * 60 * 24 * 40 });
-    return { ok: true, current: after };
+    const r = await durableFetch(env, key, "adjust", { delta: Number(deltaSek || 0), ttl: 60 * 60 * 24 * 40 });
+    return { ok: !!r.ok, current: r.current };
   } catch (e) {
-    return { ok: false, current: 0, error: "kv_write_failed" };
+    return { ok: false, reason: "counter_required" };
   }
 }
 
 export async function incrCounter(env, keyBase) {
   const day = nowYMD();
   const key = `cnt:${keyBase}:${day}`;
-  if (hasDurable(env)) {
-    try {
-      await durableFetch(env, key, "inc", { delta: 1, ttl: 60 * 60 * 24 * 60 });
-      return;
-    } catch {}
+  try {
+    await durableFetch(env, key, "inc", { delta: 1, ttl: 60 * 60 * 24 * 60 });
+  } catch (e) {
+    // Metrics counter is best-effort; do not fallback; ignore on failure
   }
-  const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
-  await env.SYNERGI_KV.put(key, String(cur + 1), { expirationTtl: 60 * 60 * 24 * 60 });
 }
 

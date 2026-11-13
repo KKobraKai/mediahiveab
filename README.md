@@ -42,8 +42,13 @@ API: `functions/api/synergimotor.js` with helpers under `functions/_lib/`.
   - On success and on failure, the pre-reservation is settled to actual usage observed from the upstream provider. Failures are not “fully refunded” — usage from partial calls is accounted for.
   - Set a provider-side monthly budget limit as a backstop (OpenAI billing portal). This is required operationally to guarantee the monthly cap cannot be exceeded due to any unforeseen bug or external change.
 - Concurrency and counters:
-  - Atomic counters (per-IP rate limit and monthly spend) use a Durable Object when bound at `env.SYNERGI_COUNTER`. If not bound, the code falls back to KV (non-atomic and only suitable for low concurrency).
-  - Cloudflare Durable Objects are available on the Free plan for Workers/Pages (see Cloudflare pricing/docs). Bind a DO named `SYNERGI_COUNTER` to enable atomicity.
+  - Atomic counters (per-IP rate limit and monthly spend) use a Durable Object. This is required; runs refuse when unavailable. On Free plan, DOs must be SQLite-backed.
+  - Deploy the counter as a separate Worker:
+    - Worker source: `workers/counter/src/index.js` (class `SynergiCounter`)
+    - `wrangler.toml` includes `new_sqlite_classes = ["SynergiCounter"]`
+    - Publish the worker via `wrangler deploy` (manual; not in CI)
+  - Bind the DO to Pages using a Durable Object namespace with `script_name` set to the deployed Worker (`synergi-counter`), binding name `SYNERGI_COUNTER`. Example Pages Env binding:
+    - Name: `SYNERGI_COUNTER`, Class: `SynergiCounter`, Script name: `synergi-counter`
 - SSRF protections for website fetch:
   - Allows only `http`/`https`.
   - Blocks `localhost`, `*.localhost`, trailing-dot hosts (`localhost.`), IPv4 private/link-local/loopback/CGNAT (`10/8`, `172.16/12`, `192.168/16`, `169.254/16`, `127/8`), “this network” `0.0.0.0/8`, multicast `224/4`, benchmark `198.18/15`, and the metadata IP `169.254.169.254`.
@@ -63,4 +68,5 @@ API: `functions/api/synergimotor.js` with helpers under `functions/_lib/`.
 - `SYNERGI_FETCH_CAP_BYTES` (default 120_000)
 - `SYNERGI_MAX_B_COUNT` (default 5)
 - Optional Durable Object binding: `SYNERGI_COUNTER` (class `SynergiCounter` in `functions/_lib/counter.js`)
+  - For Pages, use the external Worker `synergi-counter` and bind by script_name as above.
 
