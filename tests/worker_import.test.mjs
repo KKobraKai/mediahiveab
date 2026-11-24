@@ -1,0 +1,9 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+
+test("worker exports shared class and default fetch", async () => {
+  const mod = await import("../workers/counter/src/index.js");
+  assert.ok(typeof mod.SynergiCounter === "function", "SynergiCounter class should be exported");
+  assert.ok(mod.default && typeof mod.default.fetch === "function", "default export should have fetch");
+});
+
