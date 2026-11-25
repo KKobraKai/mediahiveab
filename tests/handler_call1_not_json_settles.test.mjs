@@ -77,8 +77,8 @@ test("handler: call-1 returns error-content (not_json) -> reservation settled to
       SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "openai:gpt-4o-mini": { inputPer1k: 1, outputPer1k: 1 } }),
       SYNERGI_SPEND_CAP_SEK: "100",
       SYNERGI_SPEND_REFUSE_AT_SEK: "100",
-      SYNERGI_MAX_INPUT_TOKENS: "100",
-      SYNERGI_MAX_OUTPUT_TOKENS: "100",
+      SYNERGI_MAX_INPUT_TOKENS: "50",
+      SYNERGI_MAX_OUTPUT_TOKENS: "50",
       SYNERGI_COUNTER: makeDoBinding()
     };
     const r = await onRequestPost({ request: req({ a: { name:"A" }, bList: [{ name:"B"}] }, { origin: "https://mediahiveab.com", "cf-connecting-ip":"1.2.3.4" }), env });

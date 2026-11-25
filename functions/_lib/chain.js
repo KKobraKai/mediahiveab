@@ -224,6 +224,14 @@ function estimateTokensFromChars(chars) {
   return Math.ceil(chars / 4); // conservative
 }
 
+function estimateTokensFromBytes(bytes) {
+  return Math.ceil(bytes / 4);
+}
+
+function utf8Bytes(s) {
+  return new TextEncoder().encode(String(s ?? "")).length;
+}
+
 export async function runSynergyChain({ env, a, bList, goal, region, costState }) {
   const provider = createProvider(env);
   // Caps
@@ -253,17 +261,25 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
   // Token budgets: generous but affordable on mini-class
   const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000);
   const maxPromptChars = Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000);
-  // Preserve system + instruction intact; trim only context to fit under cap
-  const fixedLen = sysMsg.content.length + instrMsg.content.length;
-  const ctxCap = Math.max(0, maxPromptChars - fixedLen);
-  const ctxMsg = { role: "user", content: ctxRaw.length > ctxCap ? ctxRaw.slice(0, ctxCap) : ctxRaw };
+  const maxInTokens = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000);
+  const overheadTokens = Number(env.SYNERGI_MESSAGE_OVERHEAD_TOKENS || 100);
+  // Preserve system + instruction intact; trim context to satisfy BOTH char cap and token cap (bytes-based)
+  const fixedBytes = utf8Bytes(sysMsg.content) + utf8Bytes(instrMsg.content);
+  const fixedChars = sysMsg.content.length + instrMsg.content.length;
+  const maxCtxByChars = Math.max(0, maxPromptChars - fixedChars);
+  const budgetTokensForCtx = Math.max(0, maxInTokens - overheadTokens - estimateTokensFromBytes(fixedBytes));
+  const maxCtxByTokensBytes = Math.max(0, budgetTokensForCtx * 4);
+  const ctxRawBytes = new TextEncoder().encode(ctxRaw);
+  const takeBytes = Math.min(maxCtxByChars, maxCtxByTokensBytes);
+  const ctxTrunc = ctxRawBytes.length > takeBytes ? new TextDecoder("utf-8").decode(ctxRawBytes.slice(0, takeBytes)) : ctxRaw;
+  const ctxMsg = { role: "user", content: ctxTrunc };
   const messages = [sysMsg, ctxMsg, instrMsg];
   const promptChars = messages.map(m => m.content.length).reduce((a,b)=>a+b,0);
   if (costState) {
     costState.promptChars = promptChars;
     costState.maxPromptChars = maxPromptChars;
   }
-  const estIn1 = estimateTokensFromChars(promptChars);
+  const estIn1 = estimateTokensFromBytes(messages.map(m => utf8Bytes(m.content)).reduce((a,b)=>a+b,0)) + overheadTokens;
   const res1 = await provider.chat({ messages, responseJson: true, maxOutputTokens: maxOut });
   let content1 = res1.content;
   if (!content1 || content1.error) {
@@ -272,15 +288,32 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
       const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
       costState.provider = res1.provider;
       costState.model = res1.model;
-      costState.usage = { promptTokens: res1.usage?.promptTokens || 0, completionTokens: res1.usage?.completionTokens || 0 };
-      costState.estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, costState.usage);
+      const u1 = res1.usage && typeof res1.usage === "object" ? res1.usage : undefined;
+      if (u1) {
+        costState.usage = { promptTokens: u1.promptTokens || 0, completionTokens: u1.completionTokens || 0 };
+        costState.estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, costState.usage);
+      } else {
+        const p = priceTable[`${provider.name}:${provider.model}`];
+        const perCallWorstSek = p ? (((maxInTokens + overheadTokens)/1000)*p.inputPer1k + (maxOut/1000)*p.outputPer1k) : 0;
+        costState.usage = undefined;
+        costState.estimatedSek = perCallWorstSek;
+      }
     }
     return { ok: false, error: content1 && content1.error || res1.error || "model_error", usage: res1.usage || {} };
   }
   // Second pass: critique & selection
   const critMsg = [
     { role: "system", content: "SJÄLVKRITIK: Ta bort generiska förslag som kunde gälla vilka parter som helst. Returnera topp 3–5 bäst rankade. STRIKT JSON med samma schema." },
-    { role: "user", content: "Kandidater (10 st):\n" + JSON.stringify(content1) }
+    (() => {
+      const prefix = "Kandidater (10 st):\n";
+      const fixedCritBytes = utf8Bytes(prefix);
+      const budgetTokensForCrit = Math.max(0, maxInTokens - overheadTokens - estimateTokensFromBytes(fixedCritBytes));
+      const maxCritBytes = Math.max(0, budgetTokensForCrit * 4);
+      const js = JSON.stringify(content1);
+      const data = new TextEncoder().encode(js);
+      const trunc = data.length > maxCritBytes ? new TextDecoder("utf-8").decode(data.slice(0, maxCritBytes)) : js;
+      return { role: "user", content: prefix + trunc };
+    })()
   ];
   let res2;
   try {
@@ -291,8 +324,17 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
       const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
       costState.provider = res1.provider;
       costState.model = res1.model;
-      costState.usage = { promptTokens: res1.usage?.promptTokens || 0, completionTokens: res1.usage?.completionTokens || 0 };
-      costState.estimatedSek = priceForUsage(priceTable, res1.provider, res1.model, costState.usage);
+      const u1 = res1.usage && typeof res1.usage === "object" ? res1.usage : undefined;
+      const p = priceTable[`${provider.name}:${provider.model}`];
+      const perCallWorstSek = p ? (((maxInTokens + overheadTokens)/1000)*p.inputPer1k + (maxOut/1000)*p.outputPer1k) : 0;
+      if (u1) {
+        costState.usage = { promptTokens: u1.promptTokens || 0, completionTokens: u1.completionTokens || 0 };
+        const used1 = priceForUsage(priceTable, res1.provider, res1.model, costState.usage);
+        costState.estimatedSek = used1 + perCallWorstSek;
+      } else {
+        costState.usage = undefined;
+        costState.estimatedSek = perCallWorstSek * 2;
+      }
     }
     return { ok: false, error: "model_exception", details: String(e && e.message || e), usage: res1.usage || {} };
   }
@@ -342,12 +384,9 @@ export async function runSynergyChain({ env, a, bList, goal, region, costState }
     // record worst-case at time of run for settlement math (computed in handler gate too)
     const p = priceTable[`${res1.provider}:${res1.model}`];
     if (p) {
-      const maxInTokens = Math.min(
-        Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000),
-        Math.ceil(Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000) / 4)
-      ) * 2;
-      const maxOutTokens = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000) * 2;
-      const worstSek = (maxInTokens/1000)*p.inputPer1k + (maxOutTokens/1000)*p.outputPer1k;
+      const perCallIn = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000) + Number(env.SYNERGI_MESSAGE_OVERHEAD_TOKENS || 100);
+      const perCallOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000);
+      const worstSek = ((perCallIn/1000)*p.inputPer1k + (perCallOut/1000)*p.outputPer1k) * 2;
       costState.worstSek = worstSek;
     }
   }

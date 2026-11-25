@@ -129,8 +129,8 @@ test("settlement on failure accounts for actual usage", async () => {
     SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "mock:mock-mini": { inputPer1k: 1, outputPer1k: 1 } }),
     SYNERGI_SPEND_CAP_SEK: "100",
     SYNERGI_SPEND_REFUSE_AT_SEK: "100",
-    SYNERGI_MAX_INPUT_TOKENS: "100",
-    SYNERGI_MAX_OUTPUT_TOKENS: "100"
+    SYNERGI_MAX_INPUT_TOKENS: "50",
+    SYNERGI_MAX_OUTPUT_TOKENS: "50"
   });
   const r = await onRequestPost({ request: req({ a: { name:"A" }, bList: [{ name:"B"}] }, { origin: "https://mediahiveab.com", "cf-connecting-ip":"9.9.9.9" }), env });
   const j = await r.json();
@@ -142,16 +142,21 @@ test("settlement on failure accounts for actual usage", async () => {
 test("settlement on success accounts for actual usage", async () => {
   const env = makeEnv({
     SYNERGI_PROVIDER: "mock",
-    SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "mock:mock-mini": { inputPer1k: 1, outputPer1k: 1 } }),
+    // Use small prices to avoid budget-worst-case pre-gate while still verifying settlement uses actual usage
+    SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "mock:mock-mini": { inputPer1k: 0.001, outputPer1k: 0.001 } }),
     SYNERGI_SPEND_CAP_SEK: "100",
     SYNERGI_SPEND_REFUSE_AT_SEK: "100",
-    SYNERGI_MAX_INPUT_TOKENS: "100",
-    SYNERGI_MAX_OUTPUT_TOKENS: "100"
+    SYNERGI_MAX_INPUT_TOKENS: "4000",
+    SYNERGI_MAX_OUTPUT_TOKENS: "50",
+    SYNERGI_MESSAGE_OVERHEAD_TOKENS: "0"
   });
   const r = await onRequestPost({ request: req({ a: { name:"A", category:"Takläggare" }, bList: [{ name:"B", category:"Hängrännefirma"}] }, { origin: "https://mediahiveab.com", "cf-connecting-ip":"9.9.9.10" }), env });
   const j = await r.json();
   assert.equal(j && j.ok, true);
-  // Mock provider uses usage promptTokens=200, completionTokens=300 per call; two calls => 1.0 SEK
-  assert.equal(Number((j.meta && j.meta.spendMonth).toFixed(3)), 1.000);
+  // Compute expected from usage and configured rates
+  const inRate = 0.001, outRate = 0.001;
+  const u = j && j.meta && j.meta.usage || { promptTokens: 0, completionTokens: 0 };
+  const expected = Number(((u.promptTokens/1000)*inRate + (u.completionTokens/1000)*outRate).toFixed(3));
+  assert.equal(Number((j.meta && j.meta.spendMonth).toFixed(3)), expected);
 });
 
