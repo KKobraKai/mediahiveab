@@ -75,7 +75,7 @@ function makeReq(body, headers = {}) {
   };
 }
 
-test("handler try/catch returns 502 on thrown chain and releases reservation", async () => {
+test("handler try/catch returns 502 on thrown chain and keeps worst-case reservation", async () => {
   // Force the provider's first chat call to throw (simulate network failure)
   const prevFetch = global.fetch;
   global.fetch = async function() { throw new Error("network_down"); };
@@ -86,8 +86,8 @@ test("handler try/catch returns 502 on thrown chain and releases reservation", a
     const j = await r.json();
     assert.equal(r.status, 502);
     assert.equal(j.error, "exception");
-    // After catching the exception, settlement should release the worst-case reservation back to 0
-    assert.equal(Number((j.meta && j.meta.spendMonth).toFixed(3)), 0.000);
+    // After catching the exception, settlement should KEEP the worst-case reservation (non-zero)
+    assert.ok((j.meta && j.meta.spendMonth) > 0, "worst-case reservation must be kept on uncertain billing");
   } finally {
     global.fetch = prevFetch;
   }

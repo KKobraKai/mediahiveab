@@ -200,7 +200,7 @@ class OpenAICompatProvider {
   }
   async chat({ messages, responseJson = true, maxOutputTokens = 800 }) {
     if (!this.apiKey) {
-      return { provider: this.name, model: this.model, error: "api_key_missing", usage: { promptTokens: 0, completionTokens: 0 } };
+      return { provider: this.name, model: this.model, error: "api_key_missing", usage: undefined };
     }
     const url = `${this.apiBase}/v1/chat/completions`;
     const body = {
@@ -216,7 +216,7 @@ class OpenAICompatProvider {
       body: JSON.stringify(body)
     });
     if (!r.ok) {
-      return { provider: this.name, model: this.model, error: "upstream_" + r.status, usage: { promptTokens: 0, completionTokens: 0 } };
+      return { provider: this.name, model: this.model, error: "upstream_" + r.status, usage: undefined };
     }
     const j = await r.json();
     const text = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content || "";
@@ -224,10 +224,10 @@ class OpenAICompatProvider {
     if (responseJson) {
       try { content = JSON.parse(text); } catch (e) { content = { error: "not_json", raw: text.slice(0, 4000) }; }
     }
-    const usage = {
-      promptTokens: (j.usage && (j.usage.prompt_tokens || j.usage.input_tokens)) || 0,
-      completionTokens: (j.usage && (j.usage.completion_tokens || j.usage.output_tokens)) || 0
-    };
+    const usage = (j.usage && (typeof j.usage === "object")) ? {
+      promptTokens: (j.usage.prompt_tokens || j.usage.input_tokens) || 0,
+      completionTokens: (j.usage.completion_tokens || j.usage.output_tokens) || 0
+    } : undefined;
     return { provider: this.name, model: this.model, content, usage };
   }
 }

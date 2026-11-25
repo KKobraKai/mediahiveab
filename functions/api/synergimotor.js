@@ -34,14 +34,16 @@ export async function onRequestPost({ request, env }) {
   const priceTable = (env.SYNERGI_PRICE_TABLE_JSON && JSON.parse(env.SYNERGI_PRICE_TABLE_JSON)) || {};
   const key = `${provider.name}:${provider.model}`;
   const p = priceTable[key];
-  if (!p) {
+  const validNum = (v) => Number.isFinite(v) && v >= 0;
+  if (!p || !validNum(p.inputPer1k) || !validNum(p.outputPer1k)) {
     return json({ error: "pricing_unknown_model", message: `Pris saknas för ${key}. Lägg till i SYNERGI_PRICE_TABLE_JSON och försök igen.` }, 400);
   }
   const calls = 2;
-  const maxInFromPrompt = Math.ceil(Number(env.SYNERGI_MAX_PROMPT_CHARS || 16000) / 4) * calls;
-  const maxInCfg = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000) * calls;
-  const maxIn = Math.min(maxInCfg, maxInFromPrompt);
-  const maxOut = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000) * calls;
+  const overheadTokens = Number(env.SYNERGI_MESSAGE_OVERHEAD_TOKENS || 100);
+  const maxInPerCall = Number(env.SYNERGI_MAX_INPUT_TOKENS || 3000) + overheadTokens;
+  const maxOutPerCall = Number(env.SYNERGI_MAX_OUTPUT_TOKENS || 3000);
+  const maxIn = maxInPerCall * calls;
+  const maxOut = maxOutPerCall * calls;
   const worstSek = (maxIn/1000)*p.inputPer1k + (maxOut/1000)*p.outputPer1k;
   if (worstSek > 0.5) {
     return json({ error: "budget_worst_case_exceeds", message: "Körningen avbryts: värsta fallet skulle överskrida 0,50 kr." }, 402);
@@ -59,12 +61,13 @@ export async function onRequestPost({ request, env }) {
   try {
     res = await runSynergyChain({ env, a, bList, goal, region, costState });
   } catch (e) {
-    // fall through to settlement in finally
+    // On uncertain billing (no usage), keep full worst-case reservation
+    costState.estimatedSek = worstSek;
     res = { ok: false, error: "exception", details: String(e && e.message || e) };
   }
   // Settle reservation to actual (even on failure)
   const delta = (costState.estimatedSek || 0) - worstSek;
-  const adj = await adjustMonthlySpend(env, delta);
+  const adj = await adjustMonthlySpend(env, delta, { ym: resv.ym, reservationId: resv.reservationId });
   if (!res.ok) {
     await incrCounter(env, "fail");
     return json({
