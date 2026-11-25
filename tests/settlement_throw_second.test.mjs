@@ -52,8 +52,8 @@ function makeEnvThrowOnSecond() {
     SYNERGI_PRICE_TABLE_JSON: JSON.stringify({ "mock:mock-mini": { inputPer1k: 1, outputPer1k: 1 } }),
     SYNERGI_SPEND_CAP_SEK: "100",
     SYNERGI_SPEND_REFUSE_AT_SEK: "100",
-    SYNERGI_MAX_INPUT_TOKENS: "100",
-    SYNERGI_MAX_OUTPUT_TOKENS: "100",
+    SYNERGI_MAX_INPUT_TOKENS: "50",
+    SYNERGI_MAX_OUTPUT_TOKENS: "50",
     SYNERGI_COUNTER: makeDoBinding()
   };
 }

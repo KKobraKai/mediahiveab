@@ -68,12 +68,14 @@ export async function getMonthlySpend(env) {
   if (hasDurable(env)) {
     try {
       const r = await durableFetch(env, key, "get", {});
-      const cap = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
+      const capCfg = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
+      const cap = Math.max(0, Math.min(100, Number.isFinite(capCfg) ? capCfg : 100));
       return { current: Number(r.current || 0), cap };
     } catch {}
   }
   const cur = Number((await env.SYNERGI_KV.get(key)) || "0") || 0;
-  const cap = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
+  const capCfg = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
+  const cap = Math.max(0, Math.min(100, Number.isFinite(capCfg) ? capCfg : 100));
   return { current: cur, cap };
 }
 
@@ -90,25 +92,28 @@ export function allowOrigin(request) {
 }
 
 export async function reserveMonthlySpend(env, amountSek) {
-  const cap = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
-  const refuseAt = env.SYNERGI_SPEND_REFUSE_AT_SEK != null
+  const capCfg = Number(env.SYNERGI_SPEND_CAP_SEK || 100);
+  const cap = Math.max(0, Math.min(100, Number.isFinite(capCfg) ? capCfg : 100));
+  const refuseAtCfg = env.SYNERGI_SPEND_REFUSE_AT_SEK != null
     ? Number(env.SYNERGI_SPEND_REFUSE_AT_SEK)
     : Math.max(0, Math.floor(cap * Number(env.SYNERGI_SPEND_REFUSE_RATIO || 0.9)));
+  const refuseAt = Math.max(0, Math.min(cap, Number.isFinite(refuseAtCfg) ? refuseAtCfg : cap));
   const ym = nowYM();
   const key = `spend:${ym}`;
+  const rid = (() => { try { return crypto.randomUUID(); } catch { return `${Date.now()}-${Math.random().toString(36).slice(2)}`; } })();
   try {
-    const r = await durableFetch(env, key, "reserve", { amount: Number(amountSek || 0), refuseAt, ttl: 60 * 60 * 24 * 40 });
-    return { ok: !!r.ok, current: r.current, refuseAt, cap };
+    const r = await durableFetch(env, key, "reserve", { amount: Number(amountSek || 0), refuseAt, ttl: 60 * 60 * 24 * 40, reservationId: rid });
+    return { ok: !!r.ok, current: r.current, refuseAt, cap, ym, reservationId: rid };
   } catch (e) {
     return { ok: false, reason: "counter_required" };
   }
 }
 
-export async function adjustMonthlySpend(env, deltaSek) {
-  const ym = nowYM();
+export async function adjustMonthlySpend(env, deltaSek, opts = {}) {
+  const ym = (opts && opts.ym) || nowYM();
   const key = `spend:${ym}`;
   try {
-    const r = await durableFetch(env, key, "adjust", { delta: Number(deltaSek || 0), ttl: 60 * 60 * 24 * 40 });
+    const r = await durableFetch(env, key, "adjust", { delta: Number(deltaSek || 0), ttl: 60 * 60 * 24 * 40, reservationId: opts && opts.reservationId });
     return { ok: !!r.ok, current: r.current };
   } catch (e) {
     return { ok: false, reason: "counter_required" };
